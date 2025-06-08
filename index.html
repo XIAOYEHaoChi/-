@@ -15,17 +15,16 @@
     
     <style>
         /* ---
-         * V3 Enhanced CSS by AI
+         * V4 Enhanced CSS by AI
          * Key Improvements:
-         * 1. MOBILE FIX: Significantly improved mobile typography, spacing, and layout.
-         * 2. LIGHT MODE FIX: Enhanced text contrast and reduced background noise for superior readability.
-         * 3. AESTHETICS: Maintained previous visual enhancements.
+         * 1. H1 TITLE FIX: Corrected the gradient of the main title "陈情表" in light mode for perfect readability.
+         * 2. Maintained all previous mobile and readability enhancements.
          * --- */
 
         /* 1. 字体系统与变量 */
         :root {
             --font-serif: "Noto Serif SC", serif;
-            --font-cursive: "Ma Shan Zheng", cursive;
+            --font-cursive: "Ma Shan Zhaeng", cursive;
             --bg-color: #1a1a1a;
             --text-color: rgba(255, 255, 255, 0.85);
             --title-color: #dcc4a8;
@@ -38,20 +37,23 @@
             --separator-color: rgba(255, 255, 255, 0.15);
             --main-max-width: 1000px;
             --main-line-height: 1.9;
+            /* H1 TITLE FIX: Define title gradient as a variable for dark mode */
+            --title-gradient: linear-gradient(120deg, var(--title-color), rgba(255,255,255,0.9), var(--highlight-color));
         }
 
-        /* LIGHT MODE FIX: Enhanced contrast for better readability */
         [data-theme="light"] {
             --bg-color: #f9f7f4;
-            --text-color: #1c1c1e; /* Darkened for much better contrast */
-            --title-color: #4a2c1a; /* Darkened for richness and contrast */
-            --highlight-color: #795548; /* Darkened to meet accessibility standards */
-            --glass-bg: rgba(255, 255, 255, 0.85); /* More opaque to reduce video distraction */
+            --text-color: #1c1c1e;
+            --title-color: #4a2c1a;
+            --highlight-color: #795548;
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --border-color: rgba(0, 0, 0, 0.08);
-            --video-opacity: 0.03; /* Further reduced to minimize visual noise */
+            --video-opacity: 0.03;
             --button-bg-hover: rgba(0, 0, 0, 0.05);
             --shadow-color: rgba(0, 0, 0, 0.1);
             --separator-color: rgba(0, 0, 0, 0.1);
+            /* H1 TITLE FIX: Redefine the title gradient for light mode with high-contrast colors */
+            --title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
         }
         
         /* 2. 基础与布局样式 */
@@ -120,12 +122,14 @@
         .animated-item.visible { opacity: 1; transform: translateY(0); }
 
         .article-title { text-align: center; margin-bottom: 6rem; }
+        /* H1 TITLE FIX: Apply the gradient using the CSS variable */
         .article-title h1 {
             font-family: var(--font-cursive); font-size: 4.8rem; font-weight: normal; 
-            background: linear-gradient(120deg, var(--title-color), rgba(255,255,255,0.9), var(--highlight-color));
+            background: var(--title-gradient); /* Use the theme-aware variable here */
             -webkit-background-clip: text; background-clip: text; color: transparent;
             text-shadow: 0 0 30px var(--shadow-color);
             animation: fadeIn-up 0.8s 0.2s both cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: background 0.5s ease; /* Add transition for smooth gradient change */
         }
         .article-title h2 {
             font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
@@ -186,7 +190,6 @@
         .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
         .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
-        /* ... (accordion inner styles remain same) ... */
         .accordion-content-inner p, .accordion-content-inner ul { margin-bottom: 1.2em; }
         .accordion-content-inner p:last-child, .accordion-content-inner ul:last-child { margin-bottom: 0; }
         .accordion-content-inner ul { list-style-position: inside; padding-left: 1em; }
@@ -204,7 +207,7 @@
         .function-word-list dt { font-weight: 700; }
         .function-word-list div:last-child { border-bottom: none; }
 
-        /* 10. 响应式设计 (Responsive) */
+        /* 10. 响应式设计 */
         @media (max-width: 1024px) { nav.main-nav a { margin: 0 10px; font-size: 0.9rem; } }
         @media (max-width: 992px) { 
             nav.main-nav { display: none; } 
@@ -214,9 +217,7 @@
             .article-container { padding: 0 15px; }
         }
         
-        /* MOBILE FIX: A dedicated block for mobile-specific refinements. */
         @media (max-width: 768px) { 
-            /* MOBILE FIX: Increase base line-height for better text block readability */
             body { line-height: 1.9; } 
             #video-bg { display: none; }
             header { padding: 15px 5%; } 
@@ -225,12 +226,10 @@
             .controls button span { display: none; } 
             main { padding: 120px 0 80px; } 
 
-            /* MOBILE FIX: Reduce title size and margins to save vertical space */
             .article-title { margin-bottom: 4rem; }
             .article-title h1 { font-size: 3.2rem; } 
             .article-title h2 { font-size: 1rem; } 
             
-            /* MOBILE FIX: Adjust section margins for a more compact layout */
             .analysis-section { margin-top: 6rem; }
             .analysis-grid { gap: 1.5rem; }
 
@@ -246,6 +245,7 @@
     </style>
 </head>
 <body id="page-body">
+    <!-- Body content is the same -->
     <video autoplay muted loop playsinline loading="lazy" id="video-bg" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='100%25' height='100%25' fill='%231a1a1a'/%3E%3C/svg%3E"><source src="https://cdn.coverr.co/videos/coverr-ink-in-water-5415/1080p.mp4" type="video/mp4"></video>
     <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop></audio>
 
@@ -265,9 +265,7 @@
     </header>
 
     <main>
-        <!-- The rest of your HTML body remains the same -->
         <div class="article-container">
-            <!-- 原文与赏析部分 -->
             <div class="article-title"><h1>陈情表</h1><h2>[晋] 李密</h2></div>
             <section id="background" class="analysis-section" style="margin-top:0; margin-bottom: 6rem;">
                 <h2 class="animated-item">创作背景</h2>
@@ -295,7 +293,6 @@
             <section id="grammar-analysis" class="analysis-section">
                 <h2 class="animated-item">文言知识详解</h2>
                 <div class="accordion animated-item">
-                    <!-- Accordion items here -->
                     <div class="accordion-item"><button class="accordion-header">重点解释 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>险衅:</strong> 灾难祸患。险：艰险，祸患。衅：祸患。</p><p><strong>夙遭闵凶:</strong> 夙：早。闵凶：忧伤的事，常指父母之丧。</p><p><strong>慈父见背:</strong> 背弃我。见：助动词，用在动词前面表示对我怎么样。</p><p><strong>舅夺母志:</strong> 强行改变。</p><p><strong>祖母刘愍臣孤弱:</strong> 怜悯，爱怜。</p><p><strong>躬亲抚养:</strong> 亲自。</p><p><strong>终鲜兄弟:</strong> 少，没有。</p><p><strong>门衰祚薄:</strong> 门庭衰微，福分浅薄。祚：福气，福分。</p><p><strong>晚有儿息:</strong> 子女。</p><p><strong>外无期功强近之亲:</strong> 勉强。</p><p><strong>茕茕孑立:</strong> 孤单。</p><p><strong>形影相吊:</strong> 安慰。</p><p><strong>而刘夙婴疾病:</strong> 缠绕着（被……缠绕）。</p><p><strong>逮奉圣朝，沐浴清化:</strong> 逮：及，到。 奉：承奉。</p><p><strong>前太守臣逵察臣孝廉:</strong> 考察后予以推荐。</p><p><strong>诏书特下:</strong> 特地。</p><p><strong>拜臣郎中:</strong> 拜：授予官职。</p><p><strong>寻蒙国恩:</strong> 寻：不久。</p><p><strong>除臣洗马:</strong> 除旧官，任新官，受职。</p><p><strong>猥以微贱:</strong> 谦辞，表示自己的谦卑。</p><p><strong>臣具以表闻:</strong> 详尽。</p><p><strong>诏书切峻:</strong> 急切而严厉。</p><p><strong>责臣逋慢:</strong> 逋：拖延，迟延。慢：怠慢。</p><p><strong>急于星火:</strong> 于：比。</p><p><strong>则刘病日笃:</strong> 笃：病重,沉重。</p><p><strong>欲苟顺私情:</strong> 姑且。</p><p><strong>伏惟圣朝以孝治天下:</strong> 俯伏思量。（谦敬之辞）</p><p><strong>犹蒙矜育:</strong> 怜悯。</p><p><strong>且臣少仕伪朝:</strong> 再说了,而且。</p><p><strong>不矜名节:</strong> 顾惜。</p><p><strong>至微至陋:</strong> 极，其。</p><p><strong>过蒙拔擢:</strong> 提升。</p><p><strong>宠命优渥:</strong> 厚。</p><p><strong>岂敢盘桓:</strong> 犹豫不决的样子。</p><p><strong>但以刘日薄西山:</strong> 迫近。</p><p><strong>无以至今日:</strong> 没有用来……的。</p><p><strong>更相为命:</strong> 交互。</p><p><strong>是以区区不能废远:</strong> 是以：这是因为。区区：拳拳之情，形容自己的私情。</p><p><strong>实所共鉴:</strong> 明察。</p><p><strong>矜悯愚诚:</strong> 怜悯。</p><p><strong>听臣微志:</strong> 听任，请允许。</p><p><strong>庶刘侥幸:</strong> 但愿，希冀。</p><p><strong>保卒余年:</strong> 终。</p><p><strong>臣不胜犬马怖惧之情:</strong> 完，尽。</p></div></div></div>
                     <div class="accordion-item"><button class="accordion-header">通假字 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>夙遭闵凶</strong>：闵，通“<strong>悯</strong>”，意为可忧患的事。</li><li><strong>零丁孤苦</strong>：零丁，通“<strong>伶仃</strong>”，意为孤独的样子。</li><li><strong>臣密今年四十有四</strong>：有，通“<strong>又</strong>”，表示整数后面的零数。</li><li><strong>常在床蓐</strong>：蓐，通“<strong>褥</strong>”，指垫子、草席。</li></ul></div></div></div>
                     <div class="accordion-item"><button class="accordion-header">词类活用 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）名词作状语</h4><ul><li>非臣陨首所能<strong>上</strong>报。（上：向上。）</li><li>臣不胜<strong>犬马</strong>怖惧之情。（犬马：像犬马一样。）</li><li>则刘病<strong>日</strong>笃。（日：一天天地。）</li><li><strong>外</strong>无期功强近之亲。（外：在家外。）</li><li><strong>内</strong>无应门五尺之僮。（内：在家里。）</li><li><strong>躬</strong>亲抚养。（躬：亲自。）</li></ul><h4>（二）使动用法</h4><ul><li>臣具以表<strong>闻</strong>。（闻：使……闻。）</li><li><strong>保</strong>卒余年。（保：使……保全。）</li><li>谨拜表以<strong>闻</strong>（闻：使……知道。）</li></ul><h4>（三）形容词作名词</h4><ul><li>夙遭<strong>闵凶</strong>。（闵凶：忧患不幸的事。）</li><li>猥以<strong>微贱</strong>。（微贱：卑微低贱的身份。）</li><li>凡在<strong>故老</strong>。（故老：年老而有功德的旧臣。）</li><li>愿陛下矜悯<strong>愚诚</strong>（愚诚：诚心。）</li></ul><h4>（四）形容词作动词</h4><ul><li>是以区区不能废<strong>远</strong>。（远：远离。）</li><li>则刘病日<strong>笃</strong>。（笃：病重。）</li></ul><h4>（五）名词作动词</h4><ul><li>臣少多疾<strong>病</strong>。（病：生病。）</li><li>且臣少<strong>仕</strong>伪朝。（仕：做官。）</li><li>历<strong>职</strong>郎署。（职：任职。）</li></ul><h4>（六）动词作名词</h4><ul><li>臣之<strong>进退</strong>，实为狼狈。（进退：指是否出来做官之事。）</li></ul></div></div></div>
@@ -375,11 +372,12 @@
             }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
             
             const itemsToAnimate = document.querySelectorAll('.animated-item');
-            itemsToAnimate.forEach((el, index) => {
+            itemsToAnimate.forEach((el) => {
                 const sectionParent = el.closest('.analysis-section, .translation-grid');
                 let delayIndex = 0;
                 if (sectionParent) {
-                    delayIndex = Array.from(sectionParent.querySelectorAll('.animated-item')).indexOf(el);
+                    const siblings = Array.from(sectionParent.querySelectorAll('.animated-item'));
+                    delayIndex = siblings.indexOf(el);
                 }
                 el.style.setProperty('--delay', `${delayIndex * 100}ms`);
                 observer.observe(el);
