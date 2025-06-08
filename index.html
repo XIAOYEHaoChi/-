@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陈情表 - 深度解析·增强版</title>
+    <title>陈情表 - 深度解析·最终版</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,10 +15,11 @@
     
     <style>
         /* ---
-         * V5 Enhanced CSS by AI
+         * V8 Final (True Original) CSS by AI
          * Key Improvements:
-         * 1. MOBILE NAV FIX: Implemented a fully functional hamburger menu for mobile devices.
-         * 2. TITLE AESTHETICS: Restored and enhanced the animated "shimmer" effect on the main title for both themes.
+         * 1. DARK MODE TITLE RESTORED: Title in dark mode is now a classic SOLID color, as originally intended.
+         * 2. LIGHT MODE TITLE: Retains the high-contrast GRADIENT for readability.
+         * 3. All other fixes (mobile nav, etc.) are maintained.
          * --- */
 
         /* 1. 字体系统与变量 */
@@ -37,7 +38,8 @@
             --separator-color: rgba(255, 255, 255, 0.15);
             --main-max-width: 1000px;
             --main-line-height: 1.9;
-            --title-gradient: linear-gradient(120deg, var(--title-color), rgba(255,255,255,0.9), var(--highlight-color));
+            /* Light mode title gradient is defined here for use in the override */
+            --light-title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
         }
 
         [data-theme="light"] {
@@ -51,7 +53,6 @@
             --button-bg-hover: rgba(0, 0, 0, 0.05);
             --shadow-color: rgba(0, 0, 0, 0.1);
             --separator-color: rgba(0, 0, 0, 0.1);
-            --title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
         }
         
         /* 2. 基础与布局样式 */
@@ -101,14 +102,11 @@
         nav.main-nav a { font-family: var(--font-serif); font-size: 1rem; color: var(--text-color); text-decoration: none; margin: 0 15px; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
         nav.main-nav a:hover { color: var(--title-color); opacity: 1; }
         .controls { display: flex; align-items: center; gap: 10px; }
-        /* ... (button styles remain same) ... */
         .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
         .controls button:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-2px); }
         .controls button .fas { font-size: 0.9em; transition: transform 0.5s ease; }
         .controls button.playing .fas { animation: pulse 1.5s infinite ease-in-out; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-
-        /* MOBILE NAV: Hamburger menu button */
         .hamburger { display: none; cursor: pointer; background: transparent; border: none; z-index: 102; padding: 10px; }
         .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-color); transition: all 0.3s ease-in-out; }
         .hamburger.active .bar:nth-child(2) { opacity: 0; }
@@ -120,29 +118,39 @@
         .animated-item { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); transition-delay: var(--delay, 0s); }
         .animated-item.visible { opacity: 1; transform: translateY(0); }
 
-        .article-title { text-align: center; margin-bottom: 6rem; position: relative; }
-        /* TITLE AESTHETICS: Restored shimmer effect */
-        @keyframes shimmer { 0% { transform: translateX(-100%) skewX(-15deg); } 100% { transform: translateX(200%) skewX(-15deg); } }
+        .article-title { text-align: center; margin-bottom: 6rem; }
+        /* --- TITLE STYLE --- */
+        /* Base style for h1 (This is the Dark Mode style) */
         .article-title h1 {
-            font-family: var(--font-cursive); font-size: 4.8rem; font-weight: normal; 
-            background: var(--title-gradient);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-            text-shadow: 0 0 30px var(--shadow-color);
+            font-family: var(--font-cursive);
+            font-size: 4.8rem;
+            font-weight: normal; 
+            color: var(--title-color); /* Classic solid color */
+            background: none; /* Ensure no background is applied by default */
+            -webkit-background-clip: unset;
+            background-clip: unset;
+            text-shadow: 1px 1px 2px var(--shadow-color), 0 0 15px var(--shadow-color);
             animation: fadeIn-up 0.8s 0.2s both cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: background 0.5s ease;
-            position: relative; overflow: hidden; display: inline-block;
+            transition: color 0.5s ease, background 0.5s ease;
         }
-        .article-title h1::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 100%;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%);
-            animation: shimmer 4s infinite linear;
+        /* Specific override for Light Mode to apply gradient */
+        [data-theme="light"] .article-title h1 {
+            background: var(--light-title-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
+        
         .article-title h2 {
-            font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
+            font-size: 1.2rem;
+            color: var(--text-color);
+            font-weight: 400;
+            margin-top: 0.5rem;
+            letter-spacing: 2px; 
             animation: fadeIn-up 0.8s 0.4s both cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        /* ... (All other styles from V4 remain unchanged) ... */
+        /* 5. 原文与译文 & other sections (styles remain unchanged) */
         .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
         .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
         .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
@@ -187,42 +195,22 @@
         .function-word-list dt { font-weight: 700; }
         .function-word-list div:last-child { border-bottom: none; }
 
-        /* 10. 响应式设计 (Responsive) & MOBILE NAV FIX */
+        /* 6. 响应式设计 (Responsive) */
         @media (max-width: 992px) { 
-            /* Hide desktop nav, show hamburger */
             .nav-center { display: none; }
             .hamburger { display: block; }
-
-            /* Mobile nav panel styles */
             .nav-center.active {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
+                display: flex; flex-direction: column; justify-content: center; align-items: center;
+                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
                 background-color: var(--glass-bg);
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
+                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 z-index: 101;
                 transform: translateY(-100%);
                 animation: slideIn 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
             }
-            .nav-center.active.closing {
-                animation: slideOut 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-            }
-            .nav-center.active .main-nav {
-                flex-direction: column;
-                gap: 2rem;
-            }
-            .nav-center.active .main-nav a {
-                font-size: 1.8rem;
-                opacity: 1;
-            }
-
+            .nav-center.active.closing { animation: slideOut 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1); }
+            .nav-center.active .main-nav { flex-direction: column; gap: 2rem; }
+            .nav-center.active .main-nav a { font-size: 1.8rem; opacity: 1; }
             @keyframes slideIn { from { transform: translateY(-100%); } to { transform: translateY(0); } }
             @keyframes slideOut { from { transform: translateY(0); } to { transform: translateY(-100%); } }
 
@@ -240,20 +228,16 @@
             .controls button { min-width: auto; padding: 8px 12px; font-size: 0.8rem; } 
             .controls button span { display: none; } 
             main { padding: 120px 0 80px; } 
-
             .article-title { margin-bottom: 4rem; }
             .article-title h1 { font-size: 3.2rem; } 
             .article-title h2 { font-size: 1rem; } 
-            
             .analysis-section { margin-top: 6rem; }
             .analysis-grid { gap: 1.5rem; }
-
             .original-text p, .translated-text p { font-size: 1.1rem; } 
             .analysis-card p { font-size: 1rem; } 
             body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.25rem; } 
             body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.15rem; } 
             body.large-font-mode .tooltip .tooltip-text { font-size: 1.05rem; width: 240px; margin-left: -120px; }
-            
             .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
             .accordion-content-inner { font-size: 1rem; } 
         }
@@ -264,7 +248,6 @@
     <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop></audio>
 
     <header>
-        <!-- HTML Change: Added header-content wrapper and hamburger button -->
         <div class="header-content">
             <a href="#" class="logo">陈情表</a>
             <div class="nav-center">
@@ -348,21 +331,18 @@
             const toggleNav = () => {
                 const isActive = hamburger.classList.contains('active');
                 if (isActive) {
-                    // Close menu
                     hamburger.classList.remove('active');
                     navCenter.classList.add('closing');
                     navCenter.addEventListener('animationend', () => {
                         navCenter.classList.remove('active', 'closing');
                     }, { once: true });
                 } else {
-                    // Open menu
                     hamburger.classList.add('active');
                     navCenter.classList.add('active');
                 }
             };
             
             hamburger.addEventListener('click', toggleNav);
-            // Close menu when a link is clicked
             navLinks.forEach(link => {
                 link.addEventListener('click', () => {
                     if (hamburger.classList.contains('active')) {
@@ -430,7 +410,7 @@
             
             const itemsToAnimate = document.querySelectorAll('.animated-item');
             itemsToAnimate.forEach((el) => {
-                const sectionParent = el.closest('.analysis-section, .translation-grid');
+                const sectionParent = el.closest('.analysis-section, .translation-grid, .accordion');
                 let delayIndex = 0;
                 if (sectionParent) {
                     const siblings = Array.from(sectionParent.querySelectorAll('.animated-item'));
