@@ -13,13 +13,12 @@
     
     <style>
         /* ---
-         * V11 Final CSS by AI
+         * V12 Final CSS by AI
          * Key Improvements:
-         * 1. LAYOUT OVERFLOW FIX: The root cause of the horizontal overflow on mobile has been fixed.
-         *    The `.analysis-section` class had redundant padding and max-width rules that conflicted
-         *    with its parent container. These have been removed.
-         * 2. CLEANUP: Removed `overflow-x: hidden` from the body, as the underlying issue is now solved.
-         * 3. All previous fixes maintained.
+         * 1. GLOBAL OVERFLOW FIX: Added `overflow-x: hidden` to <html> and `width: 100%` to <body>.
+         *    This is the definitive fix for fixed-position elements (like the mobile nav and back-to-top button)
+         *    being pushed off-screen due to micro-overflows from child elements.
+         * 2. All previous fixes maintained.
          * --- */
 
         /* 1. 字体系统与变量 */
@@ -56,16 +55,22 @@
         
         /* 2. 基础与布局样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        
+        /* --- CSS FIX: Prevent all horizontal overflow --- */
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
         body {
+            width: 100%; /* Ensures body does not exceed html width */
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-serif);
             font-weight: 400;
             line-height: var(--main-line-height);
-            /* overflow-x: hidden;  <-- REMOVED: This was masking the layout bug. */
             transition: background-color 0.5s ease, color 0.5s ease;
         }
+        
         body::before {
             content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4));
@@ -136,16 +141,15 @@
         /* 5. 原文与译文 & other sections */
         .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
         .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
-        .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
+        .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size: 0.4s ease; margin: 0; }
         .translated-text p { color: var(--text-color); opacity: 0.85; font-weight: 400; }
         .tooltip { display: inline; position: relative; text-decoration: underline; text-decoration-style: dashed; text-decoration-color: var(--highlight-color); text-decoration-thickness: 1px; text-underline-offset: 5px; cursor: help; }
         .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--glass-bg); color: var(--text-color); text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease; font-size: 0.9rem; line-height: 1.6; backdrop-filter: blur(10px); border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color); }
         .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateY(0); }
         .tooltip .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--border-color) transparent transparent transparent; }
         
-        /* --- CSS FIX: Removed conflicting layout rules --- */
         .analysis-section {
-            margin: 8rem 0 0; /* REMOVED: max-width, horizontal margin, and horizontal padding */
+            margin: 8rem 0 0;
         }
         .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; }
         .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
@@ -164,7 +168,7 @@
         .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease; }
         .accordion-header:hover { background-color: var(--button-bg-hover); }
         .accordion-header .icon { font-size: 1.2rem; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .accordion-header .icon svg { width: 1em; height: 1em; } /* Sizing for accordion SVG icon */
+        .accordion-header .icon svg { width: 1em; height: 1em; } 
         .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
         .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
@@ -209,7 +213,6 @@
         }
         
         @media (max-width: 768px) { 
-            body { line-height: 1.9; } 
             #video-bg { display: none; }
             header { padding: 15px 5%; } 
             .logo { font-size: 1.8rem; } 
