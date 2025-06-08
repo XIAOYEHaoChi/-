@@ -11,14 +11,14 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- 优化：移除了 Font Awesome 的 CSS 链接，改用内联 SVG，以提升性能 -->
-    
     <style>
         /* ---
-         * V10 Optimized CSS by AI
+         * V11 Final CSS by AI
          * Key Improvements:
-         * 1. BACK TO TOP: Added a "back to top" button for better navigation.
-         * 2. MOBILE NAV FIX: Corrected mobile navigation overlay width to prevent horizontal scroll.
+         * 1. LAYOUT OVERFLOW FIX: The root cause of the horizontal overflow on mobile has been fixed.
+         *    The `.analysis-section` class had redundant padding and max-width rules that conflicted
+         *    with its parent container. These have been removed.
+         * 2. CLEANUP: Removed `overflow-x: hidden` from the body, as the underlying issue is now solved.
          * 3. All previous fixes maintained.
          * --- */
 
@@ -63,7 +63,7 @@
             font-family: var(--font-serif);
             font-weight: 400;
             line-height: var(--main-line-height);
-            overflow-x: hidden;
+            /* overflow-x: hidden;  <-- REMOVED: This was masking the layout bug. */
             transition: background-color 0.5s ease, color 0.5s ease;
         }
         body::before {
@@ -142,7 +142,11 @@
         .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--glass-bg); color: var(--text-color); text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease; font-size: 0.9rem; line-height: 1.6; backdrop-filter: blur(10px); border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color); }
         .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateY(0); }
         .tooltip .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--border-color) transparent transparent transparent; }
-        .analysis-section { max-width: 1000px; margin: 8rem auto 0; padding: 0 20px; }
+        
+        /* --- CSS FIX: Removed conflicting layout rules --- */
+        .analysis-section {
+            margin: 8rem 0 0; /* REMOVED: max-width, horizontal margin, and horizontal padding */
+        }
         .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; }
         .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .analysis-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease, border-color 0.4s ease; }
@@ -185,7 +189,7 @@
             .hamburger { display: block; }
             .nav-center.active {
                 display: flex; flex-direction: column; justify-content: center; align-items: center;
-                position: fixed; top: 0; left: 0; width: 100%; /* FIX: Use 100% to avoid vw-related scroll issues */ height: 100vh;
+                position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
                 background-color: var(--glass-bg);
                 backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 z-index: 101;
@@ -225,7 +229,6 @@
             .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
             .accordion-content-inner { font-size: 1rem; }
             
-            /* --- 修复：成语卡片移动端布局 --- */
             .idiom-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
@@ -326,7 +329,6 @@
     </header>
 
     <main>
-        <!-- The rest of your HTML body remains the same -->
         <div class="article-container">
             <div class="article-title"><h1>陈情表</h1><h2>[晋] 李密</h2></div>
             <section id="background" class="analysis-section" style="margin-top:0; margin-bottom: 6rem;">
