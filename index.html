@@ -15,10 +15,10 @@
     
     <style>
         /* ---
-         * V9 Optimized CSS by AI
+         * V10 Optimized CSS by AI
          * Key Improvements:
-         * 1. MOBILE IDIOM FIX: Added rule to force single-column layout for idiom cards on small screens.
-         * 2. SVG ICONS: Adjusted styles to support inline SVG icons, removing the Font Awesome dependency.
+         * 1. BACK TO TOP: Added a "back to top" button for better navigation.
+         * 2. MOBILE NAV FIX: Corrected mobile navigation overlay width to prevent horizontal scroll.
          * 3. All previous fixes maintained.
          * --- */
 
@@ -185,7 +185,7 @@
             .hamburger { display: block; }
             .nav-center.active {
                 display: flex; flex-direction: column; justify-content: center; align-items: center;
-                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+                position: fixed; top: 0; left: 0; width: 100%; /* FIX: Use 100% to avoid vw-related scroll issues */ height: 100vh;
                 background-color: var(--glass-bg);
                 backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 z-index: 101;
@@ -229,6 +229,54 @@
             .idiom-grid {
                 grid-template-columns: 1fr;
                 gap: 1rem;
+            }
+        }
+        
+        /* 7. Utilities (Back to Top Button) */
+        #back-to-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--glass-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 50%;
+            cursor: pointer;
+            visibility: hidden;
+            opacity: 0;
+            z-index: 99;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s, background-color 0.3s;
+        }
+
+        #back-to-top.visible {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        #back-to-top:hover {
+            background: var(--button-bg-hover);
+            color: var(--title-color);
+            transform: translateY(-5px);
+        }
+
+        #back-to-top svg {
+            width: 1.2em;
+            height: 1.2em;
+        }
+
+        @media (max-width: 768px) {
+            #back-to-top {
+                width: 45px;
+                height: 45px;
+                bottom: 20px;
+                right: 20px;
             }
         }
     </style>
@@ -320,6 +368,11 @@
             </section>
         </div>
     </main>
+
+    <!-- Back to Top Button -->
+    <button id="back-to-top" title="回到顶部">
+        <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3V480c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l137.4 137.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg>
+    </button>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -447,6 +500,25 @@
                 header.addEventListener('click', () => {
                     const isActive = item.classList.toggle('active');
                     content.style.maxHeight = isActive ? content.scrollHeight + "px" : null;
+                });
+            });
+
+            // --- BACK TO TOP SCRIPT ---
+            const backToTopButton = document.getElementById('back-to-top');
+            
+            window.addEventListener('scroll', () => {
+                // Show button after scrolling down 300px
+                if (window.scrollY > 300) {
+                    backToTopButton.classList.add('visible');
+                } else {
+                    backToTopButton.classList.remove('visible');
+                }
+            });
+            
+            backToTopButton.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
                 });
             });
         });
