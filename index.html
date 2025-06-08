@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陈情表 - 深度解析·最终版 (V11)</title>
+    <title>陈情表 - 深度解析·最终版 (优化版)</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,13 +11,15 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
     
+    <!-- 优化：移除了 Font Awesome 的 CSS 链接，改用内联 SVG，以提升性能 -->
+    
     <style>
         /* ---
-         * V11 Final Polish by AI
+         * V9 Optimized CSS by AI
          * Key Improvements:
-         * 1. GO-TO-TOP BUTTON: Added a new, stylish scroll-to-top button.
-         * 2. MOBILE NAV FIX: Corrected mobile navigation width to prevent horizontal overflow.
-         * 3. All previous performance optimizations (will-change, SVG icons, etc.) are maintained.
+         * 1. MOBILE IDIOM FIX: Added rule to force single-column layout for idiom cards on small screens.
+         * 2. SVG ICONS: Adjusted styles to support inline SVG icons, removing the Font Awesome dependency.
+         * 3. All previous fixes maintained.
          * --- */
 
         /* 1. 字体系统与变量 */
@@ -37,12 +39,6 @@
             --main-max-width: 1000px;
             --main-line-height: 1.9;
             --light-title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
-            --theme-transition-duration: 0.25s;
-            --theme-transition:
-                background-color var(--theme-transition-duration) ease,
-                color var(--theme-transition-duration) ease,
-                border-color var(--theme-transition-duration) ease,
-                opacity var(--theme-transition-duration) ease;
         }
 
         [data-theme="light"] {
@@ -68,16 +64,8 @@
             font-weight: 400;
             line-height: var(--main-line-height);
             overflow-x: hidden;
-            transition: var(--theme-transition);
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
-
-        body, header, .analysis-card, .accordion, .tooltip .tooltip-text, .controls button, #back-to-top {
-            will-change: background-color, border-color, color, opacity, transform;
-        }
-        .article-title h1 {
-            will-change: color, background;
-        }
-        
         body::before {
             content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4));
@@ -103,19 +91,17 @@
             z-index: 100; background: var(--glass-bg);
             backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
             border-bottom: 1px solid var(--border-color);
-            transition: background-color var(--theme-transition-duration) ease, border-color var(--theme-transition-duration) ease, box-shadow 0.4s ease;
+            transition: background-color 0.4s ease, box-shadow 0.4s ease;
             animation: slideDown 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--title-color); text-decoration: none; transition: var(--theme-transition); }
+        .logo { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--title-color); text-decoration: none; transition: color 0.3s; z-index: 102; }
         .logo:hover { color: var(--highlight-color); }
         .nav-center { flex-grow: 1; display: flex; justify-content: center; }
-        nav.main-nav a { font-family: var(--font-serif); font-size: 1rem; color: var(--text-color); text-decoration: none; margin: 0 15px; opacity: 0.8; transition: var(--theme-transition); }
+        nav.main-nav a { font-family: var(--font-serif); font-size: 1rem; color: var(--text-color); text-decoration: none; margin: 0 15px; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
         nav.main-nav a:hover { color: var(--title-color); opacity: 1; }
         .controls { display: flex; align-items: center; gap: 10px; }
-        .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; 
-            transition: background-color 0.3s ease, color var(--theme-transition-duration) ease, transform 0.3s ease;
-        }
+        .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
         .controls button:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-2px); }
         .controls button svg { width: 1em; height: 1em; transition: transform 0.5s ease; }
         .controls button.playing svg { animation: pulse 1.5s infinite ease-in-out; }
@@ -137,7 +123,7 @@
             color: var(--title-color); background: none; -webkit-background-clip: unset; background-clip: unset;
             text-shadow: 1px 1px 2px var(--shadow-color), 0 0 15px var(--shadow-color);
             animation: fadeIn-up 0.8s 0.2s both cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: color var(--theme-transition-duration) ease, background var(--theme-transition-duration) ease;
+            transition: color 0.5s ease, background 0.5s ease;
         }
         [data-theme="light"] .article-title h1 {
             background: var(--light-title-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -145,106 +131,61 @@
         .article-title h2 {
             font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
             animation: fadeIn-up 0.8s 0.4s both cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: var(--theme-transition);
         }
         
-        /* 5. 原文与译文 & 其他内容 */
+        /* 5. 原文与译文 & other sections */
         .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
         .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
         .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
-        .translated-text p { color: var(--text-color); opacity: 0.85; font-weight: 400; transition: var(--theme-transition); }
+        .translated-text p { color: var(--text-color); opacity: 0.85; font-weight: 400; }
         .tooltip { display: inline; position: relative; text-decoration: underline; text-decoration-style: dashed; text-decoration-color: var(--highlight-color); text-decoration-thickness: 1px; text-underline-offset: 5px; cursor: help; }
-        .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--glass-bg); color: var(--text-color); text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease, var(--theme-transition); font-size: 0.9rem; line-height: 1.6; backdrop-filter: blur(10px); border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color); }
+        .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--glass-bg); color: var(--text-color); text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease; font-size: 0.9rem; line-height: 1.6; backdrop-filter: blur(10px); border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color); }
         .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateY(0); }
         .tooltip .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--border-color) transparent transparent transparent; }
         .analysis-section { max-width: 1000px; margin: 8rem auto 0; padding: 0 20px; }
-        .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; transition: var(--theme-transition); }
+        .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; }
         .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        .analysis-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; 
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease, var(--theme-transition);
-        }
+        .analysis-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease, border-color 0.4s ease; }
         .analysis-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 10px 40px var(--shadow-color); border-color: var(--highlight-color); }
-        .analysis-card h3 { font-family: var(--font-serif); font-weight: 700; font-size: 1.5rem; color: var(--title-color); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; transition: var(--theme-transition); }
-        .analysis-card p { font-size: 1.1rem; line-height: 1.8; text-align: left; text-indent: 0; margin-bottom: 1em; transition: font-size 0.4s ease, color var(--theme-transition-duration) ease; }
+        .analysis-card h3 { font-family: var(--font-serif); font-weight: 700; font-size: 1.5rem; color: var(--title-color); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; }
+        .analysis-card p { font-size: 1.1rem; line-height: 1.8; text-align: left; text-indent: 0; margin-bottom: 1em; transition: font-size 0.4s ease; }
         .analysis-card p:last-child { margin-bottom: 0; }
-        .analysis-card p strong { color: var(--highlight-color); font-weight: 500; transition: var(--theme-transition); }
+        .analysis-card p strong { color: var(--highlight-color); font-weight: 500; }
         body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.55rem; }
         body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.4rem; }
         body.large-font-mode .tooltip .tooltip-text { font-size: 1.15rem; width: 280px; margin-left: -140px; }
-        .accordion { margin-top: 2rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background-color: var(--glass-bg); transition: var(--theme-transition); }
-        .accordion-item { border-bottom: 1px solid var(--border-color); transition: border-color var(--theme-transition-duration) ease; }
+        .accordion { margin-top: 2rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background-color: var(--glass-bg); }
+        .accordion-item { border-bottom: 1px solid var(--border-color); }
         .accordion-item:last-child { border-bottom: none; }
-        .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease, color var(--theme-transition-duration) ease; }
+        .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease; }
         .accordion-header:hover { background-color: var(--button-bg-hover); }
         .accordion-header .icon { font-size: 1.2rem; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .accordion-header .icon svg { width: 1em; height: 1em; } 
+        .accordion-header .icon svg { width: 1em; height: 1em; } /* Sizing for accordion SVG icon */
         .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-        .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease, color var(--theme-transition-duration) ease; }
+        .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
         .accordion-content-inner p, .accordion-content-inner ul { margin-bottom: 1.2em; }
         .accordion-content-inner p:last-child, .accordion-content-inner ul:last-child { margin-bottom: 0; }
         .accordion-content-inner ul { list-style-position: inside; padding-left: 1em; }
         .accordion-content-inner li { margin-bottom: 0.5em; }
-        .accordion-content-inner strong { color: var(--highlight-color); font-weight: 500; transition: var(--theme-transition); }
+        .accordion-content-inner strong { color: var(--highlight-color); font-weight: 500; }
         .accordion-content-inner em { font-style: normal; opacity: 0.8; }
-        .accordion-content-inner h4 { font-size: 1.2rem; color: var(--title-color); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; transition: var(--theme-transition); }
-        .accordion-content-inner blockquote { border-left: 3px solid var(--highlight-color); margin: 1em 0; padding: 0.5em 1.5em; background-color: var(--button-bg-hover); border-radius: 4px; font-style: italic; transition: var(--theme-transition); }
+        .accordion-content-inner h4 { font-size: 1.2rem; color: var(--title-color); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        .accordion-content-inner blockquote { border-left: 3px solid var(--highlight-color); margin: 1em 0; padding: 0.5em 1.5em; background-color: var(--button-bg-hover); border-radius: 4px; font-style: italic; }
         .idiom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .idiom-item { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; transition: var(--theme-transition); }
-        .idiom-item dt { font-size: 1.3em; font-weight: 700; color: var(--title-color); margin-bottom: 0.5rem; transition: var(--theme-transition); }
-        .function-word-list div { padding: 1.2rem 0; border-bottom: 1px dashed var(--border-color); transition: border-color var(--theme-transition-duration) ease; }
+        .idiom-item { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
+        .idiom-item dt { font-size: 1.3em; font-weight: 700; color: var(--title-color); margin-bottom: 0.5rem; }
+        .function-word-list div { padding: 1.2rem 0; border-bottom: 1px dashed var(--border-color); }
         .function-word-list dt { font-weight: 700; }
         .function-word-list div:last-child { border-bottom: none; }
 
-        /* 6. 返回顶部按钮 */
-        #back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 99;
-            border: none;
-            outline: none;
-            background-color: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: var(--text-color);
-            cursor: pointer;
-            padding: 15px;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border-color);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: opacity 0.3s, visibility 0.3s, transform 0.3s, var(--theme-transition);
-        }
-        #back-to-top.show {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-        #back-to-top:hover {
-            background-color: var(--highlight-color);
-            color: var(--bg-color);
-        }
-        #back-to-top svg {
-            width: 1.2em;
-            height: 1.2em;
-        }
-
-        /* 7. 响应式设计 (Responsive) */
+        /* 6. 响应式设计 (Responsive) */
         @media (max-width: 992px) { 
             .nav-center { display: none; }
             .hamburger { display: block; }
             .nav-center.active {
                 display: flex; flex-direction: column; justify-content: center; align-items: center;
-                position: fixed; top: 0; left: 0; 
-                width: 100%; /* 修复：使用100%而不是100vw */
-                height: 100vh;
+                position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
                 background-color: var(--glass-bg);
                 backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
                 z-index: 101;
@@ -283,14 +224,20 @@
             body.large-font-mode .tooltip .tooltip-text { font-size: 1.05rem; width: 240px; margin-left: -120px; }
             .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
             .accordion-content-inner { font-size: 1rem; }
-            .idiom-grid { grid-template-columns: 1fr; gap: 1rem; }
-            #back-to-top { bottom: 20px; right: 20px; width: 45px; height: 45px; padding: 12px; }
+            
+            /* --- 修复：成语卡片移动端布局 --- */
+            .idiom-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body id="page-body">
+    <!-- 提示：为了获得最佳体验，可以将 poster 替换为视频第一帧的截图 -->
     <video autoplay muted loop playsinline loading="lazy" id="video-bg" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='100%25' height='100%25' fill='%231a1a1a'/%3E%3C/svg%3E"><source src="https://cdn.coverr.co/videos/coverr-ink-in-water-5415/1080p.mp4" type="video/mp4"></video>
     
+    <!-- 优化：添加 preload="metadata" 以加快音频播放响应速度 -->
     <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop preload="metadata"></audio>
 
     <header>
@@ -305,6 +252,7 @@
                 </nav>
             </div>
             <div class="controls">
+                <!-- 优化：使用 SVG 图标替换 Font Awesome -->
                 <button id="large-font-toggle" title="大字模式">
                     <svg id="zoom-in-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM256 176v64h64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-48v-48c0-8.8-7.2-16-16-16s-16 7.2-16 16z"></path></svg>
                     <svg id="zoom-out-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: none;"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM152 224c-8.8 0-16-7.2-16-16s7.2-16 16-16h112c8.8 0 16 7.2 16 16s-7.2 16-16 16H152z"></path></svg>
@@ -330,7 +278,7 @@
     </header>
 
     <main>
-        <!-- 主体内容 -->
+        <!-- The rest of your HTML body remains the same -->
         <div class="article-container">
             <div class="article-title"><h1>陈情表</h1><h2>[晋] 李密</h2></div>
             <section id="background" class="analysis-section" style="margin-top:0; margin-bottom: 6rem;">
@@ -359,7 +307,7 @@
             <section id="grammar-analysis" class="analysis-section">
                 <h2 class="animated-item">文言知识详解</h2>
                 <div class="accordion animated-item">
-                    <!-- ... Accordion content remains the same ... -->
+                    <!-- Accordion items here -->
                     <div class="accordion-item"><button class="accordion-header">重点解释 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>险衅:</strong> 灾难祸患。险：艰险，祸患。衅：祸患。</p><p><strong>夙遭闵凶:</strong> 夙：早。闵凶：忧伤的事，常指父母之丧。</p><p><strong>慈父见背:</strong> 背弃我。见：助动词，用在动词前面表示对我怎么样。</p><p><strong>舅夺母志:</strong> 强行改变。</p><p><strong>祖母刘愍臣孤弱:</strong> 怜悯，爱怜。</p><p><strong>躬亲抚养:</strong> 亲自。</p><p><strong>终鲜兄弟:</strong> 少，没有。</p><p><strong>门衰祚薄:</strong> 门庭衰微，福分浅薄。祚：福气，福分。</p><p><strong>晚有儿息:</strong> 子女。</p><p><strong>外无期功强近之亲:</strong> 勉强。</p><p><strong>茕茕孑立:</strong> 孤单。</p><p><strong>形影相吊:</strong> 安慰。</p><p><strong>而刘夙婴疾病:</strong> 缠绕着（被……缠绕）。</p><p><strong>逮奉圣朝，沐浴清化:</strong> 逮：及，到。 奉：承奉。</p><p><strong>前太守臣逵察臣孝廉:</strong> 考察后予以推荐。</p><p><strong>诏书特下:</strong> 特地。</p><p><strong>拜臣郎中:</strong> 拜：授予官职。</p><p><strong>寻蒙国恩:</strong> 寻：不久。</p><p><strong>除臣洗马:</strong> 除旧官，任新官，受职。</p><p><strong>猥以微贱:</strong> 谦辞，表示自己的谦卑。</p><p><strong>臣具以表闻:</strong> 详尽。</p><p><strong>诏书切峻:</strong> 急切而严厉。</p><p><strong>责臣逋慢:</strong> 逋：拖延，迟延。慢：怠慢。</p><p><strong>急于星火:</strong> 于：比。</p><p><strong>则刘病日笃:</strong> 笃：病重,沉重。</p><p><strong>欲苟顺私情:</strong> 姑且。</p><p><strong>伏惟圣朝以孝治天下:</strong> 俯伏思量。（谦敬之辞）</p><p><strong>犹蒙矜育:</strong> 怜悯。</p><p><strong>且臣少仕伪朝:</strong> 再说了,而且。</p><p><strong>不矜名节:</strong> 顾惜。</p><p><strong>至微至陋:</strong> 极，其。</p><p><strong>过蒙拔擢:</strong> 提升。</p><p><strong>宠命优渥:</strong> 厚。</p><p><strong>岂敢盘桓:</strong> 犹豫不决的样子。</p><p><strong>但以刘日薄西山:</strong> 迫近。</p><p><strong>无以至今日:</strong> 没有用来……的。</p><p><strong>更相为命:</strong> 交互。</p><p><strong>是以区区不能废远:</strong> 是以：这是因为。区区：拳拳之情，形容自己的私情。</p><p><strong>实所共鉴:</strong> 明察。</p><p><strong>矜悯愚诚:</strong> 怜悯。</p><p><strong>听臣微志:</strong> 听任，请允许。</p><p><strong>庶刘侥幸:</strong> 但愿，希冀。</p><p><strong>保卒余年:</strong> 终。</p><p><strong>臣不胜犬马怖惧之情:</strong> 完，尽。</p></div></div></div>
                     <div class="accordion-item"><button class="accordion-header">通假字 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>夙遭闵凶</strong>：闵，通“<strong>悯</strong>”，意为可忧患的事。</li><li><strong>零丁孤苦</strong>：零丁，通“<strong>伶仃</strong>”，意为孤独的样子。</li><li><strong>臣密今年四十有四</strong>：有，通“<strong>又</strong>”，表示整数后面的零数。</li><li><strong>常在床蓐</strong>：蓐，通“<strong>褥</strong>”，指垫子、草席。</li></ul></div></div></div>
                     <div class="accordion-item"><button class="accordion-header">词类活用 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）名词作状语</h4><ul><li>非臣陨首所能<strong>上</strong>报。（上：向上。）</li><li>臣不胜<strong>犬马</strong>怖惧之情。（犬马：像犬马一样。）</li><li>则刘病<strong>日</strong>笃。（日：一天天地。）</li><li><strong>外</strong>无期功强近之亲。（外：在家外。）</li><li><strong>内</strong>无应门五尺之僮。（内：在家里。）</li><li><strong>躬</strong>亲抚养。（躬：亲自。）</li></ul><h4>（二）使动用法</h4><ul><li>臣具以表<strong>闻</strong>。（闻：使……闻。）</li><li><strong>保</strong>卒余年。（保：使……保全。）</li><li>谨拜表以<strong>闻</strong>（闻：使……知道。）</li></ul><h4>（三）形容词作名词</h4><ul><li>夙遭<strong>闵凶</strong>。（闵凶：忧患不幸的事。）</li><li>猥以<strong>微贱</strong>。（微贱：卑微低贱的身份。）</li><li>凡在<strong>故老</strong>。（故老：年老而有功德的旧臣。）</li><li>愿陛下矜悯<strong>愚诚</strong>（愚诚：诚心。）</li></ul><h4>（四）形容词作动词</h4><ul><li>是以区区不能废<strong>远</strong>。（远：远离。）</li><li>则刘病日<strong>笃</strong>。（笃：病重。）</li></ul><h4>（五）名词作动词</h4><ul><li>臣少多疾<strong>病</strong>。（病：生病。）</li><li>且臣少<strong>仕</strong>伪朝。（仕：做官。）</li><li>历<strong>职</strong>郎署。（职：任职。）</li></ul><h4>（六）动词作名词</h4><ul><li>臣之<strong>进退</strong>，实为狼狈。（进退：指是否出来做官之事。）</li></ul></div></div></div>
@@ -372,12 +320,6 @@
             </section>
         </div>
     </main>
-
-    <!-- 新增：返回顶部按钮 -->
-    <button id="back-to-top" title="返回顶部">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3 361.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160zM246.6 233.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 301.3 361.4 438.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"/></svg>
-    </button>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -415,7 +357,7 @@
                 });
             });
 
-            // --- THEME SCRIPT ---
+            // --- THEME SCRIPT (Updated for SVG icons) ---
             const themeBtnText = themeToggle.querySelector('span');
             const sunIcon = document.getElementById('sun-icon');
             const moonIcon = document.getElementById('moon-icon');
@@ -437,7 +379,7 @@
             applyTheme(currentTheme);
             themeToggle.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-            // --- AUDIO SCRIPT ---
+            // --- AUDIO SCRIPT (Updated for SVG icons) ---
             const audioBtnText = audioToggle.querySelector('span');
             const volumeIcon = document.getElementById('volume-icon');
             const pauseIcon = document.getElementById('pause-icon');
@@ -464,7 +406,7 @@
                 audioToggle.classList.remove('playing');
             });
 
-            // --- LARGE FONT SCRIPT ---
+            // --- LARGE FONT SCRIPT (Updated for SVG icons) ---
             const zoomInIcon = document.getElementById('zoom-in-icon');
             const zoomOutIcon = document.getElementById('zoom-out-icon');
 
@@ -474,22 +416,6 @@
                 zoomInIcon.style.display = isLarge ? 'none' : 'inline-block';
                 zoomOutIcon.style.display = isLarge ? 'inline-block' : 'none';
             });
-
-            // --- SCROLL TO TOP SCRIPT ---
-            const backToTopButton = document.getElementById('back-to-top');
-            
-            window.onscroll = () => {
-                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                    backToTopButton.classList.add('show');
-                } else {
-                    backToTopButton.classList.remove('show');
-                }
-            };
-            
-            backToTopButton.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
 
             // --- ANIMATION SCRIPT ---
             const observer = new IntersectionObserver((entries) => {
