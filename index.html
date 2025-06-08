@@ -3,23 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陈情表 - 深度解析·最终版</title>
+    <title>陈情表 - 深度解析·最终版 (优化版)</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.coverr.co">
     
     <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+    
+    <!-- 优化：移除了 Font Awesome 的 CSS 链接，改用内联 SVG，以提升性能 -->
     
     <style>
         /* ---
-         * V8 Final (True Original) CSS by AI
+         * V9 Optimized CSS by AI
          * Key Improvements:
-         * 1. DARK MODE TITLE RESTORED: Title in dark mode is now a classic SOLID color, as originally intended.
-         * 2. LIGHT MODE TITLE: Retains the high-contrast GRADIENT for readability.
-         * 3. All other fixes (mobile nav, etc.) are maintained.
+         * 1. MOBILE IDIOM FIX: Added rule to force single-column layout for idiom cards on small screens.
+         * 2. SVG ICONS: Adjusted styles to support inline SVG icons, removing the Font Awesome dependency.
+         * 3. All previous fixes maintained.
          * --- */
 
         /* 1. 字体系统与变量 */
@@ -38,7 +38,6 @@
             --separator-color: rgba(255, 255, 255, 0.15);
             --main-max-width: 1000px;
             --main-line-height: 1.9;
-            /* Light mode title gradient is defined here for use in the override */
             --light-title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
         }
 
@@ -104,8 +103,8 @@
         .controls { display: flex; align-items: center; gap: 10px; }
         .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
         .controls button:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-2px); }
-        .controls button .fas { font-size: 0.9em; transition: transform 0.5s ease; }
-        .controls button.playing .fas { animation: pulse 1.5s infinite ease-in-out; }
+        .controls button svg { width: 1em; height: 1em; transition: transform 0.5s ease; }
+        .controls button.playing svg { animation: pulse 1.5s infinite ease-in-out; }
         @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
         .hamburger { display: none; cursor: pointer; background: transparent; border: none; z-index: 102; padding: 10px; }
         .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-color); transition: all 0.3s ease-in-out; }
@@ -119,38 +118,22 @@
         .animated-item.visible { opacity: 1; transform: translateY(0); }
 
         .article-title { text-align: center; margin-bottom: 6rem; }
-        /* --- TITLE STYLE --- */
-        /* Base style for h1 (This is the Dark Mode style) */
         .article-title h1 {
-            font-family: var(--font-cursive);
-            font-size: 4.8rem;
-            font-weight: normal; 
-            color: var(--title-color); /* Classic solid color */
-            background: none; /* Ensure no background is applied by default */
-            -webkit-background-clip: unset;
-            background-clip: unset;
+            font-family: var(--font-cursive); font-size: 4.8rem; font-weight: normal; 
+            color: var(--title-color); background: none; -webkit-background-clip: unset; background-clip: unset;
             text-shadow: 1px 1px 2px var(--shadow-color), 0 0 15px var(--shadow-color);
             animation: fadeIn-up 0.8s 0.2s both cubic-bezier(0.25, 0.8, 0.25, 1);
             transition: color 0.5s ease, background 0.5s ease;
         }
-        /* Specific override for Light Mode to apply gradient */
         [data-theme="light"] .article-title h1 {
-            background: var(--light-title-gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            background: var(--light-title-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
         }
-        
         .article-title h2 {
-            font-size: 1.2rem;
-            color: var(--text-color);
-            font-weight: 400;
-            margin-top: 0.5rem;
-            letter-spacing: 2px; 
+            font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
             animation: fadeIn-up 0.8s 0.4s both cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         
-        /* 5. 原文与译文 & other sections (styles remain unchanged) */
+        /* 5. 原文与译文 & other sections */
         .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
         .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
         .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
@@ -177,6 +160,7 @@
         .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease; }
         .accordion-header:hover { background-color: var(--button-bg-hover); }
         .accordion-header .icon { font-size: 1.2rem; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
+        .accordion-header .icon svg { width: 1em; height: 1em; } /* Sizing for accordion SVG icon */
         .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
         .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
@@ -239,13 +223,22 @@
             body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.15rem; } 
             body.large-font-mode .tooltip .tooltip-text { font-size: 1.05rem; width: 240px; margin-left: -120px; }
             .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
-            .accordion-content-inner { font-size: 1rem; } 
+            .accordion-content-inner { font-size: 1rem; }
+            
+            /* --- 修复：成语卡片移动端布局 --- */
+            .idiom-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
 <body id="page-body">
+    <!-- 提示：为了获得最佳体验，可以将 poster 替换为视频第一帧的截图 -->
     <video autoplay muted loop playsinline loading="lazy" id="video-bg" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Crect width='100%25' height='100%25' fill='%231a1a1a'/%3E%3C/svg%3E"><source src="https://cdn.coverr.co/videos/coverr-ink-in-water-5415/1080p.mp4" type="video/mp4"></video>
-    <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop></audio>
+    
+    <!-- 优化：添加 preload="metadata" 以加快音频播放响应速度 -->
+    <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop preload="metadata"></audio>
 
     <header>
         <div class="header-content">
@@ -259,9 +252,22 @@
                 </nav>
             </div>
             <div class="controls">
-                <button id="large-font-toggle" title="大字模式"><i class="fas fa-search-plus"></i><span>大字模式</span></button>
-                <button id="play-audio" title="聆听朗诵"><i class="fas fa-volume-high"></i><span>聆听朗诵</span></button>
-                <button id="theme-toggle" title="切换主题"><i class="fas fa-sun"></i><span>光明主题</span></button>
+                <!-- 优化：使用 SVG 图标替换 Font Awesome -->
+                <button id="large-font-toggle" title="大字模式">
+                    <svg id="zoom-in-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM256 176v64h64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-48v-48c0-8.8-7.2-16-16-16s-16 7.2-16 16z"></path></svg>
+                    <svg id="zoom-out-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: none;"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM152 224c-8.8 0-16-7.2-16-16s7.2-16 16-16h112c8.8 0 16 7.2 16 16s-7.2 16-16 16H152z"></path></svg>
+                    <span>大字模式</span>
+                </button>
+                <button id="play-audio" title="聆听朗诵">
+                    <svg id="volume-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"></path></svg>
+                    <svg id="pause-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" style="display: none;"><path fill="currentColor" d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"></path></svg>
+                    <span>聆听朗诵</span>
+                </button>
+                <button id="theme-toggle" title="切换主题">
+                    <svg id="sun-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M361.5 1.2c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zM256 0c-13.3 0-24 10.7-24 24V160c0 13.3 10.7 24 24 24s24-10.7 24-24V24c0-13.3-10.7-24-24-24zm-192.4 220.3c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zm-16.3 28.9c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zM256 320c-13.3 0-24 10.7-24 24v144c0 13.3 10.7 24 24 24s24-10.7 24-24V344c0-13.3-10.7-24-24-24zM456.3 221.7c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6z"></path></svg>
+                    <svg id="moon-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="display: none;"><path fill="currentColor" d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-20 2.6-30.6 2.6c-96.8 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
+                    <span>光明主题</span>
+                </button>
             </div>
             <button class="hamburger" id="hamburger-menu">
                 <span class="bar"></span>
@@ -302,14 +308,14 @@
                 <h2 class="animated-item">文言知识详解</h2>
                 <div class="accordion animated-item">
                     <!-- Accordion items here -->
-                    <div class="accordion-item"><button class="accordion-header">重点解释 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>险衅:</strong> 灾难祸患。险：艰险，祸患。衅：祸患。</p><p><strong>夙遭闵凶:</strong> 夙：早。闵凶：忧伤的事，常指父母之丧。</p><p><strong>慈父见背:</strong> 背弃我。见：助动词，用在动词前面表示对我怎么样。</p><p><strong>舅夺母志:</strong> 强行改变。</p><p><strong>祖母刘愍臣孤弱:</strong> 怜悯，爱怜。</p><p><strong>躬亲抚养:</strong> 亲自。</p><p><strong>终鲜兄弟:</strong> 少，没有。</p><p><strong>门衰祚薄:</strong> 门庭衰微，福分浅薄。祚：福气，福分。</p><p><strong>晚有儿息:</strong> 子女。</p><p><strong>外无期功强近之亲:</strong> 勉强。</p><p><strong>茕茕孑立:</strong> 孤单。</p><p><strong>形影相吊:</strong> 安慰。</p><p><strong>而刘夙婴疾病:</strong> 缠绕着（被……缠绕）。</p><p><strong>逮奉圣朝，沐浴清化:</strong> 逮：及，到。 奉：承奉。</p><p><strong>前太守臣逵察臣孝廉:</strong> 考察后予以推荐。</p><p><strong>诏书特下:</strong> 特地。</p><p><strong>拜臣郎中:</strong> 拜：授予官职。</p><p><strong>寻蒙国恩:</strong> 寻：不久。</p><p><strong>除臣洗马:</strong> 除旧官，任新官，受职。</p><p><strong>猥以微贱:</strong> 谦辞，表示自己的谦卑。</p><p><strong>臣具以表闻:</strong> 详尽。</p><p><strong>诏书切峻:</strong> 急切而严厉。</p><p><strong>责臣逋慢:</strong> 逋：拖延，迟延。慢：怠慢。</p><p><strong>急于星火:</strong> 于：比。</p><p><strong>则刘病日笃:</strong> 笃：病重,沉重。</p><p><strong>欲苟顺私情:</strong> 姑且。</p><p><strong>伏惟圣朝以孝治天下:</strong> 俯伏思量。（谦敬之辞）</p><p><strong>犹蒙矜育:</strong> 怜悯。</p><p><strong>且臣少仕伪朝:</strong> 再说了,而且。</p><p><strong>不矜名节:</strong> 顾惜。</p><p><strong>至微至陋:</strong> 极，其。</p><p><strong>过蒙拔擢:</strong> 提升。</p><p><strong>宠命优渥:</strong> 厚。</p><p><strong>岂敢盘桓:</strong> 犹豫不决的样子。</p><p><strong>但以刘日薄西山:</strong> 迫近。</p><p><strong>无以至今日:</strong> 没有用来……的。</p><p><strong>更相为命:</strong> 交互。</p><p><strong>是以区区不能废远:</strong> 是以：这是因为。区区：拳拳之情，形容自己的私情。</p><p><strong>实所共鉴:</strong> 明察。</p><p><strong>矜悯愚诚:</strong> 怜悯。</p><p><strong>听臣微志:</strong> 听任，请允许。</p><p><strong>庶刘侥幸:</strong> 但愿，希冀。</p><p><strong>保卒余年:</strong> 终。</p><p><strong>臣不胜犬马怖惧之情:</strong> 完，尽。</p></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">通假字 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>夙遭闵凶</strong>：闵，通“<strong>悯</strong>”，意为可忧患的事。</li><li><strong>零丁孤苦</strong>：零丁，通“<strong>伶仃</strong>”，意为孤独的样子。</li><li><strong>臣密今年四十有四</strong>：有，通“<strong>又</strong>”，表示整数后面的零数。</li><li><strong>常在床蓐</strong>：蓐，通“<strong>褥</strong>”，指垫子、草席。</li></ul></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">词类活用 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）名词作状语</h4><ul><li>非臣陨首所能<strong>上</strong>报。（上：向上。）</li><li>臣不胜<strong>犬马</strong>怖惧之情。（犬马：像犬马一样。）</li><li>则刘病<strong>日</strong>笃。（日：一天天地。）</li><li><strong>外</strong>无期功强近之亲。（外：在家外。）</li><li><strong>内</strong>无应门五尺之僮。（内：在家里。）</li><li><strong>躬</strong>亲抚养。（躬：亲自。）</li></ul><h4>（二）使动用法</h4><ul><li>臣具以表<strong>闻</strong>。（闻：使……闻。）</li><li><strong>保</strong>卒余年。（保：使……保全。）</li><li>谨拜表以<strong>闻</strong>（闻：使……知道。）</li></ul><h4>（三）形容词作名词</h4><ul><li>夙遭<strong>闵凶</strong>。（闵凶：忧患不幸的事。）</li><li>猥以<strong>微贱</strong>。（微贱：卑微低贱的身份。）</li><li>凡在<strong>故老</strong>。（故老：年老而有功德的旧臣。）</li><li>愿陛下矜悯<strong>愚诚</strong>（愚诚：诚心。）</li></ul><h4>（四）形容词作动词</h4><ul><li>是以区区不能废<strong>远</strong>。（远：远离。）</li><li>则刘病日<strong>笃</strong>。（笃：病重。）</li></ul><h4>（五）名词作动词</h4><ul><li>臣少多疾<strong>病</strong>。（病：生病。）</li><li>且臣少<strong>仕</strong>伪朝。（仕：做官。）</li><li>历<strong>职</strong>郎署。（职：任职。）</li></ul><h4>（六）动词作名词</h4><ul><li>臣之<strong>进退</strong>，实为狼狈。（进退：指是否出来做官之事。）</li></ul></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">古今异义 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>不行</strong>: <em>古义：</em> 不能走路，这里指柔弱。 <em>今义：</em>不可以。</li><li><strong>秀才</strong>: <em>古义：</em>优秀人才。<em>今义：</em>读书人的通称。</li><li><strong>除</strong>: <em>古义：</em>授予官职。<em>今义：</em>不包括在内。</li><li><strong>洗马</strong>: <em>古义：</em>官职名，太子随从。<em>今义：</em>给马洗身子。</li><li><strong>奔驰</strong>: <em>古义：</em>奔走效劳,这里指赴京就职。<em>今义：</em>迅速的跑。</li><li><strong>辛苦</strong>: <em>古义：</em>辛酸苦楚。<em>今义：</em>表身心劳苦，比喻艰难困苦，很疲倦的感觉。现多指工作和劳作的感受。</li><li><strong>告诉</strong>: <em>古义：</em>申诉。<em>今义：</em>向别人陈述;通知某事，使人知道。</li><li><strong>区区</strong>: <em>古义：</em>拳拳，形容感情恳切。<em>今义：</em>小;少。形容微不足道。</li><li><strong>至于</strong>: <em>古义：</em>一直到....... 。<em>今义：</em>副词。表示事情达到某种程度；连词。表示另提一事或另一情况；到达。</li><li><strong>成立</strong>: <em>古义：</em>成人自立。<em>今义：</em>组织机构开始存在；理论意见，站得住脚。创立、建立。</li><li><strong>星火</strong>: <em>古义：</em>流星的光，比喻急迫。<em>今义：</em>微小的光。</li></ul></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">一词多义 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><h4>行:</h4><ul><li><strong>行</strong>年四岁（动词，经历）</li><li>九岁不<strong>行</strong>（动词，走路）</li><li>余嘉其能<strong>行</strong>古道（动词，施行）</li></ul><h4>矜:</h4><ul><li>犹蒙<strong>矜</strong>育（动词，怜惜）</li><li>不<strong>矜</strong>名节（动词，顾惜）</li><li>愿陛下<strong>矜</strong>悯愚诚（动词，怜悯）</li></ul><h4>至:</h4><ul><li><strong>至</strong>微<strong>至</strong>陋（副词，最）</li><li>无以<strong>至</strong>今日（动词，到达）</li></ul><h4>见:</h4><ul><li>慈父<strong>见</strong>背（见用在动词前，表示他人行为及于自己）</li><li>二州牧伯所<strong>见</strong>明知（动词，看见）</li><li>臣诚恐<strong>见</strong>欺于王而负赵（被）</li></ul><h4>亲:</h4><ul><li>躬<strong>亲</strong>抚养（代词，亲自）</li><li>外无期功强近之<strong>亲</strong>（名词，亲戚）</li></ul><h4>日:</h4><ul><li><strong>日</strong>薄西山（名词，太阳）</li><li>报养刘之<strong>日</strong>短（名词，日子）</li><li>则刘病<strong>日</strong>笃（名词作状语，一天天）</li></ul><h4>当:</h4><ul><li><strong>当</strong>侍东宫（动词，任，充当）</li><li>死<strong>当</strong>结草（副词，应当）</li></ul><h4>薄:</h4><ul><li>日<strong>薄</strong>西山（动词，迫近）</li><li>门衰祚<strong>薄</strong>（形容词，微薄，少）</li><li><strong>薄</strong>微细古（微小）</li></ul><h4>拜:</h4><ul><li><strong>拜</strong>臣郎中（动词，授官）</li><li>谨<strong>拜</strong>表以闻（动词，奉上）</li></ul><h4>于:</h4><ul><li>州司临门，急<strong>于</strong>星火（介词，比）</li><li>是臣尽节<strong>于</strong>陛下之日长（介词，给）</li></ul><h4>夙:</h4><ul><li><strong>夙</strong>遭闵凶（名词，很早，幼年）</li><li><strong>夙</strong>夜忧叹（名词，早晨）</li></ul><h4>区区:</h4><ul><li>是以<strong>区区</strong>不能废远（拳拳，形容自己的私情）</li><li>何乃太<strong>区区</strong>（形容词， 短浅的）</li><li><strong>区区</strong>小事（形容词，形容分量少）</li><li><strong>区区</strong>在下（谦称自己）</li></ul><h4>卒:</h4><ul><li>保<strong>卒</strong>余年（副词， 终）</li><li><strong>卒</strong>成帝业 （副词，终究）</li><li>信臣精<strong>卒</strong>陈利兵而谁何（名词， 士兵）</li><li><strong>卒</strong>然边境有急 （副词，突然）</li></ul><h4>除:</h4><ul><li><strong>除</strong>臣洗马(动词,任命)</li><li>登自东<strong>除</strong>(名词,台阶)</li><li>攘<strong>除</strong>奸凶(动词,清除)</li></ul><h4>婴:</h4><ul><li>夙<strong>婴</strong>疾病(动词,缠绕)</li><li>举<strong>婴</strong>,欲投之于河(名词,婴孩)</li></ul><h4>应:</h4><ul><li>内无<strong>应</strong>门五尺之僮(动词,照应)</li><li>其人弗能<strong>应</strong>也(动词,回答)</li></ul><h4>志:</h4><ul><li>舅夺母<strong>志</strong>（名词，志向）</li><li>寻向所<strong>志</strong>（名词，标记）</li></ul><h4>以:</h4><ul><li>臣<strong>以</strong>险衅（以：因为）</li><li>臣<strong>以</strong>供养无主 （以：介词，因为）</li><li>臣具<strong>以</strong>表闻（以：用）</li><li>猥<strong>以</strong>微贱（以：和地位搭配时，译为“凭借”）</li><li>无<strong>以</strong>至今日 （无以：没有......的办法）</li><li>但<strong>以</strong>刘日薄西山（以：因为）</li><li>是<strong>以</strong>区区不能废远 （是以：因此 以：因为）</li><li>伏惟圣朝<strong>以</strong>孝治天下（以：用）</li><li>谨拜表<strong>以</strong>闻 （以：连词，而）</li></ul></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">重点虚词：“以” <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><div class="function-word-list"><div><dl><dt>臣以险衅 / 臣以供养无主 / 但以刘日薄西山</dt><dd>因为</dd></dl></div><div><dl><dt>是以区区不能废远</dt><dd>是以：因此 (其中“以”表原因)</dd></dl></div><div><dl><dt>伏惟圣朝以孝治天下 / 臣具以表闻</dt><dd>用，拿</dd></dl></div><div><dl><dt>猥以微贱</dt><dd>凭借</dd></dl></div><div><dl><dt>无以至今日</dt><dd>无以：没有用来……的办法</dd></dl></div><div><dl><dt>谨拜表以闻</dt><dd>连词，来，然后</dd></dl></div></div></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">成语典故 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><div class="idiom-grid"><div class="idiom-item"><dl><dt>孤苦伶仃</dt><dd>原文作“零丁孤苦”。孤单困苦，没有依靠。</dd></dl></div><div class="idiom-item"><dl><dt>茕茕孑立</dt><dd>孤身一人。形容一个人无依无靠，孤苦伶仃。</dd></dl></div><div class="idiom-item"><dl><dt>形影相吊</dt><dd>孤身一人，只有和自己的身影相互慰问。形容无依无靠，非常孤单。</dd></dl></div><div class="idiom-item"><dl><dt>急于星火</dt><dd>象流星的光从空中急闪而过。形容非常急促紧迫。</dd></dl></div><div class="idiom-item"><dl><dt>日薄西山</dt><dd>太阳快要落山了。比喻人已衰老或事物衰败，临近死亡。</dd></dl></div><div class="idiom-item"><dl><dt>气息奄奄</dt><dd>形容呼吸微弱，快要断气的样子。</dd></dl></div><div class="idiom-item"><dl><dt>朝不虑夕</dt><dd>早晨不能知道晚上会怎样。形容形势危急，难以预料。</dd></dl></div><div class="idiom-item"><dl><dt>结草衔环</dt><dd>旧时比喻感恩报德，至死不忘。</dd></dl></div><div class="idiom-item"><dl><dt>乌鸟私情</dt><dd>传说小乌鸦能反哺老乌鸦。比喻侍奉尊亲的孝心。</dd></dl></div><div class="idiom-item"><dl><dt>皇天后土</dt><dd>指天地神明。旧时迷信天地能主持公道，主宰万物。</dd></dl></div></div></div></div></div>
-                    <div class="accordion-item"><button class="accordion-header">特殊句式 <i class="fas fa-chevron-down icon"></i></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）介宾短语后置</h4><ul><li>急于星火</li><li>是臣尽节于陛下之日长</li></ul><h4>（二）宾语前置</h4><ul><li>是以区区不能废远</li><li>慈父见背</li></ul><h4>（三）被动句</h4><ul><li>而刘夙婴疾病</li><li>则告诉不许</li></ul><h4>（四）省略句</h4><ul><li>拜臣（为）郎中</li><li>且臣少仕（于）伪朝</li><li>但以刘日薄西山</li></ul><h4>（五）判断句</h4><ul><li>今臣亡国贱俘</li><li>非独蜀之人士及二州牧伯所见明知</li><li>非臣陨首所能上报</li><li>是臣尽节于陛下之日长，报养刘之日短也</li></ul><h4>（六）固定句式</h4><ul><li>臣无祖母，无以至今日</li></ul></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">重点解释 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>险衅:</strong> 灾难祸患。险：艰险，祸患。衅：祸患。</p><p><strong>夙遭闵凶:</strong> 夙：早。闵凶：忧伤的事，常指父母之丧。</p><p><strong>慈父见背:</strong> 背弃我。见：助动词，用在动词前面表示对我怎么样。</p><p><strong>舅夺母志:</strong> 强行改变。</p><p><strong>祖母刘愍臣孤弱:</strong> 怜悯，爱怜。</p><p><strong>躬亲抚养:</strong> 亲自。</p><p><strong>终鲜兄弟:</strong> 少，没有。</p><p><strong>门衰祚薄:</strong> 门庭衰微，福分浅薄。祚：福气，福分。</p><p><strong>晚有儿息:</strong> 子女。</p><p><strong>外无期功强近之亲:</strong> 勉强。</p><p><strong>茕茕孑立:</strong> 孤单。</p><p><strong>形影相吊:</strong> 安慰。</p><p><strong>而刘夙婴疾病:</strong> 缠绕着（被……缠绕）。</p><p><strong>逮奉圣朝，沐浴清化:</strong> 逮：及，到。 奉：承奉。</p><p><strong>前太守臣逵察臣孝廉:</strong> 考察后予以推荐。</p><p><strong>诏书特下:</strong> 特地。</p><p><strong>拜臣郎中:</strong> 拜：授予官职。</p><p><strong>寻蒙国恩:</strong> 寻：不久。</p><p><strong>除臣洗马:</strong> 除旧官，任新官，受职。</p><p><strong>猥以微贱:</strong> 谦辞，表示自己的谦卑。</p><p><strong>臣具以表闻:</strong> 详尽。</p><p><strong>诏书切峻:</strong> 急切而严厉。</p><p><strong>责臣逋慢:</strong> 逋：拖延，迟延。慢：怠慢。</p><p><strong>急于星火:</strong> 于：比。</p><p><strong>则刘病日笃:</strong> 笃：病重,沉重。</p><p><strong>欲苟顺私情:</strong> 姑且。</p><p><strong>伏惟圣朝以孝治天下:</strong> 俯伏思量。（谦敬之辞）</p><p><strong>犹蒙矜育:</strong> 怜悯。</p><p><strong>且臣少仕伪朝:</strong> 再说了,而且。</p><p><strong>不矜名节:</strong> 顾惜。</p><p><strong>至微至陋:</strong> 极，其。</p><p><strong>过蒙拔擢:</strong> 提升。</p><p><strong>宠命优渥:</strong> 厚。</p><p><strong>岂敢盘桓:</strong> 犹豫不决的样子。</p><p><strong>但以刘日薄西山:</strong> 迫近。</p><p><strong>无以至今日:</strong> 没有用来……的。</p><p><strong>更相为命:</strong> 交互。</p><p><strong>是以区区不能废远:</strong> 是以：这是因为。区区：拳拳之情，形容自己的私情。</p><p><strong>实所共鉴:</strong> 明察。</p><p><strong>矜悯愚诚:</strong> 怜悯。</p><p><strong>听臣微志:</strong> 听任，请允许。</p><p><strong>庶刘侥幸:</strong> 但愿，希冀。</p><p><strong>保卒余年:</strong> 终。</p><p><strong>臣不胜犬马怖惧之情:</strong> 完，尽。</p></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">通假字 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>夙遭闵凶</strong>：闵，通“<strong>悯</strong>”，意为可忧患的事。</li><li><strong>零丁孤苦</strong>：零丁，通“<strong>伶仃</strong>”，意为孤独的样子。</li><li><strong>臣密今年四十有四</strong>：有，通“<strong>又</strong>”，表示整数后面的零数。</li><li><strong>常在床蓐</strong>：蓐，通“<strong>褥</strong>”，指垫子、草席。</li></ul></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">词类活用 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）名词作状语</h4><ul><li>非臣陨首所能<strong>上</strong>报。（上：向上。）</li><li>臣不胜<strong>犬马</strong>怖惧之情。（犬马：像犬马一样。）</li><li>则刘病<strong>日</strong>笃。（日：一天天地。）</li><li><strong>外</strong>无期功强近之亲。（外：在家外。）</li><li><strong>内</strong>无应门五尺之僮。（内：在家里。）</li><li><strong>躬</strong>亲抚养。（躬：亲自。）</li></ul><h4>（二）使动用法</h4><ul><li>臣具以表<strong>闻</strong>。（闻：使……闻。）</li><li><strong>保</strong>卒余年。（保：使……保全。）</li><li>谨拜表以<strong>闻</strong>（闻：使……知道。）</li></ul><h4>（三）形容词作名词</h4><ul><li>夙遭<strong>闵凶</strong>。（闵凶：忧患不幸的事。）</li><li>猥以<strong>微贱</strong>。（微贱：卑微低贱的身份。）</li><li>凡在<strong>故老</strong>。（故老：年老而有功德的旧臣。）</li><li>愿陛下矜悯<strong>愚诚</strong>（愚诚：诚心。）</li></ul><h4>（四）形容词作动词</h4><ul><li>是以区区不能废<strong>远</strong>。（远：远离。）</li><li>则刘病日<strong>笃</strong>。（笃：病重。）</li></ul><h4>（五）名词作动词</h4><ul><li>臣少多疾<strong>病</strong>。（病：生病。）</li><li>且臣少<strong>仕</strong>伪朝。（仕：做官。）</li><li>历<strong>职</strong>郎署。（职：任职。）</li></ul><h4>（六）动词作名词</h4><ul><li>臣之<strong>进退</strong>，实为狼狈。（进退：指是否出来做官之事。）</li></ul></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">古今异义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>不行</strong>: <em>古义：</em> 不能走路，这里指柔弱。 <em>今义：</em>不可以。</li><li><strong>秀才</strong>: <em>古义：</em>优秀人才。<em>今义：</em>读书人的通称。</li><li><strong>除</strong>: <em>古义：</em>授予官职。<em>今义：</em>不包括在内。</li><li><strong>洗马</strong>: <em>古义：</em>官职名，太子随从。<em>今义：</em>给马洗身子。</li><li><strong>奔驰</strong>: <em>古义：</em>奔走效劳,这里指赴京就职。<em>今义：</em>迅速的跑。</li><li><strong>辛苦</strong>: <em>古义：</em>辛酸苦楚。<em>今义：</em>表身心劳苦，比喻艰难困苦，很疲倦的感觉。现多指工作和劳作的感受。</li><li><strong>告诉</strong>: <em>古义：</em>申诉。<em>今义：</em>向别人陈述;通知某事，使人知道。</li><li><strong>区区</strong>: <em>古义：</em>拳拳，形容感情恳切。<em>今义：</em>小;少。形容微不足道。</li><li><strong>至于</strong>: <em>古义：</em>一直到....... 。<em>今义：</em>副词。表示事情达到某种程度；连词。表示另提一事或另一情况；到达。</li><li><strong>成立</strong>: <em>古义：</em>成人自立。<em>今义：</em>组织机构开始存在；理论意见，站得住脚。创立、建立。</li><li><strong>星火</strong>: <em>古义：</em>流星的光，比喻急迫。<em>今义：</em>微小的光。</li></ul></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">一词多义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>行:</h4><ul><li><strong>行</strong>年四岁（动词，经历）</li><li>九岁不<strong>行</strong>（动词，走路）</li><li>余嘉其能<strong>行</strong>古道（动词，施行）</li></ul><h4>矜:</h4><ul><li>犹蒙<strong>矜</strong>育（动词，怜惜）</li><li>不<strong>矜</strong>名节（动词，顾惜）</li><li>愿陛下<strong>矜</strong>悯愚诚（动词，怜悯）</li></ul><h4>至:</h4><ul><li><strong>至</strong>微<strong>至</strong>陋（副词，最）</li><li>无以<strong>至</strong>今日（动词，到达）</li></ul><h4>见:</h4><ul><li>慈父<strong>见</strong>背（见用在动词前，表示他人行为及于自己）</li><li>二州牧伯所<strong>见</strong>明知（动词，看见）</li><li>臣诚恐<strong>见</strong>欺于王而负赵（被）</li></ul><h4>亲:</h4><ul><li>躬<strong>亲</strong>抚养（代词，亲自）</li><li>外无期功强近之<strong>亲</strong>（名词，亲戚）</li></ul><h4>日:</h4><ul><li><strong>日</strong>薄西山（名词，太阳）</li><li>报养刘之<strong>日</strong>短（名词，日子）</li><li>则刘病<strong>日</strong>笃（名词作状语，一天天）</li></ul><h4>当:</h4><ul><li><strong>当</strong>侍东宫（动词，任，充当）</li><li>死<strong>当</strong>结草（副词，应当）</li></ul><h4>薄:</h4><ul><li>日<strong>薄</strong>西山（动词，迫近）</li><li>门衰祚<strong>薄</strong>（形容词，微薄，少）</li><li><strong>薄</strong>微细古（微小）</li></ul><h4>拜:</h4><ul><li><strong>拜</strong>臣郎中（动词，授官）</li><li>谨<strong>拜</strong>表以闻（动词，奉上）</li></ul><h4>于:</h4><ul><li>州司临门，急<strong>于</strong>星火（介词，比）</li><li>是臣尽节<strong>于</strong>陛下之日长（介词，给）</li></ul><h4>夙:</h4><ul><li><strong>夙</strong>遭闵凶（名词，很早，幼年）</li><li><strong>夙</strong>夜忧叹（名词，早晨）</li></ul><h4>区区:</h4><ul><li>是以<strong>区区</strong>不能废远（拳拳，形容自己的私情）</li><li>何乃太<strong>区区</strong>（形容词， 短浅的）</li><li><strong>区区</strong>小事（形容词，形容分量少）</li><li><strong>区区</strong>在下（谦称自己）</li></ul><h4>卒:</h4><ul><li>保<strong>卒</strong>余年（副词， 终）</li><li><strong>卒</strong>成帝业 （副词，终究）</li><li>信臣精<strong>卒</strong>陈利兵而谁何（名词， 士兵）</li><li><strong>卒</strong>然边境有急 （副词，突然）</li></ul><h4>除:</h4><ul><li><strong>除</strong>臣洗马(动词,任命)</li><li>登自东<strong>除</strong>(名词,台阶)</li><li>攘<strong>除</strong>奸凶(动词,清除)</li></ul><h4>婴:</h4><ul><li>夙<strong>婴</strong>疾病(动词,缠绕)</li><li>举<strong>婴</strong>,欲投之于河(名词,婴孩)</li></ul><h4>应:</h4><ul><li>内无<strong>应</strong>门五尺之僮(动词,照应)</li><li>其人弗能<strong>应</strong>也(动词,回答)</li></ul><h4>志:</h4><ul><li>舅夺母<strong>志</strong>（名词，志向）</li><li>寻向所<strong>志</strong>（名词，标记）</li></ul><h4>以:</h4><ul><li>臣<strong>以</strong>险衅（以：因为）</li><li>臣<strong>以</strong>供养无主 （以：介词，因为）</li><li>臣具<strong>以</strong>表闻（以：用）</li><li>猥<strong>以</strong>微贱（以：和地位搭配时，译为“凭借”）</li><li>无<strong>以</strong>至今日 （无以：没有......的办法）</li><li>但<strong>以</strong>刘日薄西山（以：因为）</li><li>是<strong>以</strong>区区不能废远 （是以：因此 以：因为）</li><li>伏惟圣朝<strong>以</strong>孝治天下（以：用）</li><li>谨拜表<strong>以</strong>闻 （以：连词，而）</li></ul></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">重点虚词：“以” <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="function-word-list"><div><dl><dt>臣以险衅 / 臣以供养无主 / 但以刘日薄西山</dt><dd>因为</dd></dl></div><div><dl><dt>是以区区不能废远</dt><dd>是以：因此 (其中“以”表原因)</dd></dl></div><div><dl><dt>伏惟圣朝以孝治天下 / 臣具以表闻</dt><dd>用，拿</dd></dl></div><div><dl><dt>猥以微贱</dt><dd>凭借</dd></dl></div><div><dl><dt>无以至今日</dt><dd>无以：没有用来……的办法</dd></dl></div><div><dl><dt>谨拜表以闻</dt><dd>连词，来，然后</dd></dl></div></div></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">成语典故 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="idiom-grid"><div class="idiom-item"><dl><dt>孤苦伶仃</dt><dd>原文作“零丁孤苦”。孤单困苦，没有依靠。</dd></dl></div><div class="idiom-item"><dl><dt>茕茕孑立</dt><dd>孤身一人。形容一个人无依无靠，孤苦伶仃。</dd></dl></div><div class="idiom-item"><dl><dt>形影相吊</dt><dd>孤身一人，只有和自己的身影相互慰问。形容无依无靠，非常孤单。</dd></dl></div><div class="idiom-item"><dl><dt>急于星火</dt><dd>象流星的光从空中急闪而过。形容非常急促紧迫。</dd></dl></div><div class="idiom-item"><dl><dt>日薄西山</dt><dd>太阳快要落山了。比喻人已衰老或事物衰败，临近死亡。</dd></dl></div><div class="idiom-item"><dl><dt>气息奄奄</dt><dd>形容呼吸微弱，快要断气的样子。</dd></dl></div><div class="idiom-item"><dl><dt>朝不虑夕</dt><dd>早晨不能知道晚上会怎样。形容形势危急，难以预料。</dd></dl></div><div class="idiom-item"><dl><dt>结草衔环</dt><dd>旧时比喻感恩报德，至死不忘。</dd></dl></div><div class="idiom-item"><dl><dt>乌鸟私情</dt><dd>传说小乌鸦能反哺老乌鸦。比喻侍奉尊亲的孝心。</dd></dl></div><div class="idiom-item"><dl><dt>皇天后土</dt><dd>指天地神明。旧时迷信天地能主持公道，主宰万物。</dd></dl></div></div></div></div></div>
+                    <div class="accordion-item"><button class="accordion-header">特殊句式 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）介宾短语后置</h4><ul><li>急于星火</li><li>是臣尽节于陛下之日长</li></ul><h4>（二）宾语前置</h4><ul><li>是以区区不能废远</li><li>慈父见背</li></ul><h4>（三）被动句</h4><ul><li>而刘夙婴疾病</li><li>则告诉不许</li></ul><h4>（四）省略句</h4><ul><li>拜臣（为）郎中</li><li>且臣少仕（于）伪朝</li><li>但以刘日薄西山</li></ul><h4>（五）判断句</h4><ul><li>今臣亡国贱俘</li><li>非独蜀之人士及二州牧伯所见明知</li><li>非臣陨首所能上报</li><li>是臣尽节于陛下之日长，报养刘之日短也</li></ul><h4>（六）固定句式</h4><ul><li>臣无祖母，无以至今日</li></ul></div></div></div>
                 </div>
             </section>
         </div>
@@ -351,51 +357,64 @@
                 });
             });
 
-            // --- THEME SCRIPT ---
-            const themeBtnIcon = themeToggle.querySelector('i');
+            // --- THEME SCRIPT (Updated for SVG icons) ---
             const themeBtnText = themeToggle.querySelector('span');
+            const sunIcon = document.getElementById('sun-icon');
+            const moonIcon = document.getElementById('moon-icon');
+            
             function applyTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
                 localStorage.setItem('theme', theme);
                 if (theme === 'dark') {
                     themeBtnText.textContent = '光明主题';
-                    themeBtnIcon.className = 'fas fa-sun';
+                    sunIcon.style.display = 'inline-block';
+                    moonIcon.style.display = 'none';
                 } else {
                     themeBtnText.textContent = '静夜主题';
-                    themeBtnIcon.className = 'fas fa-moon';
+                    sunIcon.style.display = 'none';
+                    moonIcon.style.display = 'inline-block';
                 }
             }
             const currentTheme = localStorage.getItem('theme') || 'dark';
             applyTheme(currentTheme);
             themeToggle.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-            // --- AUDIO SCRIPT ---
-            const audioBtnIcon = audioToggle.querySelector('i');
+            // --- AUDIO SCRIPT (Updated for SVG icons) ---
             const audioBtnText = audioToggle.querySelector('span');
+            const volumeIcon = document.getElementById('volume-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+
             audioToggle.addEventListener('click', () => {
                 if (audioElement.paused) {
                     audioElement.play();
-                    audioBtnIcon.className = 'fas fa-pause';
                     audioBtnText.textContent = '暂停朗诵';
+                    volumeIcon.style.display = 'none';
+                    pauseIcon.style.display = 'inline-block';
                     audioToggle.classList.add('playing');
                 } else {
                     audioElement.pause();
-                    audioBtnIcon.className = 'fas fa-volume-high';
                     audioBtnText.textContent = '聆听朗诵';
+                    volumeIcon.style.display = 'inline-block';
+                    pauseIcon.style.display = 'none';
                     audioToggle.classList.remove('playing');
                 }
             });
             audioElement.addEventListener('ended', () => {
-                audioBtnIcon.className = 'fas fa-volume-high';
                 audioBtnText.textContent = '聆听朗诵';
+                volumeIcon.style.display = 'inline-block';
+                pauseIcon.style.display = 'none';
                 audioToggle.classList.remove('playing');
             });
 
-            // --- LARGE FONT SCRIPT ---
+            // --- LARGE FONT SCRIPT (Updated for SVG icons) ---
+            const zoomInIcon = document.getElementById('zoom-in-icon');
+            const zoomOutIcon = document.getElementById('zoom-out-icon');
+
             largeFontToggle.addEventListener('click', () => {
                 body.classList.toggle('large-font-mode');
-                const largeFontIcon = largeFontToggle.querySelector('i');
-                largeFontIcon.className = body.classList.contains('large-font-mode') ? 'fas fa-search-minus' : 'fas fa-search-plus';
+                const isLarge = body.classList.contains('large-font-mode');
+                zoomInIcon.style.display = isLarge ? 'none' : 'inline-block';
+                zoomOutIcon.style.display = isLarge ? 'inline-block' : 'none';
             });
 
             // --- ANIMATION SCRIPT ---
