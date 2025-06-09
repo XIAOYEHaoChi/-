@@ -5,15 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>初元 - 郁离的个人小站</title>
 
+    <!-- 恢复使用 Google Fonts (采用非阻塞加载方式) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&display=swap"></noscript>
     
     <style>
         /* ---
-         * [首页] V27.3 - 终极性能优化
+         * [首页] V28.1 - LCP性能优化版
          * 优化重点:
-         * 1. 悬停性能: 彻底重写卡片悬停效果，使用高性能的 box-shadow 过渡代替伪元素动画，解决快速切换卡顿问题。
-         * 2. 视觉与性能平衡: 实现既美观又极致流畅的“光晕阴影”效果。
+         * 1. LCP优化: 移除了阻塞渲染的JS逐字动画，改为对H1整体使用高性能CSS动画，大幅降低LCP。
+         * 2. 字体加载: 使用 Google Fonts 并通过 preload 和 `display=swap` 优化加载体验。
          * --- */
 
         :root {
@@ -26,8 +29,8 @@
             --glass-bg: rgba(22, 21, 28, 0.7);
             --glass-bg-scrolled: rgba(22, 21, 28, 0.85);
             --border-color: rgba(255, 255, 255, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.4); /* 调整默认阴影 */
-            --glow-color: rgba(224, 201, 168, 0.25); /* 调整光晕颜色和透明度 */
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --glow-color: rgba(224, 201, 168, 0.25);
         }
         
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -141,25 +144,25 @@
             text-align: center;
             max-width: 800px;
         }
+        
+        /* 优化: 替换了原有的逐字动画，改为对H1整体动画，不再阻塞LCP */
         .hero-title {
             font-family: var(--font-cursive);
             font-size: clamp(4rem, 10vw, 7.5rem);
             font-weight: 400;
             color: #fff;
             line-height: 1.15;
-        }
-        .hero-title .char {
-            display: inline-block;
             opacity: 0;
-            transform: translateY(60px) rotate(15deg);
-            animation: letter-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: translateY(30px);
+            animation: fadeInUp-h1 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
         }
-        @keyframes letter-reveal {
+        @keyframes fadeInUp-h1 {
             to {
                 opacity: 1;
-                transform: translateY(0) rotate(0deg);
+                transform: translateY(0);
             }
         }
+
         .hero-subtitle {
             font-size: clamp(1rem, 2vw, 1.2rem);
             color: var(--text-color);
@@ -196,44 +199,22 @@
             animation: scroll-wheel 2.2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
         }
         @keyframes scroll-wheel {
-            0% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(24px);
-                opacity: 0;
-            }
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(24px); opacity: 0; }
         }
         
-        .page-content {
-            background: var(--bg-color);
-            position: relative;
-            z-index: 1;
-        }
-        .content-wrapper {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 15vh 20px;
-        }
+        .page-content { background: var(--bg-color); position: relative; z-index: 1; }
+        .content-wrapper { max-width: 1000px; margin: 0 auto; padding: 15vh 20px; }
         
         #search-section {
             opacity: 0;
             animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .search-container {
-            position: relative;
-        }
+        .search-container { position: relative; }
         #search-box {
             width: 100%;
             padding: 22px 65px 22px 30px;
@@ -288,31 +269,12 @@
             text-decoration: none;
             color: var(--text-color);
         }
-        .result-item.active, .result-item:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-        .result-item .title {
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: #fff;
-        }
-        .result-item .author {
-            font-size: 0.9rem;
-            opacity: 0.6;
-        }
-        .result-item .highlight {
-            color: var(--highlight-text);
-            font-weight: 700;
-            background-color: rgba(253, 216, 165, 0.1);
-        }
+        .result-item.active, .result-item:hover { background-color: rgba(255,255,255,0.1); }
+        .result-item .title { font-size: 1.1rem; font-weight: 400; color: #fff; }
+        .result-item .author { font-size: 0.9rem; opacity: 0.6; }
+        .result-item .highlight { color: var(--highlight-text); font-weight: 700; background-color: rgba(253, 216, 165, 0.1); }
 
-        .divider {
-            width: 120px;
-            height: 1px;
-            background: var(--border-color);
-            margin: 8rem auto;
-            position: relative;
-        }
+        .divider { width: 120px; height: 1px; background: var(--border-color); margin: 8rem auto; position: relative; }
         .divider::before {
             content: '◇';
             font-size: 1.2rem;
@@ -325,25 +287,11 @@
             padding: 0 15px;
         }
         
-        .featured-section {
-            margin-top: 0;
-            scroll-margin-top: 120px;
-        }
-        .section-title {
-            font-family: var(--font-cursive);
-            font-size: 3.2rem;
-            color: var(--title-color);
-            text-align: center;
-            margin-bottom: 4rem;
-        }
+        .featured-section { margin-top: 0; scroll-margin-top: 120px; }
+        .section-title { font-family: var(--font-cursive); font-size: 3.2rem; color: var(--title-color); text-align: center; margin-bottom: 4rem; }
         
-        .article-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 3rem;
-        }
+        .article-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 3rem; }
         
-        /* --- [终极优化] 高性能的卡片悬停效果：光晕阴影 --- */
         .article-card {
             background: var(--glass-bg); 
             border: 1px solid var(--border-color);
@@ -355,126 +303,45 @@
             display: flex; 
             flex-direction: column;
             box-shadow: 0 8px 25px var(--shadow-color);
-            /* 将所有会变化的属性放入 transition，确保流畅 */
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         .article-card:hover { 
             transform: translateY(-10px);
             border-color: var(--highlight-color);
-            /* 悬停时，改变 box-shadow 来实现光晕效果 */
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5), /* 更深的底部阴影 */
-                        0 0 20px var(--glow-color);    /* 环绕的光晕 */
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5), 0 0 20px var(--glow-color);
         }
         
-        .article-card h3 {
-            font-weight: 700;
-            font-size: 1.6rem;
-            color: #fff;
-            margin-bottom: 0.5rem;
-        }
-        .article-card .author {
-            font-size: 1rem;
-            opacity: 0.6;
-            margin-bottom: 1.5rem;
-        }
-        .article-card p {
-            font-size: 1.05rem;
-            line-height: 1.9;
-            opacity: 0.8;
-            flex-grow: 1;
-        }
-        .article-card .read-more {
-            margin-top: 2rem;
-            font-weight: 400;
-            font-size: 1.1rem;
-            color: var(--title-color);
-        }
+        .article-card h3 { font-weight: 700; font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem; }
+        .article-card .author { font-size: 1rem; opacity: 0.6; margin-bottom: 1.5rem; }
+        .article-card p { font-size: 1.05rem; line-height: 1.9; opacity: 0.8; flex-grow: 1; }
+        .article-card .read-more { margin-top: 2rem; font-weight: 400; font-size: 1.1rem; color: var(--title-color); }
         
-        .page-footer {
-            padding: 6rem 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.4);
-            border-top: 1px solid var(--border-color);
-            margin-top: 10vh;
-        }
+        .page-footer { padding: 6rem 2rem; text-align: center; font-size: 0.9rem; color: rgba(255, 255, 255, 0.4); border-top: 1px solid var(--border-color); margin-top: 10vh; }
 
-        .menu-toggle {
-            display: none;
-            width: 30px;
-            height: 22px;
-            position: relative;
-            cursor: pointer;
-            z-index: 151;
-            background: none;
-            border: none;
-        }
-        .menu-toggle span {
-            display: block;
-            position: absolute;
-            height: 2px;
-            width: 100%;
-            background: var(--text-color);
-            border-radius: 2px;
-            opacity: 1;
-            left: 0;
-            transition: all 0.3s ease-in-out;
-        }
+        .menu-toggle { display: none; width: 30px; height: 22px; position: relative; cursor: pointer; z-index: 151; background: none; border: none; }
+        .menu-toggle span { display: block; position: absolute; height: 2px; width: 100%; background: var(--text-color); border-radius: 2px; opacity: 1; left: 0; transition: all 0.3s ease-in-out; }
         .menu-toggle span:nth-child(1) { top: 0px; }
         .menu-toggle span:nth-child(2) { top: 10px; }
         .menu-toggle span:nth-child(3) { top: 20px; }
-        .menu-toggle.is-active span:nth-child(1) {
-            top: 10px;
-            transform: rotate(135deg);
-        }
-        .menu-toggle.is-active span:nth-child(2) {
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-        .menu-toggle.is-active span:nth-child(3) {
-            top: 10px;
-            transform: rotate(-135deg);
-        }
+        .menu-toggle.is-active span:nth-child(1) { top: 10px; transform: rotate(135deg); }
+        .menu-toggle.is-active span:nth-child(2) { opacity: 0; transform: translateX(-20px); }
+        .menu-toggle.is-active span:nth-child(3) { top: 10px; transform: rotate(-135deg); }
 
         .mobile-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(12, 11, 16, 0.95);
-            backdrop-filter: blur(20px);
-            z-index: 150;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 2rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.4s ease, visibility 0.4s;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(12, 11, 16, 0.95); backdrop-filter: blur(20px); z-index: 150;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 2rem;
+            opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s;
         }
-        .mobile-nav.is-open {
-            opacity: 1;
-            visibility: visible;
-        }
+        .mobile-nav.is-open { opacity: 1; visibility: visible; }
         .mobile-nav a {
-            font-size: 2rem;
-            color: var(--text-color);
-            text-decoration: none;
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            transform: translateY(20px);
+            font-size: 2rem; color: var(--text-color); text-decoration: none; opacity: 0.8;
+            transition: all 0.3s ease; transform: translateY(20px);
         }
-        .mobile-nav.is-open a {
-            transform: translateY(0);
-        }
+        .mobile-nav.is-open a { transform: translateY(0); }
         .mobile-nav a:nth-child(1) { transition-delay: 0.2s; }
         .mobile-nav a:nth-child(2) { transition-delay: 0.3s; }
-        .mobile-nav a:hover {
-            color: #fff;
-            opacity: 1;
-        }
+        .mobile-nav a:hover { color: #fff; opacity: 1; }
 
         @media(max-width: 768px){
             nav.main-nav{ display:none; }
@@ -492,7 +359,6 @@
     </style>
     
     <script defer>
-        // JavaScript部分无需任何修改，此优化完全在CSS层面完成。
         document.addEventListener('DOMContentLoaded', () => {
             const starContainer = document.getElementById('star-container');
             if (starContainer) {
@@ -511,18 +377,7 @@
                 }
             }
             
-            const title = document.querySelector('.hero-title');
-            if (title) {
-                const text = title.textContent;
-                title.innerHTML = '';
-                text.split('').forEach((char, index) => {
-                    const span = document.createElement('span');
-                    span.className = 'char';
-                    span.textContent = char === ' ' ? '\u00A0' : char;
-                    span.style.animationDelay = `${index * 0.05 + 0.5}s`;
-                    title.appendChild(span);
-                });
-            }
+            // 优化: 删除了原有的、阻塞LCP的JS逐字动画代码块。
             
             const header = document.querySelector('header');
             window.addEventListener('scroll', () => {
