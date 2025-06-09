@@ -182,11 +182,14 @@
             // 核心逻辑: 数据与内容加载
             const sitePages = [
                 { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', description: '被誉为“千古第一表”，以其至诚至孝的情感，成为中国古代抒情散文的典范之作。', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
+                { id: 'xiangjixuanzhi', title: '项脊轩志', author: '[明] 归有光', url: 'xiangjixuanzhi.html', description: '明代散文的典范，以一座小小书斋为线索，串联起家族的衰落与人事的变迁，文末的枇杷树更是点睛之笔。', keywords: 'xiangjixuanzhi 项脊轩志 归有光 guiyouguang 明 散文 枇杷树' },
                 { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', description: '此处为预留卡片，用于展示未来的新文章。您可以根据模板添加更多精彩内容。', keywords: '示例 placeholder' }
             ];
+            // 根据数据源动态生成文章卡片
             const articleGrid = document.getElementById('article-grid');
             if (articleGrid) {
-                sitePages.forEach((page, index) => {
+                const pagesToDisplay = sitePages.filter(page => page.id !== 'placeholder1');
+                pagesToDisplay.forEach((page, index) => {
                     const card = document.createElement('a');
                     card.href = page.url;
                     card.className = 'article-card animated-item';
