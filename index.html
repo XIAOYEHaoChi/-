@@ -12,7 +12,7 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&display=swap"></noscript>
     
     <style>
-:root{--font-serif:"Noto Serif SC",serif;--font-cursive:"Ma Shan Zheng",cursive;--bg-color:#121117;--text-color:rgba(230,230,240,.9);--title-color:#e0c9a8;--highlight-color:#c8b08f;--glass-bg:rgba(22,21,28,.7);--glass-bg-scrolled:rgba(22,21,28,.85);--border-color:rgba(255,255,255,.1);--shadow-color:rgba(0,0,0,.4);--glow-color:rgba(224,201,168,.25)}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background-color:var(--bg-color);color:var(--text-color);font-family:var(--font-serif);font-weight:300;line-height:1.8;overflow-x:hidden;cursor:auto}body.no-scroll{overflow:hidden}.background-layers{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background-color:var(--bg-color);overflow:hidden}.aurora-bg{width:100%;height:100%;position:absolute}.aurora-bg::before,.aurora-bg::after{content:'';position:absolute;top:50%;left:50%;width:150vmax;height:150vmax;background-image:radial-gradient(circle at center,rgba(60,100,200,.15) 0,transparent 60%);border-radius:50%;animation:aurora-move 30s infinite linear}.aurora-bg::after{background-image:radial-gradient(circle at center,rgba(147,112,219,.1) 0,transparent 60%);animation-duration:40s}@keyframes aurora-move{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}@media (prefers-reduced-motion:reduce){.aurora-bg::before,.aurora-bg::after,*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}header{position:fixed;top:0;width:100%;padding:30px 5%;z-index:100;animation:fadeIn 1s 1.8s both}.header-content{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:1500px;margin:0 auto;padding:15px 30px;background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-color);border-radius:12px;transition:background-color .4s ease,border-color .4s ease}header.scrolled .header-content{background:var(--glass-bg-scrolled);border-color:rgba(255,255,255,.15)}.logo{font-family:var(--font-cursive);font-size:2.2rem;color:var(--title-color);text-decoration:none}nav.main-nav{display:flex;gap:40px}nav.main-nav a{position:relative;font-size:1rem;color:var(--text-color);text-decoration:none;opacity:.8;transition:all .3s ease;padding-bottom:5px}nav.main-nav a::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--highlight-color);transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.16,1,.3,1)}nav.main-nav a:hover{color:#fff;opacity:1;text-shadow:0 0 8px rgba(255,255,255,.5)}nav.main-nav a:hover::after{transform:scaleX(1);transform-origin:left}.hero-section{display:flex;align-items:center;justify-content:center;height:100vh;min-height:700px;padding:0 8%;width:100%}.hero-text-content{text-align:center;max-width:800px}.hero-title{font-family:var(--font-cursive);font-size:clamp(4rem,10vw,7.5rem);font-weight:400;color:#fff;line-height:1.15;opacity:0;transform:translateY(30px);animation:fadeInUp-h1 1.2s cubic-bezier(0.16,1,.3,1) .1s forwards}@keyframes fadeInUp-h1{to{opacity:1;transform:translateY(0)}}.hero-subtitle{font-size:clamp(1rem,2vw,1.2rem);color:var(--text-color);margin-top:2.5rem;letter-spacing:5px;font-weight:300;opacity:0;animation:fadeIn 1.2s 1.5s both}.scroll-mouse{position:absolute;bottom:5vh;left:50%;transform:translateX(-50%);opacity:0;animation:fadeIn 1s 2.2s both;cursor:pointer}.scroll-mouse,.scroll-mouse .wheel{width:28px;height:48px;border:2px solid rgba(224,201,168,.7);border-radius:20px}.scroll-mouse .wheel{position:absolute;top:8px;left:50%;width:4px;height:10px;background:rgba(224,201,168,.7);border-radius:2px;margin-left:-2px;animation:scroll-wheel 2.2s cubic-bezier(.165,.84,.44,1) infinite}@keyframes scroll-wheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(24px);opacity:0}}.page-content{background:var(--bg-color);position:relative;z-index:1}.content-wrapper{max-width:1000px;margin:0 auto;padding:15vh 20px}#search-section{opacity:0;animation:fadeInUp 1s cubic-bezier(.16,1,.3,1) forwards}@keyframes fadeInUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}.search-container{position:relative}#search-box{width:100%;padding:22px 65px 22px 30px;font-size:1.2rem;border-radius:12px;border:1px solid var(--border-color);background-color:var(--glass-bg);color:#fff;backdrop-filter:blur(10px);transition:all .4s ease;box-shadow:0 10px 40px var(--shadow-color)}#search-box:focus{outline:none;border-color:var(--highlight-color);box-shadow:0 0 30px rgba(224,201,168,.2);transform:scale(1.02);transition:all .4s ease}.search-icon{position:absolute;right:30px;top:50%;transform:translateY(-50%);color:var(--text-color);opacity:.6;width:1.5rem;height:1.5rem;pointer-events:none}#search-results{position:absolute;width:100%;margin-top:1rem;padding:1rem;background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-color);border-radius:12px;max-height:50vh;overflow-y:auto;z-index:110}.result-item{display:block;padding:.8rem 1.2rem;border-radius:8px;cursor:pointer;transition:background-color .2s ease;text-decoration:none;color:var(--text-color)}.result-item.active,.result-item:hover{background-color:rgba(255,255,255,.1)}.result-item .title{font-size:1.1rem;font-weight:400;color:#fff}.result-item .author{font-size:.9rem;opacity:.6}.result-item .highlight{color:var(--highlight-text);font-weight:700;background-color:rgba(253,216,165,.1)}.divider{width:120px;height:1px;background:var(--border-color);margin:8rem auto;position:relative}.divider::before{content:'◇';font-size:1.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--title-color);background:var(--bg-color);padding:0 15px}.featured-section{margin-top:0;scroll-margin-top:120px}.section-title{font-family:var(--font-cursive);font-size:3.2rem;color:var(--title-color);text-align:center;margin-bottom:4rem}.article-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:3rem}.article-card{background:var(--glass-bg);border:1px solid var(--border-color);border-radius:12px;padding:2.5rem;position:relative;text-decoration:none;color:var(--text-color);display:flex;flex-direction:column;box-shadow:0 8px 25px var(--shadow-color);transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}.article-card:hover{transform:translateY(-10px);border-color:var(--highlight-color);box-shadow:0 15px 35px rgba(0,0,0,.5),0 0 20px var(--glow-color)}.article-card h3{font-weight:700;font-size:1.6rem;color:#fff;margin-bottom:.5rem}.article-card .author{font-size:1rem;opacity:.6;margin-bottom:1.5rem}.article-card p{font-size:1.05rem;line-height:1.9;opacity:.8;flex-grow:1}.article-card .read-more{margin-top:2rem;font-weight:400;font-size:1.1rem;color:var(--title-color)}.page-footer{padding:6rem 2rem;text-align:center;font-size:.9rem;color:rgba(255,255,255,.4);border-top:1px solid var(--border-color);margin-top:10vh}.menu-toggle{display:none;width:30px;height:22px;position:relative;cursor:pointer;z-index:151;background:none;border:none}.menu-toggle span{display:block;position:absolute;height:2px;width:100%;background:var(--text-color);border-radius:2px;opacity:1;left:0;transition:all .3s ease-in-out}.menu-toggle span:nth-child(1){top:0}.menu-toggle span:nth-child(2){top:10px}.menu-toggle span:nth-child(3){top:20px}.menu-toggle.is-active span:nth-child(1){top:10px;transform:rotate(135deg)}.menu-toggle.is-active span:nth-child(2){opacity:0;transform:translateX(-20px)}.menu-toggle.is-active span:nth-child(3){top:10px;transform:rotate(-135deg)}.mobile-nav{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(12,11,16,.95);backdrop-filter:blur(20px);z-index:150;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s}.mobile-nav.is-open{opacity:1;visibility:visible}.mobile-nav a{font-size:2rem;color:var(--text-color);text-decoration:none;opacity:.8;transition:all .3s ease;transform:translateY(20px)}.mobile-nav.is-open a{transform:translateY(0)}.mobile-nav a:nth-child(1){transition-delay:.2s}.mobile-nav a:nth-child(2){transition-delay:.3s}.mobile-nav a:hover{color:#fff;opacity:1}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}@media(max-width:768px){nav.main-nav{display:none}.menu-toggle{display:block}.header-content{padding:10px 20px}.hero-section{align-items:center;justify-content:center;text-align:center;padding:20vh 6% 0}.hero-title{font-size:clamp(3rem,12vw,4.5rem)}.hero-subtitle{letter-spacing:3px}.scroll-mouse{left:50%;transform:translateX(-50%)}.content-wrapper{padding:10vh 15px}.article-card{padding:2rem}#search-box{padding:18px 55px 18px 25px;font-size:1rem}.search-icon{right:25px}}
+:root{--font-serif:"Noto Serif SC",serif;--font-cursive:"Ma Shan Zheng",cursive;--bg-color:#121117;--text-color:rgba(230,230,240,.9);--title-color:#e0c9a8;--highlight-color:#c8b08f;--glass-bg:rgba(22,21,28,.7);--glass-bg-scrolled:rgba(22,21,28,.85);--border-color:rgba(255,255,255,.1);--shadow-color:rgba(0,0,0,.4);--glow-color:rgba(224,201,168,.25)}*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}body{background-color:var(--bg-color);color:var(--text-color);font-family:var(--font-serif);font-weight:300;line-height:1.8;overflow-x:hidden;cursor:auto}body.no-scroll{overflow:hidden}.background-layers{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background-color:var(--bg-color);overflow:hidden}.aurora-bg{width:100%;height:100%;position:absolute}.aurora-bg::before,.aurora-bg::after{content:'';position:absolute;top:50%;left:50%;width:150vmax;height:150vmax;background-image:radial-gradient(circle at center,rgba(60,100,200,.15) 0,transparent 60%);border-radius:50%;animation:aurora-move 30s infinite linear;will-change:transform}.aurora-bg::after{background-image:radial-gradient(circle at center,rgba(147,112,219,.1) 0,transparent 60%);animation-duration:40s}@keyframes aurora-move{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}#starfield{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}@media (prefers-reduced-motion:reduce){.aurora-bg::before,.aurora-bg::after,*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}header{position:fixed;top:0;width:100%;padding:30px 5%;z-index:100;animation:fadeIn 1s 1.8s both;will-change:opacity}.header-content{display:flex;justify-content:space-between;align-items:center;width:100%;max-width:1500px;margin:0 auto;padding:15px 30px;background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-color);border-radius:12px;transition:background-color .4s ease,border-color .4s ease}header.scrolled .header-content{background:var(--glass-bg-scrolled);border-color:rgba(255,255,255,.15)}.logo{font-family:var(--font-cursive);font-size:2.2rem;color:var(--title-color);text-decoration:none}nav.main-nav{display:flex;gap:40px}nav.main-nav a{position:relative;font-size:1rem;color:var(--text-color);text-decoration:none;opacity:.8;transition:all .3s ease;padding-bottom:5px}nav.main-nav a::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:var(--highlight-color);transform:scaleX(0);transform-origin:right;transition:transform .4s cubic-bezier(.16,1,.3,1)}nav.main-nav a:hover{color:#fff;opacity:1;text-shadow:0 0 8px rgba(255,255,255,.5)}nav.main-nav a:hover::after{transform:scaleX(1);transform-origin:left}.hero-section{display:flex;align-items:center;justify-content:center;height:100vh;min-height:700px;padding:0 8%;width:100%}.hero-text-content{text-align:center;max-width:800px}.hero-title{font-family:var(--font-cursive);font-size:clamp(4rem,10vw,7.5rem);font-weight:400;color:#fff;line-height:1.15;opacity:0;transform:translateY(30px);animation:fadeInUp-h1 1.2s cubic-bezier(.16,1,.3,1) .1s forwards;will-change:transform,opacity}@keyframes fadeInUp-h1{to{opacity:1;transform:translateY(0)}}.hero-subtitle{font-size:clamp(1rem,2vw,1.2rem);color:var(--text-color);margin-top:2.5rem;letter-spacing:5px;font-weight:300;opacity:0;animation:fadeIn 1.2s 1.5s both}.scroll-mouse{position:absolute;bottom:5vh;left:50%;transform:translateX(-50%);opacity:0;animation:fadeIn 1s 2.2s both;cursor:pointer}.scroll-mouse,.scroll-mouse .wheel{width:28px;height:48px;border:2px solid rgba(224,201,168,.7);border-radius:20px}.scroll-mouse .wheel{position:absolute;top:8px;left:50%;width:4px;height:10px;background:rgba(224,201,168,.7);border-radius:2px;margin-left:-2px;animation:scroll-wheel 2.2s cubic-bezier(.165,.84,.44,1) infinite;will-change:transform,opacity}@keyframes scroll-wheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(24px);opacity:0}}.page-content{background:var(--bg-color);position:relative;z-index:1}.content-wrapper{max-width:1000px;margin:0 auto;padding:15vh 20px}#search-section{opacity:0;animation:fadeInUp 1s cubic-bezier(.16,1,.3,1) forwards;will-change:transform,opacity}@keyframes fadeInUp{from{opacity:0;transform:translateY(50px)}to{opacity:1;transform:translateY(0)}}.search-container{position:relative}#search-box{width:100%;padding:22px 65px 22px 30px;font-size:1.2rem;border-radius:12px;border:1px solid var(--border-color);background-color:var(--glass-bg);color:#fff;backdrop-filter:blur(10px);transition:all .4s ease;box-shadow:0 10px 40px var(--shadow-color)}#search-box:focus{outline:none;border-color:var(--highlight-color);box-shadow:0 0 30px rgba(224,201,168,.2);transform:scale(1.02);transition:all .4s ease}.search-icon{position:absolute;right:30px;top:50%;transform:translateY(-50%);color:var(--text-color);opacity:.6;width:1.5rem;height:1.5rem;pointer-events:none}#search-results{position:absolute;width:100%;margin-top:1rem;padding:1rem;background:var(--glass-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--border-color);border-radius:12px;max-height:50vh;overflow-y:auto;z-index:110}.result-item{display:block;padding:.8rem 1.2rem;border-radius:8px;cursor:pointer;transition:background-color .2s ease;text-decoration:none;color:var(--text-color)}.result-item.active,.result-item:hover{background-color:rgba(255,255,255,.1)}.result-item .title{font-size:1.1rem;font-weight:400;color:#fff}.result-item .author{font-size:.9rem;opacity:.6}.result-item .highlight{color:var(--highlight-text);font-weight:700;background-color:rgba(253,216,165,.1)}.divider{width:120px;height:1px;background:var(--border-color);margin:8rem auto;position:relative}.divider::before{content:'◇';font-size:1.2rem;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:var(--title-color);background:var(--bg-color);padding:0 15px}.featured-section{margin-top:0;scroll-margin-top:120px}.section-title{font-family:var(--font-cursive);font-size:3.2rem;color:var(--title-color);text-align:center;margin-bottom:4rem}.article-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:3rem}.article-card{background:var(--glass-bg);border:1px solid var(--border-color);border-radius:12px;padding:2.5rem;position:relative;text-decoration:none;color:var(--text-color);display:flex;flex-direction:column;box-shadow:0 8px 25px var(--shadow-color);transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;will-change:transform,border-color,box-shadow}.article-card:hover{transform:translateY(-10px);border-color:var(--highlight-color);box-shadow:0 15px 35px rgba(0,0,0,.5),0 0 20px var(--glow-color)}.article-card h3{font-weight:700;font-size:1.6rem;color:#fff;margin-bottom:.5rem}.article-card .author{font-size:1rem;opacity:.6;margin-bottom:1.5rem}.article-card p{font-size:1.05rem;line-height:1.9;opacity:.8;flex-grow:1}.article-card .read-more{margin-top:2rem;font-weight:400;font-size:1.1rem;color:var(--title-color)}.page-footer{padding:6rem 2rem;text-align:center;font-size:.9rem;color:rgba(255,255,255,.4);border-top:1px solid var(--border-color);margin-top:10vh}.menu-toggle{display:none;width:30px;height:22px;position:relative;cursor:pointer;z-index:151;background:none;border:none}.menu-toggle span{display:block;position:absolute;height:2px;width:100%;background:var(--text-color);border-radius:2px;opacity:1;left:0;transition:all .3s ease-in-out;will-change:transform,opacity}.menu-toggle span:nth-child(1){top:0}.menu-toggle span:nth-child(2){top:10px}.menu-toggle span:nth-child(3){top:20px}.menu-toggle.is-active span:nth-child(1){top:10px;transform:rotate(135deg)}.menu-toggle.is-active span:nth-child(2){opacity:0;transform:translateX(-20px)}.menu-toggle.is-active span:nth-child(3){top:10px;transform:rotate(-135deg)}.mobile-nav{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(12,11,16,.95);backdrop-filter:blur(20px);z-index:150;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2rem;opacity:0;visibility:hidden;transition:opacity .4s ease,visibility .4s}.mobile-nav.is-open{opacity:1;visibility:visible}.mobile-nav a{font-size:2rem;color:var(--text-color);text-decoration:none;opacity:.8;transition:all .3s ease;transform:translateY(20px);will-change:transform}.mobile-nav.is-open a{transform:translateY(0)}.mobile-nav a:nth-child(1){transition-delay:.2s}.mobile-nav a:nth-child(2){transition-delay:.3s}.mobile-nav a:hover{color:#fff;opacity:1}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}@media(max-width:768px){nav.main-nav{display:none}.menu-toggle{display:block}.header-content{padding:10px 20px}.hero-section{align-items:center;justify-content:center;text-align:center;padding:20vh 6% 0}.hero-title{font-size:clamp(3rem,12vw,4.5rem)}.hero-subtitle{letter-spacing:3px}.scroll-mouse{left:50%;transform:translateX(-50%)}.content-wrapper{padding:10vh 15px}.article-card{padding:2rem}#search-box{padding:18px 55px 18px 25px;font-size:1rem}.search-icon{right:25px}}
     </style>
     
 </head>
@@ -82,24 +82,20 @@
     </div>
 
     <script defer>
-        // [已修复] 将所有JS代码包裹在DOMContentLoaded事件中，确保HTML元素加载完毕后再执行
         document.addEventListener('DOMContentLoaded', () => {
     
             // --- Canvas Starfield Initialization ---
             const canvas = document.getElementById('starfield');
             if (canvas) {
                 const ctx = canvas.getContext('2d');
-    
                 function resizeCanvas() {
                     canvas.width = window.innerWidth;
                     canvas.height = window.innerHeight;
                 }
                 window.addEventListener('resize', resizeCanvas);
                 resizeCanvas();
-    
                 const stars = [];
                 const numStars = window.innerWidth > 768 ? 400 : 150; 
-    
                 for (let i = 0; i < numStars; i++) {
                     stars.push({
                         x: Math.random() * canvas.width,
@@ -108,11 +104,9 @@
                         speed: Math.random() * 0.5 + 0.1 
                     });
                 }
-    
                 function drawStars() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     ctx.fillStyle = 'white';
-                    
                     stars.forEach(star => {
                         ctx.beginPath();
                         ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
@@ -125,13 +119,52 @@
                     });
                     requestAnimationFrame(drawStars);
                 }
-    
                 if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
                     drawStars();
                 }
             }
     
-            // --- Original Site Functionality ---
+            // --- [优化] 将非关键JS延迟执行 ---
+            function deferredSetup() {
+                const sitePages = [
+                    { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', description: '被誉为“千古第一表”，以其至诚至孝的情感，成为中国古代抒情散文的典范之作。', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
+                    { id: 'xiangjixuanzhi', title: '项脊轩志', author: '[明] 归有光', url: 'xiangjixuanzhi.html', description: '明代散文的典范，以一座小小书斋为线索，串联起家族的衰落与人事的变迁，文末的枇杷树更是点睛之笔。', keywords: 'xiangjixuanzhi 项脊轩志 归有光 guiyouguang 明 散文 枇杷树' },
+                    { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', description: '此处为预留卡片，用于展示未来的新文章。您可以根据模板添加更多精彩内容。', keywords: '示例 placeholder' }
+                ];
+                
+                const articleGrid = document.getElementById('article-grid');
+                if (articleGrid) {
+                    const pagesToDisplay = sitePages.filter(page => page.id !== 'placeholder1');
+                    const fragment = document.createDocumentFragment(); // 使用文档片段优化批量DOM插入
+                    pagesToDisplay.forEach((page, index) => {
+                        const card = document.createElement('a');
+                        card.href = page.url;
+                        card.className = 'article-card animated-item';
+                        card.style.animationDelay = `${index * 100 + 200}ms`;
+                        card.innerHTML = `<h3>${page.title}</h3><div class="author">${page.author}</div><p>${page.description}</p><div class="read-more">阅读全文 →</div>`;
+                        fragment.appendChild(card);
+                    });
+                    articleGrid.appendChild(fragment); // 一次性插入所有卡片
+                }
+        
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+                document.querySelectorAll('.animated-item, #search-section').forEach(el => observer.observe(el));
+            }
+
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(deferredSetup);
+            } else {
+                setTimeout(deferredSetup, 200); // 为不支持的浏览器提供回退
+            }
+
+            // --- 立即执行的关键JS ---
             const header = document.querySelector('header');
             window.addEventListener('scroll', () => {
                 if (window.scrollY > 50) { header.classList.add('scrolled'); } 
@@ -155,41 +188,19 @@
                 });
             }
     
-            const sitePages = [
-                { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', description: '被誉为“千古第一表”，以其至诚至孝的情感，成为中国古代抒情散文的典范之作。', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
-                { id: 'xiangjixuanzhi', title: '项脊轩志', author: '[明] 归有光', url: 'xiangjixuanzhi.html', description: '明代散文的典范，以一座小小书斋为线索，串联起家族的衰落与人事的变迁，文末的枇杷树更是点睛之笔。', keywords: 'xiangjixuanzhi 项脊轩志 归有光 guiyouguang 明 散文 枇杷树' },
-                { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', description: '此处为预留卡片，用于展示未来的新文章。您可以根据模板添加更多精彩内容。', keywords: '示例 placeholder' }
-            ];
-            
-            const articleGrid = document.getElementById('article-grid');
-            if (articleGrid) {
-                const pagesToDisplay = sitePages.filter(page => page.id !== 'placeholder1');
-                pagesToDisplay.forEach((page, index) => {
-                    const card = document.createElement('a');
-                    card.href = page.url;
-                    card.className = 'article-card animated-item';
-                    card.style.animationDelay = `${index * 100 + 200}ms`;
-                    card.innerHTML = `<h3>${page.title}</h3><div class="author">${page.author}</div><p>${page.description}</p><div class="read-more">阅读全文 →</div>`;
-                    articleGrid.appendChild(card);
-                });
-            }
-    
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
-            document.querySelectorAll('.animated-item, #search-section').forEach(el => observer.observe(el));
-    
+            // 搜索功能需要立即响应，所以不延迟
             const searchBox = document.getElementById('search-box');
             const searchResultsContainer = document.getElementById('search-results');
             let activeIndex = -1;
             function highlightText(text, query) { if (!query) return text; const regex = new RegExp(`(${query})`, 'gi'); return text.replace(regex, '<span class="highlight">$1</span>'); }
             function displayResults(query) {
                 const lowerCaseQuery = query.toLowerCase();
+                 // 注意：这里需要能访问到sitePages，所以要确保它在作用域内
+                const sitePages = [
+                    { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
+                    { id: 'xiangjixuanzhi', title: '项脊轩志', author: '[明] 归有光', url: 'xiangjixuanzhi.html', keywords: 'xiangjixuanzhi 项脊轩志 归有光 guiyouguang 明 散文 枇杷树' },
+                    { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', keywords: '示例 placeholder' }
+                ];
                 const results = sitePages.filter(page => page.id !== 'placeholder1' && (page.title.toLowerCase().includes(lowerCaseQuery) || page.author.toLowerCase().includes(lowerCaseQuery) || page.keywords.toLowerCase().includes(lowerCaseQuery)));
                 searchResultsContainer.style.display = results.length > 0 ? 'block' : 'none';
                 if (results.length > 0) { searchResultsContainer.innerHTML = results.map(page => `<a href="${page.url}" class="result-item"><div class="title">${highlightText(page.title, query)}</div><div class="author">${highlightText(page.author, query)}</div></a>`).join(''); }
