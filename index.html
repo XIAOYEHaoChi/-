@@ -1,412 +1,202 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陈情表 - 郁离测试站</title>
+    <title>初元 - 郁离的个人小站</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@300;400;700&display=swap" rel="stylesheet">
     
     <style>
         /* ---
-         * V15 Single-File Optimized CSS
-         * Key Optimizations:
-         * 1. STATIC BACKGROUND: Background video removed for maximum performance and simplicity.
-         * 2. ANIMATION OPTIMIZATION: Hover effect on analysis-card uses a pseudo-element with opacity transition
-         *    instead of the performance-heavy box-shadow transition.
-         * 3. CLEANUP: All CSS is consolidated into a single style block for easy management.
+         * [首页] V25 - 功能连接与优化
+         * 优化重点:
+         * 1. 性能: 保持 defer 脚本加载，确保非阻塞渲染。
+         * 2. 连接: 确认所有卡片链接指向正确，结构清晰。
+         * 3. 维护: 代码注释已全部中文化，便于理解。
          * --- */
 
-        /* 1. 字体系统与变量 */
         :root {
             --font-serif: "Noto Serif SC", serif;
             --font-cursive: "Ma Shan Zheng", cursive;
-            --bg-color: #1a1a1a;
-            --text-color: rgba(255, 255, 255, 0.85);
-            --title-color: #dcc4a8;
-            --highlight-color: #b8a088;
-            --glass-bg: rgba(30, 30, 30, 0.65);
+            --bg-color: #0c0b10;
+            --text-color: rgba(230, 230, 240, 0.9);
+            --title-color: #e0c9a8;
+            --highlight-color: #c8b08f;
+            --glass-bg: rgba(22, 21, 28, 0.7);
             --border-color: rgba(255, 255, 255, 0.1);
-            --button-bg-hover: rgba(255, 255, 255, 0.1);
             --shadow-color: rgba(0, 0, 0, 0.5);
-            --separator-color: rgba(255, 255, 255, 0.15);
-            --main-max-width: 1000px;
-            --main-line-height: 1.9;
-            --light-title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f9f7f4;
-            --text-color: #1c1c1e;
-            --title-color: #4a2c1a;
-            --highlight-color: #795548;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --button-bg-hover: rgba(0, 0, 0, 0.05);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --separator-color: rgba(0, 0, 0, 0.1);
+            --highlight-text: #fdd8a5; /* 搜索关键词高亮颜色 */
         }
         
-        /* 2. 基础与布局样式 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
-
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-serif);
-            font-weight: 400;
-            line-height: var(--main-line-height);
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-
-        #page-wrapper {
-            position: relative;
-            width: 100%;
+            font-weight: 300;
+            line-height: 1.8;
             overflow-x: hidden;
         }
         
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4));
-            z-index: -1; pointer-events: none;
+        .background-layers { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background-color: var(--bg-color); }
+        .aurora-bg { width: 100%; height: 100%; position: absolute; }
+        .aurora-bg::before, .aurora-bg::after {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 150vmax; height: 150vmax;
+            background-image: radial-gradient(circle at center, rgba(60, 100, 200, 0.15) 0%, transparent 60%);
+            border-radius: 50%; animation: aurora-move 30s infinite linear;
         }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background-color: var(--highlight-color); border-radius: 10px; border: 2px solid var(--bg-color); }
+        .aurora-bg::after {
+             background-image: radial-gradient(circle at center, rgba(147, 112, 219, 0.1) 0%, transparent 60%);
+             animation-duration: 40s;
+        }
+        @keyframes aurora-move { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(360deg); } }
         
-        main { padding: 140px 0 100px; }
-        .article-container { max-width: var(--main-max-width); margin: 0 auto; padding: 0 20px; }
-
-        /* 3. 页眉 Header & 移动端导航 */
-        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        header {
-            position: fixed; top: 0; width: 100%; padding: 15px 3%;
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        header { position: fixed; top: 0; width: 100%; padding: 20px 5%; z-index: 100; animation: fadeIn 1s 1.8s both; }
+        .header-content {
             display: flex; justify-content: space-between; align-items: center;
-            z-index: 100; background: var(--glass-bg);
-            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.4s ease;
-            animation: slideDown 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
+            width: 100%; max-width: 1500px; margin: 0 auto;
+            padding: 15px 30px; background: rgba(22, 21, 28, 0.6);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color); border-radius: 12px;
         }
-        .header-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--title-color); text-decoration: none; transition: color 0.3s; z-index: 102; }
-        .logo:hover { color: var(--highlight-color); }
-        .nav-center { flex-grow: 1; display: flex; justify-content: center; }
-        nav.main-nav a { font-family: var(--font-serif); font-size: 1rem; color: var(--text-color); text-decoration: none; margin: 0 15px; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
-        nav.main-nav a:hover { color: var(--title-color); opacity: 1; }
-        .controls { display: flex; align-items: center; gap: 10px; }
-        .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
-        .controls button:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-2px); }
-        .controls button svg { width: 1em; height: 1em; transition: transform 0.5s ease; }
-        .controls button.playing svg { animation: pulse 1.5s infinite ease-in-out; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .hamburger { display: none; cursor: pointer; background: transparent; border: none; z-index: 102; padding: 10px; }
-        .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-color); transition: all 0.3s ease-in-out; }
-        .hamburger.active .bar:nth-child(2) { opacity: 0; }
-        .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        .logo { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--title-color); text-decoration: none; }
+        nav.main-nav { display: flex; gap: 40px; }
+        nav.main-nav a { font-size: 1rem; color: var(--text-color); text-decoration: none; opacity: 0.8; transition: all 0.3s ease; }
+        nav.main-nav a:hover { color: #fff; opacity: 1; text-shadow: 0 0 8px rgba(255,255,255,0.5); }
         
-        /* 4. 入场动画 */
-        @keyframes fadeIn-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animated-item { opacity: 0; transform: translateY(30px); transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); transition-delay: var(--delay, 0s); }
-        .animated-item.visible { opacity: 1; transform: translateY(0); }
+        .hero-section {
+            display: flex; align-items: center; height: 100vh;
+            min-height: 700px; padding: 0 8%; width: 100%;
+        }
+        .hero-text-content { text-align: left; max-width: 650px; }
+        .hero-title { font-family: var(--font-cursive); font-size: clamp(4rem, 10vw, 7.5rem); font-weight: 400; color: #fff; line-height: 1.15; }
+        .hero-title .char { display: inline-block; opacity: 0; transform: translateY(60px) rotate(15deg); animation: letter-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes letter-reveal { to { opacity: 1; transform: translateY(0) rotate(0deg); } }
+        .hero-subtitle { font-size: clamp(1rem, 2vw, 1.2rem); color: var(--text-color); margin-top: 2.5rem; letter-spacing: 5px; font-weight: 300; opacity: 0; animation: fadeIn 1.2s 1.5s both; }
+        .scroll-mouse { position: absolute; bottom: 5vh; left: 8%; opacity: 0; animation: fadeIn 1s 2.2s both; cursor:pointer; }
+        .scroll-mouse .wheel { animation: scroll-wheel 2.2s cubic-bezier(0.165, 0.84, 0.44, 1) infinite; }
+        .scroll-mouse, .scroll-mouse .wheel {width:28px;height:48px;border:2px solid rgba(255,255,255,0.7);border-radius:20px;}.scroll-mouse .wheel{position:absolute;top:8px;left:50%;width:4px;height:10px;background:rgba(255,255,255,0.7);border-radius:2px;margin-left:-2px;}@keyframes scroll-wheel{0%{transform:translateY(0);opacity:1}100%{transform:translateY(24px);opacity:0}}
+        
+        .page-content { background: var(--bg-color); position: relative; z-index: 1; }
+        .content-wrapper { max-width: 1000px; margin: 0 auto; padding: 15vh 20px; }
+        
+        /* [已恢复] 搜索区域 */
+        #search-section { opacity: 0; animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        .search-container { position: relative; }
+        #search-box {
+            width: 100%; padding: 22px 65px 22px 30px; font-size: 1.2rem;
+            border-radius: 12px; border: 1px solid var(--border-color);
+            background-color: var(--glass-bg); color: #fff; backdrop-filter: blur(10px);
+            transition: all 0.4s ease; box-shadow: 0 10px 40px var(--shadow-color);
+        }
+        #search-box:focus { outline: none; border-color: var(--highlight-color); box-shadow: 0 0 30px rgba(224,201,168,0.2); }
+        .search-icon { position: absolute; right: 30px; top: 50%; transform: translateY(-50%); color: var(--text-color); opacity: 0.6; width: 1.5rem; height: 1.5rem; pointer-events: none; }
+        
+        /* [已优化] 搜索结果面板 */
+        #search-results {
+            position: absolute;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            max-height: 50vh;
+            overflow-y: auto;
+            z-index: 110;
+        }
+        .result-item {
+            display: block;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .result-item.active, .result-item:hover { background-color: rgba(255,255,255,0.1); }
+        .result-item .title { font-size: 1.1rem; font-weight: 400; color: #fff; }
+        .result-item .author { font-size: 0.9rem; opacity: 0.6; }
+        .result-item .highlight { color: var(--highlight-text); font-weight: 700; background-color: rgba(253, 216, 165, 0.1); }
 
-        .article-title { text-align: center; margin-bottom: 6rem; }
-        .article-title h1 {
-            font-family: var(--font-cursive); font-size: 4.8rem; font-weight: normal; 
-            color: var(--title-color); background: none; -webkit-background-clip: unset; background-clip: unset;
-            text-shadow: 1px 1px 2px var(--shadow-color), 0 0 15px var(--shadow-color);
-            animation: fadeIn-up 0.8s 0.2s both cubic-bezier(0.25, 0.8, 0.25, 1);
-            transition: color 0.5s ease, background 0.5s ease;
-        }
-        [data-theme="light"] .article-title h1 {
-            background: var(--light-title-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .article-title h2 {
-            font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
-            animation: fadeIn-up 0.8s 0.4s both cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+        .featured-section { margin-top: 8rem; scroll-margin-top: 120px; }
+        .section-title { font-family: var(--font-cursive); font-size: 3.2rem; color: var(--title-color); text-align: center; margin-bottom: 4rem; }
         
-        /* 5. 原文与译文 & other sections */
-        .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
-        .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
-        .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
-        .translated-text p { color: var(--text-color); opacity: 0.85; font-weight: 400; }
-        .tooltip { display: inline; position: relative; text-decoration: underline; text-decoration-style: dashed; text-decoration-color: var(--highlight-color); text-decoration-thickness: 1px; text-underline-offset: 5px; cursor: help; }
-        .tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: var(--glass-bg); color: var(--text-color); text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; opacity: 0; transform: translateY(10px); transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease; font-size: 0.9rem; line-height: 1.6; backdrop-filter: blur(10px); border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color); }
-        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateY(0); }
-        .tooltip .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--border-color) transparent transparent transparent; }
-        
-        .analysis-section {
-            margin: 8rem 0 0;
-        }
-        .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; }
-        .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        
-        /* --- ANIMATION OPTIMIZATION --- */
-        .analysis-card { 
+        /* [已同步] 与内页一致的卡片设计 */
+        .article-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
+        .article-card {
             background: var(--glass-bg); 
             border: 1px solid var(--border-color); 
             border-radius: 12px; 
-            padding: 2rem; 
+            padding: 2.5rem;
             position: relative;
             z-index: 1;
-            transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease;
-            will-change: transform;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease;
+            text-decoration: none;
+            color: var(--text-color);
         }
-        .analysis-card::after {
+        .article-card::after {
             content: '';
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px var(--shadow-color);
-            opacity: 0;
-            z-index: -1;
-            transition: opacity 0.4s ease;
-            will-change: opacity;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 12px; box-shadow: 0 15px 45px var(--shadow-color);
+            opacity: 0; z-index: -1; transition: opacity 0.4s ease;
         }
-        .analysis-card:hover { 
-            transform: translateY(-8px) scale(1.02);
+        .article-card:hover { 
+            transform: translateY(-12px);
             border-color: var(--highlight-color);
         }
-        .analysis-card:hover::after {
-            opacity: 1;
-        }
-        /* --- END ANIMATION OPTIMIZATION --- */
-
-        .analysis-card h3 { font-family: var(--font-serif); font-weight: 700; font-size: 1.5rem; color: var(--title-color); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; }
-        .analysis-card p { font-size: 1.1rem; line-height: 1.8; text-align: left; text-indent: 0; margin-bottom: 1em; transition: font-size 0.4s ease; }
-        .analysis-card p:last-child { margin-bottom: 0; }
-        .analysis-card p strong { color: var(--highlight-color); font-weight: 500; }
-        body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.55rem; }
-        body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.4rem; }
-        body.large-font-mode .tooltip .tooltip-text { font-size: 1.15rem; width: 280px; margin-left: -140px; }
+        .article-card:hover::after { opacity: 1; }
+        .article-card h3 { font-weight: 700; font-size: 1.6rem; color: #fff; margin-bottom: 0.5rem; }
+        .article-card .author { font-size: 1rem; opacity: 0.6; margin-bottom: 1.5rem; }
+        .article-card p { font-size: 1.05rem; line-height: 1.9; opacity: 0.8; flex-grow: 1; }
+        .article-card .read-more { margin-top: 2rem; font-weight: 400; font-size: 1.1rem; color: var(--title-color); }
         
-        .accordion { margin-top: 2rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background-color: var(--glass-bg); }
-        .accordion-item { border-bottom: 1px solid var(--border-color); }
-        .accordion-item:last-child { border-bottom: none; }
-        .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease; }
-        .accordion-header:hover { background-color: var(--button-bg-hover); }
-        .accordion-header .icon { font-size: 1.2rem; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .accordion-header .icon svg { width: 1em; height: 1em; } 
-        .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-        .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
-        .accordion-content-inner p, .accordion-content-inner ul { margin-bottom: 1.2em; }
-        .accordion-content-inner p:last-child, .accordion-content-inner ul:last-child { margin-bottom: 0; }
-        .accordion-content-inner ul { list-style-position: inside; padding-left: 1em; }
-        .accordion-content-inner li { margin-bottom: 0.5em; }
-        .accordion-content-inner strong { color: var(--highlight-color); font-weight: 500; }
-        .accordion-content-inner em { font-style: normal; opacity: 0.8; }
-        .accordion-content-inner h4 { font-size: 1.2rem; color: var(--title-color); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .accordion-content-inner blockquote { border-left: 3px solid var(--highlight-color); margin: 1em 0; padding: 0.5em 1.5em; background-color: var(--button-bg-hover); border-radius: 4px; font-style: italic; }
-        .idiom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .idiom-item { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
-        .idiom-item dt { font-size: 1.3em; font-weight: 700; color: var(--title-color); margin-bottom: 0.5rem; }
-        .function-word-list div { padding: 1.2rem 0; border-bottom: 1px dashed var(--border-color); }
-        .function-word-list dt { font-weight: 700; }
-        .function-word-list div:last-child { border-bottom: none; }
+        @media(max-width: 768px){nav.main-nav{display:none}.header-content{padding:10px 20px}.hero-section{align-items:flex-start;justify-content:center;padding:0 6%}.hero-title{font-size:3.5rem}.scroll-mouse{left:6%}.content-wrapper{padding:10vh 15px}}
 
-        /* 6. 响应式设计 (Responsive) */
-        @media (max-width: 992px) { 
-            .nav-center { display: none; }
-            .hamburger { display: block; }
-            .nav-center.active {
-                display: flex; flex-direction: column; justify-content: center; align-items: center;
-                position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-                background-color: var(--glass-bg);
-                backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-                z-index: 101;
-                transform: translateY(-100%);
-                animation: slideIn 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1);
-            }
-            .nav-center.active.closing { animation: slideOut 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1); }
-            .nav-center.active .main-nav { flex-direction: column; gap: 2rem; }
-            .nav-center.active .main-nav a { font-size: 1.8rem; opacity: 1; }
-            @keyframes slideIn { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-            @keyframes slideOut { from { transform: translateY(0); } to { transform: translateY(-100%); } }
-
-            .translation-grid { grid-template-columns: 1fr; gap: 1.5rem; } 
-            .separator { display: none; } 
-            .original-text p { margin-bottom: 1.5em; } 
-            .article-container { padding: 0 15px; }
-        }
-        
-        @media (max-width: 768px) { 
-            header { padding: 15px 5%; } 
-            .logo { font-size: 1.8rem; } 
-            .controls button { min-width: auto; padding: 8px 12px; font-size: 0.8rem; } 
-            .controls button span { display: none; } 
-            main { padding: 120px 0 80px; } 
-            .article-title { margin-bottom: 4rem; }
-            .article-title h1 { font-size: 3.2rem; } 
-            .article-title h2 { font-size: 1rem; } 
-            .analysis-section { margin-top: 6rem; }
-            .analysis-grid { gap: 1.5rem; }
-            .original-text p, .translated-text p { font-size: 1.1rem; } 
-            .analysis-card p { font-size: 1rem; } 
-            body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.25rem; } 
-            body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.15rem; } 
-            body.large-font-mode .tooltip .tooltip-text { font-size: 1.05rem; width: 240px; margin-left: -120px; }
-            .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
-            .accordion-content-inner { font-size: 1rem; }
-            
-            .idiom-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-        }
-        
-        /* 7. Utilities (Back to Top Button) */
-        #back-to-top {
-            position: fixed;
-            bottom: 25px;
-            right: 25px;
-            width: 50px;
-            height: 50px;
-            background-color: var(--glass-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            border-radius: 50%;
-            cursor: pointer;
-            visibility: hidden;
-            opacity: 0;
-            z-index: 99;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transform: translateY(10px);
-            transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s, background-color 0.3s;
-        }
-
-        #back-to-top.visible {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #back-to-top:hover {
-            background: var(--button-bg-hover);
-            color: var(--title-color);
-            transform: translateY(-5px);
-        }
-
-        #back-to-top svg {
-            width: 1.2em;
-            height: 1.2em;
-        }
-
-        @media (max-width: 768px) {
-            #back-to-top {
-                width: 45px;
-                height: 45px;
-                bottom: 20px;
-                right: 20px;
-            }
-        }
     </style>
     
-    <!-- PERFORMANCE OPTIMIZATION: 'defer' allows parallel download with HTML parsing -->
     <script defer>
         document.addEventListener('DOMContentLoaded', () => {
-            // Cache DOM elements
-            const body = document.getElementById('page-body');
-            const themeToggle = document.getElementById('theme-toggle');
-            const audioToggle = document.getElementById('play-audio');
-            const audioElement = document.getElementById('recitation-audio');
-            const largeFontToggle = document.getElementById('large-font-toggle');
-            const hamburger = document.getElementById('hamburger-menu');
-            const navCenter = document.querySelector('.nav-center');
-            const navLinks = navCenter.querySelectorAll('a');
-            const themeBtnText = themeToggle.querySelector('span');
-            const sunIcon = document.getElementById('sun-icon');
-            const moonIcon = document.getElementById('moon-icon');
-            const audioBtnText = audioToggle.querySelector('span');
-            const volumeIcon = document.getElementById('volume-icon');
-            const pauseIcon = document.getElementById('pause-icon');
-            const zoomInIcon = document.getElementById('zoom-in-icon');
-            const zoomOutIcon = document.getElementById('zoom-out-icon');
-            const backToTopButton = document.getElementById('back-to-top');
 
-            // --- MOBILE NAV SCRIPT ---
-            const toggleNav = () => {
-                const isActive = hamburger.classList.contains('active');
-                if (isActive) {
-                    hamburger.classList.remove('active');
-                    navCenter.classList.add('closing');
-                    navCenter.addEventListener('animationend', () => {
-                        navCenter.classList.remove('active', 'closing');
-                    }, { once: true });
-                } else {
-                    hamburger.classList.add('active');
-                    navCenter.classList.add('active');
-                }
-            };
-            
-            hamburger.addEventListener('click', toggleNav);
-            navLinks.forEach(link => {
-                link.addEventListener('click', () => {
-                    if (hamburger.classList.contains('active')) {
-                        toggleNav();
-                    }
+            // 电影感标题入场动画
+            const title = document.querySelector('.hero-title');
+            if (title) {
+                const text = title.textContent;
+                title.innerHTML = '';
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.className = 'char';
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.animationDelay = `${index * 0.05 + 0.5}s`;
+                    title.appendChild(span);
                 });
-            });
-
-            // --- THEME SCRIPT ---
-            function applyTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                if (theme === 'dark') {
-                    themeBtnText.textContent = '光明主题';
-                    sunIcon.style.display = 'inline-block';
-                    moonIcon.style.display = 'none';
-                } else {
-                    themeBtnText.textContent = '静夜主题';
-                    sunIcon.style.display = 'none';
-                    moonIcon.style.display = 'inline-block';
-                }
             }
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            applyTheme(currentTheme);
-            themeToggle.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
 
-            // --- AUDIO SCRIPT ---
-            audioToggle.addEventListener('click', () => {
-                if (audioElement.paused) {
-                    audioElement.play();
-                    audioBtnText.textContent = '暂停朗诵';
-                    volumeIcon.style.display = 'none';
-                    pauseIcon.style.display = 'inline-block';
-                    audioToggle.classList.add('playing');
-                } else {
-                    audioElement.pause();
-                    audioBtnText.textContent = '聆听朗诵';
-                    volumeIcon.style.display = 'inline-block';
-                    pauseIcon.style.display = 'none';
-                    audioToggle.classList.remove('playing');
-                }
-            });
-            audioElement.addEventListener('ended', () => {
-                audioBtnText.textContent = '聆听朗诵';
-                volumeIcon.style.display = 'inline-block';
-                pauseIcon.style.display = 'none';
-                audioToggle.classList.remove('playing');
-            });
+            // 核心逻辑: 数据与内容加载
+            const sitePages = [
+                { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', description: '被誉为“千古第一表”，以其至诚至孝的情感，成为中国古代抒情散文的典范之作。', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
+                { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', description: '此处为预留卡片，用于展示未来的新文章。您可以根据模板添加更多精彩内容。', keywords: '示例 placeholder' }
+            ];
+            const articleGrid = document.getElementById('article-grid');
+            if (articleGrid) {
+                sitePages.forEach((page, index) => {
+                    const card = document.createElement('a');
+                    card.href = page.url;
+                    card.className = 'article-card animated-item';
+                    card.style.animationDelay = `${index * 100 + 200}ms`;
+                    card.innerHTML = `<h3>${page.title}</h3><div class="author">${page.author}</div><p>${page.description}</p><div class="read-more">阅读全文 →</div>`;
+                    articleGrid.appendChild(card);
+                });
+            }
 
-            // --- LARGE FONT SCRIPT ---
-            largeFontToggle.addEventListener('click', () => {
-                body.classList.toggle('large-font-mode');
-                const isLarge = body.classList.contains('large-font-mode');
-                zoomInIcon.style.display = isLarge ? 'none' : 'inline-block';
-                zoomOutIcon.style.display = isLarge ? 'inline-block' : 'none';
-            });
-
-            // --- ANIMATION SCRIPT ---
+            // 滚动动画观察器
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -414,137 +204,139 @@
                         observer.unobserve(entry.target);
                     }
                 });
-            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-            
-            const itemsToAnimate = document.querySelectorAll('.animated-item');
-            itemsToAnimate.forEach((el) => {
-                const sectionParent = el.closest('.analysis-section, .translation-grid, .accordion');
-                let delayIndex = 0;
-                if (sectionParent) {
-                    const siblings = Array.from(sectionParent.querySelectorAll('.animated-item'));
-                    delayIndex = siblings.indexOf(el);
+            }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+            document.querySelectorAll('.animated-item, #search-section').forEach(el => observer.observe(el));
+
+            // [增强] 搜索功能
+            const searchBox = document.getElementById('search-box');
+            const searchResultsContainer = document.getElementById('search-results');
+            let activeIndex = -1;
+
+            function highlightText(text, query) {
+                if (!query) return text;
+                const regex = new RegExp(`(${query})`, 'gi');
+                return text.replace(regex, '<span class="highlight">$1</span>');
+            }
+
+            function displayResults(query) {
+                const lowerCaseQuery = query.toLowerCase();
+                const results = sitePages.filter(page => page.id !== 'placeholder1' && (page.title.toLowerCase().includes(lowerCaseQuery) || page.author.toLowerCase().includes(lowerCaseQuery) || page.keywords.toLowerCase().includes(lowerCaseQuery)));
+                
+                searchResultsContainer.style.display = results.length > 0 ? 'block' : 'none';
+                if (results.length > 0) {
+                    searchResultsContainer.innerHTML = results.map(page => `
+                        <a href="${page.url}" class="result-item">
+                            <div class="title">${highlightText(page.title, query)}</div>
+                            <div class="author">${highlightText(page.author, query)}</div>
+                        </a>
+                    `).join('');
                 }
-                el.style.setProperty('--delay', `${delayIndex * 100}ms`);
-                observer.observe(el);
-            });
+                activeIndex = -1;
+            }
 
-            // --- ACCORDION SCRIPT ---
-            const accordionItems = document.querySelectorAll('.accordion-item');
-            accordionItems.forEach(item => {
-                const header = item.querySelector('.accordion-header');
-                const content = item.querySelector('.accordion-content');
-                header.addEventListener('click', () => {
-                    const isActive = item.classList.toggle('active');
-                    content.style.maxHeight = isActive ? content.scrollHeight + "px" : null;
+            function updateActiveItem() {
+                const items = searchResultsContainer.querySelectorAll('.result-item');
+                items.forEach((item, index) => {
+                    item.classList.toggle('active', index === activeIndex);
                 });
-            });
+            }
 
-            // --- BACK TO TOP SCRIPT ---
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTopButton.classList.add('visible');
+            searchBox.addEventListener('input', () => {
+                const query = searchBox.value.trim();
+                if (query) {
+                    displayResults(query);
                 } else {
-                    backToTopButton.classList.remove('visible');
+                    searchResultsContainer.style.display = 'none';
+                }
+            });
+
+            searchBox.addEventListener('keydown', (e) => {
+                const items = searchResultsContainer.querySelectorAll('.result-item');
+                if (!items.length) return;
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex + 1) % items.length;
+                    updateActiveItem();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    activeIndex = (activeIndex - 1 + items.length) % items.length;
+                    updateActiveItem();
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (activeIndex > -1) {
+                        items[activeIndex].click();
+                    }
                 }
             });
             
-            backToTopButton.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+            searchBox.addEventListener('blur', () => {
+                // 使用短暂延迟以允许点击结果项事件注册
+                setTimeout(() => { searchResultsContainer.style.display = 'none'; }, 150);
+            });
+            
+            searchBox.addEventListener('focus', () => {
+                if(searchBox.value.trim()){
+                     displayResults(searchBox.value.trim());
+                }
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    searchResultsContainer.style.display = 'none';
+                    searchBox.blur();
+                }
             });
         });
     </script>
 </head>
-<body id="page-body">
-    <div id="page-wrapper">
-        <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/make/f84986dafb2d.mp3" loop preload="metadata"></audio>
+<body>
+    <div class="background-layers">
+        <div class="aurora-bg"></div>
+    </div>
 
+    <div id="page-wrapper">
         <header>
             <div class="header-content">
-                <a href="#" class="logo">陈情表</a>
-                <div class="nav-center">
-                    <nav class="main-nav">
-                        <a href="#background">创作背景</a>
-                        <a href="#features">艺术特色</a>
-                        <a href="#influence">后世影响</a>
-                        <a href="#grammar-analysis">文言详解</a>
-                    </nav>
-                </div>
-                <div class="controls">
-                    <!-- 优化：使用 SVG 图标替换 Font Awesome -->
-                    <button id="large-font-toggle" title="大字模式">
-                        <svg id="zoom-in-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM256 176v64h64c8.8 0 16-7.2 16-16s-7.2-16-16-16h-48v-48c0-8.8-7.2-16-16-16s-16 7.2-16 16z"></path></svg>
-                        <svg id="zoom-out-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="display: none;"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288zM152 224c-8.8 0-16-7.2-16-16s7.2-16 16-16h112c8.8 0 16 7.2 16 16s-7.2 16-16 16H152z"></path></svg>
-                        <span>大字模式</span>
-                    </button>
-                    <button id="play-audio" title="聆听朗诵">
-                        <svg id="volume-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path fill="currentColor" d="M301.1 34.8C312.6 40 320 51.4 320 64V448c0 12.6-7.4 24-18.9 29.2s-25 3.1-34.4-5.3L131.8 352H64c-35.3 0-64-28.7-64-64V224c0-35.3 28.7-64 64-64h67.8L266.7 40.1c9.4-8.4 22.9-10.4 34.4-5.3zM425 167l55 55 55-55c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-55 55 55 55c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-55-55-55 55c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l55-55-55-55c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0z"></path></svg>
-                        <svg id="pause-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512" style="display: none;"><path fill="currentColor" d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"></path></svg>
-                        <span>聆听朗诵</span>
-                    </button>
-                    <button id="theme-toggle" title="切换主题">
-                        <svg id="sun-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M361.5 1.2c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zM256 0c-13.3 0-24 10.7-24 24V160c0 13.3 10.7 24 24 24s24-10.7 24-24V24c0-13.3-10.7-24-24-24zm-192.4 220.3c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zm-16.3 28.9c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6zM256 320c-13.3 0-24 10.7-24 24v144c0 13.3 10.7 24 24 24s24-10.7 24-24V344c0-13.3-10.7-24-24-24zM456.3 221.7c-11.4 1.5-20.6 10-22.3 21.6l-29.3 190c-2.2 14.5 9.1 27.2 23.6 27.2h56.2c14.5 0 25.8-12.7 23.6-27.2l-29.3-190c-1.8-11.6-11-20.1-22.3-21.6z"></path></svg>
-                        <svg id="moon-icon" aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" style="display: none;"><path fill="currentColor" d="M223.5 32C100 32 0 132.3 0 256S100 480 223.5 480c60.6 0 115.5-24.2 155.8-63.4c5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-20 2.6-30.6 2.6c-96.8 0-175.5-78.8-175.5-176c0-65.8 36-123.1 89.3-153.3c6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"></path></svg>
-                        <span>光明主题</span>
-                    </button>
-                </div>
-                <button class="hamburger" id="hamburger-menu">
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                    <span class="bar"></span>
-                </button>
+                <a href="index.html" class="logo">初元</a>
+                <nav class="main-nav">
+                    <a href="#">说说空间</a>
+                    <a href="#featured-content">古诗总页</a>
+                </nav>
             </div>
         </header>
 
         <main>
-            <div class="article-container">
-                <div class="article-title"><h1>陈情表</h1><h2>[晋] 李密</h2></div>
-                
-                <section id="background" class="analysis-section" style="margin-top:0; margin-bottom: 6rem;">
-                    <h2 class="animated-item">创作背景</h2>
-                    <div class="analysis-grid" style="grid-template-columns: 1fr;">
-                        <div class="analysis-card animated-item"><h3>君臣的博弈</h3><p>本文写于西晋泰始三年（公元267年）。作者<strong>李密</strong>原为蜀汉后主刘禅的郎官。晋武帝<strong>司马炎</strong>统一天下后，为笼络蜀汉旧臣，巩固统治，征召李密入朝为官。</p><p>但李密上有年迈病重的祖母需要奉养，若应召入朝，则忠孝不能两全。多次辞官后，司马炎下诏严词催逼。李密遂写下此表，向皇帝陈述家中实情，恳求暂缓征召，以全孝道。全文情真意切，辞采委婉，是古代奏表文学的典范。</p></div>
-                    </div>
-                </section>
-                
-                <div class="translation-grid"><div class="original-text animated-item"><p>臣以<span class="tooltip">险衅<span class="tooltip-text">险：坎坷。衅：灾祸。指命运坎坷多灾。</span></span>，夙遭<span class="tooltip">闵凶<span class="tooltip-text">指幼年遭遇父母去世的悲伤事。</span></span>。生孩六月，慈父<span class="tooltip">见背<span class="tooltip-text">“见”为助词，表被动，意为“我”。“背”是去世的委婉说法。指父亲抛下我去世了。</span></span>；行年四岁，舅夺母志。祖母刘，愍臣孤弱，躬亲抚养。臣少多疾病，九岁不行，<span class="tooltip">零丁孤苦<span class="tooltip-text">孤单困苦，无依无靠。</span></span>，至于<span class="tooltip">成立<span class="tooltip-text">古代指成年自立。</span></span>。既无叔伯，终鲜兄弟。门衰<span class="tooltip">祚薄<span class="tooltip-text">祚：福气。薄：微薄。指家门衰微，福分浅薄。</span></span>，晚有<span class="tooltip">儿息<span class="tooltip-text">儿子。古代常以“息”指代子息。</span></span>。外无<span class="tooltip">期功强近之亲<span class="tooltip-text">期、功是古代丧服的两种，代表亲属关系的远近。这里泛指较近的亲戚。</span></span>，内无应门五尺之僮。<span class="tooltip">茕茕孑立，形影相吊<span class="tooltip-text">茕茕、孑：都是孤独的样子。形容无依无靠，非常孤单，只有自己的身体和影子互相慰问。</span></span>。而刘夙婴疾病，常在<span class="tooltip">床蓐<span class="tooltip-text">床褥，指病床。</span></span>；臣侍汤药，未曾废离。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我因为命运坎坷，幼年时就遭遇了不幸。出生六个月，慈爱的父亲就去世了；长到四岁时，舅父强迫母亲改嫁。我的祖母刘氏，可怜我孤单弱小，亲自抚养我。我从小就体弱多病，九岁时还不能走路，孤独无靠，一直到长大成人。我既没有叔叔伯伯，也没有兄弟。家门衰败，福气浅薄，很晚才有了儿子。在外面没有比较亲近的亲戚，在家里没有看门的童仆。我孤身一人，只有和自己的影子相互慰问。而祖母刘氏很早就被疾病缠身，常年卧病在床，我侍奉她喝水吃药，从未懈怠离开过。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p><span class="tooltip">逮<span class="tooltip-text">及、等到。</span></span>奉圣朝，沐浴<span class="tooltip">清化<span class="tooltip-text">清明的教化。指太平盛世的政治。</span></span>。前太守臣逵，察臣<span class="tooltip">孝廉<span class="tooltip-text">汉代选拔官吏的科目之一，由郡国推举孝顺父母、品行方正的人。</span></span>；后刺史臣荣，举臣<span class="tooltip">秀才<span class="tooltip-text">晋代选拔人才的科目，与后世科举的“秀才”不同。</span></span>。臣以供养无主，辞不赴命。<span class="tooltip">寻<span class="tooltip-text">不久，随即。</span></span>蒙国恩，<span class="tooltip">除<span class="tooltip-text">拜官授职的意思。</span></span>臣<span class="tooltip">洗马<span class="tooltip-text">读作xiǎn mǎ。官名，太子侍从之臣。</span></span>。猥以微贱，当侍东宫，非臣陨首所能上报。臣具以表闻，辞不就职。诏书切峻，责臣<span class="tooltip">逋慢<span class="tooltip-text">拖延、怠慢。指对皇帝的命令拖延不办，是一种罪名。</span></span>。郡县逼迫，催臣上道；州司临门，急于星火。臣欲奉诏奔驰，则以刘病日笃；欲苟顺私情，则告诉不许。臣之进退，<span class="tooltip">是所维谷<span class="tooltip-text">出自《诗经》，比喻处境艰难，进退两难。</span></span>。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>到了晋朝，我受到清明政治的教化。前任太守逵，推举我为孝廉；后任刺史荣，又推举我为秀才。我因为无法亲自奉养祖母，都推辞没有前去赴任。不久又蒙受国家大恩，任命我为太子洗马。凭我这样卑微下贱的身份，担当侍奉太子的大任，这实在不是我杀身成仁所能报答的。我将详情写在奏章上，再次推辞不去就职。但诏书措辞严厉，责备我拖延怠慢。郡县官吏催促我上路，州府的官员也登门督促，比星火还要急。我想遵从诏令去京城，但祖母的病却一天比一天重；我想暂且顺从自己的私情（尽孝），但又申诉无门，不被允许。我的处境，真是进退两难啊。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>伏惟圣朝以孝治天下，凡在故老，犹蒙矜育，况臣孤苦，特为尤甚。且臣少事<span class="tooltip">伪朝<span class="tooltip-text">指蜀汉。李密作为亡国之臣对新朝的谦卑自称。</span></span>，历职郎署，本图宦达，不矜名节。今臣亡国贱俘，至微至陋，过蒙拔擢，宠命优渥，岂敢盘桓，有所希冀？但以刘<span class="tooltip">日薄西山<span class="tooltip-text">太阳将要落山。比喻人已年老，临近死亡。</span></span>，气息奄奄，人命危浅，朝不虑夕。臣无祖母，无以至今日；祖母无臣，无以终余年。祖母、孙二人，更相为命，是以<span class="tooltip">区区<span class="tooltip-text">自称的谦词，意为“我这微末之人”。这里引申为拳拳的孝心。全句意为“因此我这点孝心（或：我这个人）实在不忍心离开祖母”。</span></span>不能废远。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我想我们圣朝是以孝道治理天下的，凡是年老的大臣，尚且受到怜恤养育，何况我的孤苦，尤其严重呢。况且我年轻时曾在伪朝（蜀汉）做官，在郎署任过职，本来只是想做官显达，并不顾惜名声气节。现在我是亡了国的卑贱俘虏，实在卑微鄙陋，承蒙您过分的提拔，恩宠优厚，我怎敢犹豫不决，另有所图呢？只是因为祖母刘氏已是垂暮之年，气息微弱，生命垂危，很快就要不久于人世了。没有祖母，我就不可能活到今天；祖母没有我，也不能安度她的晚年。我们祖孙二人，是互相依靠着活下来的，因此我这点拳拳孝心，实在不忍心离开她。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>臣密今年四十有四，祖母刘今年九十有六。是臣尽节于陛下之日长，报养刘之日短也。<span class="tooltip">乌鸟私情<span class="tooltip-text">乌鸦有反哺之情。这里比喻作者奉养祖母的孝心。</span></span>，愿乞终养。臣之辛苦，非独蜀之人士及二州牧伯所见明知，皇天后土，实所共鉴。愿陛下矜愍愚诚，听臣微志，庶刘侥幸，保卒余年。臣生当陨首，死当<span class="tooltip">结草<span class="tooltip-text">典故，出自《左传》，指死后报恩。</span></span>。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我李密今年四十四岁，祖母刘氏今年九十六岁。因此，我为陛下尽忠效力的日子还很长，而报答祖母养育之恩的日子却很短了。我怀着乌鸦反哺一样的私情，恳求您允许我为祖母养老送终。我的苦衷，不只是蜀地的百姓和两州的官员所亲眼看见、清楚了解的，天地神明，也都看得清清楚楚。希望陛下能怜悯我的一片愚诚，成全我这个小小的愿望，使祖母刘氏能侥幸地保全她剩下的岁月。我活着定当杀身报效，死后也当结草报恩。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>臣不胜<span class="tooltip">犬马<span class="tooltip-text">古代臣子在君主面前的自谦之词。</span></span>怖惧之情，谨拜表以闻。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我怀着像犬马一样恐惧不安的心情，恭敬地呈上这份奏表来禀告您。</p></div></div>
+            <section class="hero-section">
+                <div class="hero-text-content">
+                    <h1 class="hero-title">郁离的个人小站</h1>
+                    <p class="hero-subtitle">沉淀 · 分享 · 求索</p>
+                </div>
+                 <a class="scroll-mouse" href="#page-content">
+                    <span class="wheel"></span>
+                </a>
+            </section>
             
-                <section id="features" class="analysis-section">
-                    <h2 class="animated-item">艺术特色探微</h2>
-                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>骈偶对仗</h3><p>本文大量运用四六句式的骈文，形成音韵和谐、结构严谨的美感。例如 <strong>“外无期功强近之亲，内无应门五尺之僮”</strong> 和 <strong>“臣无祖母，无以至今日；祖母无臣，无以终余年”</strong>，前后对仗工整，言简意丰，极大地增强了文章的感染力。</p></div><div class="analysis-card animated-item"><h3>委婉陈情</h3><p>作为臣子，李密不能直接抗旨，因此全文采用委婉曲折的笔法。他不直言“不就职”，而是反复陈述自己的苦衷与祖母的病情，以“情”动人，将“忠”与“孝”的矛盾摆在台面上，使拒绝的理由显得合情合理，令人同情。</p></div><div class="analysis-card animated-item"><h3>善用典故</h3><p>文中用典精当，增强了说服力和文化底蕴。如用 <strong>“乌鸟私情”</strong> 表达反哺之孝，用 <strong>“结草”</strong> 表达死后报恩的决心，用 <strong>“是所维谷”</strong> 形容进退两难的困境。这些典故使文章言辞更典雅，情感表达更含蓄有力。</p></div></div>
-                </section>
-        
-                <section id="influence" class="analysis-section">
-                    <h2 class="animated-item">后世影响</h2>
-                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>千古第一表</h3><p>《陈情表》被誉为“千古第一表”，与诸葛亮的《出师表》、韩愈的《祭十二郎文》并称为中国古代三大抒情名篇。它以朴实的语言和真挚的情感，将“孝”这一中华传统美德阐述得淋漓尽致。</p></div><div class="analysis-card animated-item"><h3>以孝动人</h3><p>据说晋武帝读此表后，为李密的孝心所感动，赞叹道：“密不空有名，乃孝子也！” 最终不仅准许了他的请求，还赏赐了奴婢和食米，让郡县继续供养其祖母。这篇奏表也因此成为后世“以孝治国”思想的生动例证。</p></div><div class="analysis-card animated-item"><h3>文学典范</h3><p>文章的叙事、议论、抒情融为一体，结构严谨，层次分明。从陈述身世的悲苦，到叙述征召的急迫，再到剖析内心的矛盾，最后立誓报恩，一气呵成，感人至深，成为后世奏表乃至散文写作的楷模。</p></div></div>
-                </section>
-
-                <section id="grammar-analysis" class="analysis-section">
-                    <h2 class="animated-item">文言知识详解</h2>
-                    <div class="accordion animated-item">
-                        <div class="accordion-item"><button class="accordion-header">重点解释 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>险衅:</strong> 灾难祸患。险：艰险，祸患。衅：祸患。</p><p><strong>夙遭闵凶:</strong> 夙：早。闵凶：忧伤的事，常指父母之丧。</p><p><strong>慈父见背:</strong> 背弃我。见：助动词，用在动词前面表示对我怎么样。</p><p><strong>舅夺母志:</strong> 强行改变。</p><p><strong>祖母刘愍臣孤弱:</strong> 怜悯，爱怜。</p><p><strong>躬亲抚养:</strong> 亲自。</p><p><strong>终鲜兄弟:</strong> 少，没有。</p><p><strong>门衰祚薄:</strong> 门庭衰微，福分浅薄。祚：福气，福分。</p><p><strong>晚有儿息:</strong> 子女。</p><p><strong>外无期功强近之亲:</strong> 勉强。</p><p><strong>茕茕孑立:</strong> 孤单。</p><p><strong>形影相吊:</strong> 安慰。</p><p><strong>而刘夙婴疾病:</strong> 缠绕着（被……缠绕）。</p><p><strong>逮奉圣朝，沐浴清化:</strong> 逮：及，到。 奉：承奉。</p><p><strong>前太守臣逵察臣孝廉:</strong> 考察后予以推荐。</p><p><strong>诏书特下:</strong> 特地。</p><p><strong>拜臣郎中:</strong> 拜：授予官职。</p><p><strong>寻蒙国恩:</strong> 寻：不久。</p><p><strong>除臣洗马:</strong> 除旧官，任新官，受职。</p><p><strong>猥以微贱:</strong> 谦辞，表示自己的谦卑。</p><p><strong>臣具以表闻:</strong> 详尽。</p><p><strong>诏书切峻:</strong> 急切而严厉。</p><p><strong>责臣逋慢:</strong> 逋：拖延，迟延。慢：怠慢。</p><p><strong>急于星火:</strong> 于：比。</p><p><strong>则刘病日笃:</strong> 笃：病重,沉重。</p><p><strong>欲苟顺私情:</strong> 姑且。</p><p><strong>伏惟圣朝以孝治天下:</strong> 俯伏思量。（谦敬之辞）</p><p><strong>犹蒙矜育:</strong> 怜悯。</p><p><strong>且臣少仕伪朝:</strong> 再说了,而且。</p><p><strong>不矜名节:</strong> 顾惜。</p><p><strong>至微至陋:</strong> 极，其。</p><p><strong>过蒙拔擢:</strong> 提升。</p><p><strong>宠命优渥:</strong> 厚。</p><p><strong>岂敢盘桓:</strong> 犹豫不决的样子。</p><p><strong>但以刘日薄西山:</strong> 迫近。</p><p><strong>无以至今日:</strong> 没有用来……的。</p><p><strong>更相为命:</strong> 交互。</p><p><strong>是以区区不能废远:</strong> 是以：这是因为。区区：拳拳之情，形容自己的私情。</p><p><strong>实所共鉴:</strong> 明察。</p><p><strong>矜悯愚诚:</strong> 怜悯。</p><p><strong>听臣微志:</strong> 听任，请允许。</p><p><strong>庶刘侥幸:</strong> 但愿，希冀。</p><p><strong>保卒余年:</strong> 终。</p><p><strong>臣不胜犬马怖惧之情:</strong> 完，尽。</p></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">通假字 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>夙遭闵凶</strong>：闵，通“<strong>悯</strong>”，意为可忧患的事。</li><li><strong>零丁孤苦</strong>：零丁，通“<strong>伶仃</strong>”，意为孤独的样子。</li><li><strong>臣密今年四十有四</strong>：有，通“<strong>又</strong>”，表示整数后面的零数。</li><li><strong>常在床蓐</strong>：蓐，通“<strong>褥</strong>”，指垫子、草席。</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">词类活用 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）名词作状语</h4><ul><li>非臣陨首所能<strong>上</strong>报。（上：向上。）</li><li>臣不胜<strong>犬马</strong>怖惧之情。（犬马：像犬马一样。）</li><li>则刘病<strong>日</strong>笃。（日：一天天地。）</li><li><strong>外</strong>无期功强近之亲。（外：在家外。）</li><li><strong>内</strong>无应门五尺之僮。（内：在家里。）</li><li><strong>躬</strong>亲抚养。（躬：亲自。）</li></ul><h4>（二）使动用法</h4><ul><li>臣具以表<strong>闻</strong>。（闻：使……闻。）</li><li><strong>保</strong>卒余年。（保：使……保全。）</li><li>谨拜表以<strong>闻</strong>（闻：使……知道。）</li></ul><h4>（三）形容词作名词</h4><ul><li>夙遭<strong>闵凶</strong>。（闵凶：忧患不幸的事。）</li><li>猥以<strong>微贱</strong>。（微贱：卑微低贱的身份。）</li><li>凡在<strong>故老</strong>。（故老：年老而有功德的旧臣。）</li><li>愿陛下矜悯<strong>愚诚</strong>（愚诚：诚心。）</li></ul><h4>（四）形容词作动词</h4><ul><li>是以区区不能废<strong>远</strong>。（远：远离。）</li><li>则刘病日<strong>笃</strong>。（笃：病重。）</li></ul><h4>（五）名词作动词</h4><ul><li>臣少多疾<strong>病</strong>。（病：生病。）</li><li>且臣少<strong>仕</strong>伪朝。（仕：做官。）</li><li>历<strong>职</strong>郎署。（职：任职。）</li></ul><h4>（六）动词作名词</h4><ul><li>臣之<strong>进退</strong>，实为狼狈。（进退：指是否出来做官之事。）</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">古今异义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>不行</strong>: <em>古义：</em> 不能走路，这里指柔弱。 <em>今义：</em>不可以。</li><li><strong>秀才</strong>: <em>古义：</em>优秀人才。<em>今义：</em>读书人的通称。</li><li><strong>除</strong>: <em>古义：</em>授予官职。<em>今义：</em>不包括在内。</li><li><strong>洗马</strong>: <em>古义：</em>官职名，太子随从。<em>今义：</em>给马洗身子。</li><li><strong>奔驰</strong>: <em>古义：</em>奔走效劳,这里指赴京就职。<em>今义：</em>迅速的跑。</li><li><strong>辛苦</strong>: <em>古义：</em>辛酸苦楚。<em>今义：</em>表身心劳苦，比喻艰难困苦，很疲倦的感觉。现多指工作和劳作的感受。</li><li><strong>告诉</strong>: <em>古义：</em>申诉。<em>今义：</em>向别人陈述;通知某事，使人知道。</li><li><strong>区区</strong>: <em>古义：</em>拳拳，形容感情恳切。<em>今义：</em>小;少。形容微不足道。</li><li><strong>至于</strong>: <em>古义：</em>一直到....... 。<em>今义：</em>副词。表示事情达到某种程度；连词。表示另提一事或另一情况；到达。</li><li><strong>成立</strong>: <em>古义：</em>成人自立。<em>今义：</em>组织机构开始存在；理论意见，站得住脚。创立、建立。</li><li><strong>星火</strong>: <em>古义：</em>流星的光，比喻急迫。<em>今义：</em>微小的光。</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">一词多义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>行:</h4><ul><li><strong>行</strong>年四岁（动词，经历）</li><li>九岁不<strong>行</strong>（动词，走路）</li><li>余嘉其能<strong>行</strong>古道（动词，施行）</li></ul><h4>矜:</h4><ul><li>犹蒙<strong>矜</strong>育（动词，怜惜）</li><li>不<strong>矜</strong>名节（动词，顾惜）</li><li>愿陛下<strong>矜</strong>悯愚诚（动词，怜悯）</li></ul><h4>至:</h4><ul><li><strong>至</strong>微<strong>至</strong>陋（副词，最）</li><li>无以<strong>至</strong>今日（动词，到达）</li></ul><h4>见:</h4><ul><li>慈父<strong>见</strong>背（见用在动词前，表示他人行为及于自己）</li><li>二州牧伯所<strong>见</strong>明知（动词，看见）</li><li>臣诚恐<strong>见</strong>欺于王而负赵（被）</li></ul><h4>亲:</h4><ul><li>躬<strong>亲</strong>抚养（代词，亲自）</li><li>外无期功强近之<strong>亲</strong>（名词，亲戚）</li></ul><h4>日:</h4><ul><li><strong>日</strong>薄西山（名词，太阳）</li><li>报养刘之<strong>日</strong>短（名词，日子）</li><li>则刘病<strong>日</strong>笃（名词作状语，一天天）</li></ul><h4>当:</h4><ul><li><strong>当</strong>侍东宫（动词，任，充当）</li><li>死<strong>当</strong>结草（副词，应当）</li></ul><h4>薄:</h4><ul><li>日<strong>薄</strong>西山（动词，迫近）</li><li>门衰祚<strong>薄</strong>（形容词，微薄，少）</li><li><strong>薄</strong>微细古（微小）</li></ul><h4>拜:</h4><ul><li><strong>拜</strong>臣郎中（动词，授官）</li><li>谨<strong>拜</strong>表以闻（动词，奉上）</li></ul><h4>于:</h4><ul><li>州司临门，急<strong>于</strong>星火（介词，比）</li><li>是臣尽节<strong>于</strong>陛下之日长（介词，给）</li></ul><h4>夙:</h4><ul><li><strong>夙</strong>遭闵凶（名词，很早，幼年）</li><li><strong>夙</strong>夜忧叹（名词，早晨）</li></ul><h4>区区:</h4><ul><li>是以<strong>区区</strong>不能废远（拳拳，形容自己的私情）</li><li>何乃太<strong>区区</strong>（形容词， 短浅的）</li><li><strong>区区</strong>小事（形容词，形容分量少）</li><li><strong>区区</strong>在下（谦称自己）</li></ul><h4>卒:</h4><ul><li>保<strong>卒</strong>余年（副词， 终）</li><li><strong>卒</strong>成帝业 （副词，终究）</li><li>信臣精<strong>卒</strong>陈利兵而谁何（名词， 士兵）</li><li><strong>卒</strong>然边境有急 （副词，突然）</li></ul><h4>除:</h4><ul><li><strong>除</strong>臣洗马(动词,任命)</li><li>登自东<strong>除</strong>(名词,台阶)</li><li>攘<strong>除</strong>奸凶(动词,清除)</li></ul><h4>婴:</h4><ul><li>夙<strong>婴</strong>疾病(动词,缠绕)</li><li>举<strong>婴</strong>,欲投之于河(名词,婴孩)</li></ul><h4>应:</h4><ul><li>内无<strong>应</strong>门五尺之僮(动词,照应)</li><li>其人弗能<strong>应</strong>也(动词,回答)</li></ul><h4>志:</h4><ul><li>舅夺母<strong>志</strong>（名词，志向）</li><li>寻向所<strong>志</strong>（名词，标记）</li></ul><h4>以:</h4><ul><li>臣<strong>以</strong>险衅（以：因为）</li><li>臣<strong>以</strong>供养无主 （以：介词，因为）</li><li>臣具<strong>以</strong>表闻（以：用）</li><li>猥<strong>以</strong>微贱（以：和地位搭配时，译为“凭借”）</li><li>无<strong>以</strong>至今日 （无以：没有......的办法）</li><li>但<strong>以</strong>刘日薄西山（以：因为）</li><li>是<strong>以</strong>区区不能废远 （是以：因此 以：因为）</li><li>伏惟圣朝<strong>以</strong>孝治天下（以：用）</li><li>谨拜表<strong>以</strong>闻 （以：连词，而）</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">重点虚词：“以” <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="function-word-list"><div><dl><dt>臣以险衅 / 臣以供养无主 / 但以刘日薄西山</dt><dd>因为</dd></dl></div><div><dl><dt>是以区区不能废远</dt><dd>是以：因此 (其中“以”表原因)</dd></dl></div><div><dl><dt>伏惟圣朝以孝治天下 / 臣具以表闻</dt><dd>用，拿</dd></dl></div><div><dl><dt>猥以微贱</dt><dd>凭借</dd></dl></div><div><dl><dt>无以至今日</dt><dd>无以：没有用来……的办法</dd></dl></div><div><dl><dt>谨拜表以闻</dt><dd>连词，来，然后</dd></dl></div></div></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">成语典故 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="idiom-grid"><div class="idiom-item"><dl><dt>孤苦伶仃</dt><dd>原文作“零丁孤苦”。孤单困苦，没有依靠。</dd></dl></div><div class="idiom-item"><dl><dt>茕茕孑立</dt><dd>孤身一人。形容一个人无依无靠，孤苦伶仃。</dd></dl></div><div class="idiom-item"><dl><dt>形影相吊</dt><dd>孤身一人，只有和自己的身影相互慰问。形容无依无靠，非常孤单。</dd></dl></div><div class="idiom-item"><dl><dt>急于星火</dt><dd>象流星的光从空中急闪而过。形容非常急促紧迫。</dd></dl></div><div class="idiom-item"><dl><dt>日薄西山</dt><dd>太阳快要落山了。比喻人已衰老或事物衰败，临近死亡。</dd></dl></div><div class="idiom-item"><dl><dt>气息奄奄</dt><dd>形容呼吸微弱，快要断气的样子。</dd></dl></div><div class="idiom-item"><dl><dt>朝不虑夕</dt><dd>早晨不能知道晚上会怎样。形容形势危急，难以预料。</dd></dl></div><div class="idiom-item"><dl><dt>结草衔环</dt><dd>旧时比喻感恩报德，至死不忘。</dd></dl></div><div class="idiom-item"><dl><dt>乌鸟私情</dt><dd>传说小乌鸦能反哺老乌鸦。比喻侍奉尊亲的孝心。</dd></dl></div><div class="idiom-item"><dl><dt>皇天后土</dt><dd>指天地神明。旧时迷信天地能主持公道，主宰万物。</dd></dl></div></div></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">特殊句式 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>（一）介宾短语后置</h4><ul><li>急于星火</li><li>是臣尽节于陛下之日长</li></ul><h4>（二）宾语前置</h4><ul><li>是以区区不能废远</li><li>慈父见背</li></ul><h4>（三）被动句</h4><ul><li>而刘夙婴疾病</li><li>则告诉不许</li></ul><h4>（四）省略句</h4><ul><li>拜臣（为）郎中</li><li>且臣少仕（于）伪朝</li><li>但以刘日薄西山</li></ul><h4>（五）判断句</h4><ul><li>今臣亡国贱俘</li><li>非独蜀之人士及二州牧伯所见明知</li><li>非臣陨首所能上报</li><li>是臣尽节于陛下之日长，报养刘之日短也</li></ul><h4>（六）固定句式</h4><ul><li>臣无祖母，无以至今日</li></ul></div></div></div>
+            <div id="page-content" class="page-content">
+                <div class="content-wrapper">
+                    
+                    <div id="search-section">
+                        <div class="search-container">
+                            <input type="search" id="search-box" placeholder="于星海间，寻一篇诗文" autocomplete="off">
+                            <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208z"/></svg>
+                             <div id="search-results" style="display: none;"></div>
+                        </div>
                     </div>
-                </section>
+
+                    <section id="featured-content" class="featured-section">
+                        <h2 class="section-title animated-item">文海拾贝</h2>
+                        <div id="article-grid" class="article-grid">
+                            <!-- 卡片将由JS在此生成 -->
+                        </div>
+                    </section>
+                </div>
             </div>
         </main>
-        
-        <!-- Back to Top Button -->
-        <button id="back-to-top" title="回到顶部">
-            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3V480c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l137.4 137.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg>
-        </button>
     </div>
 </body>
 </html>
