@@ -402,10 +402,25 @@
                 const items = searchResultsContainer.querySelectorAll('.result-item');
                 items.forEach((item, index) => item.classList.toggle('active', index === activeIndex));
             }
-            searchBox.addEventListener('input', () => {
+            function debounce(func, delay) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), delay);
+                };
+            }
+
+            function handleSearch() {
                 const query = searchBox.value.trim();
-                if (query) { displayResults(query); } else { searchResultsContainer.style.display = 'none'; }
-            });
+                if (query) {
+                    displayResults(query);
+                } else {
+                    searchResultsContainer.style.display = 'none';
+                }
+            }
+
+            searchBox.addEventListener('input', debounce(handleSearch, 300));
+            
             searchBox.addEventListener('keydown', (e) => {
                 const items = searchResultsContainer.querySelectorAll('.result-item');
                 if (!items.length) return;
