@@ -7,440 +7,16 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;500;700&display=swap"></noscript>
     
-    <style>
-        /* ---
-         * V19 内页视觉增强版 - 完整代码
-         * 关键优化:
-         * 1. 视觉一致性: 增强了注释(Tooltip)的毛玻璃效果，使其模糊度和不透明度与网站其他元素更匹配。
-         * 2. 动画流畅度: 保留了分段式滚动动画和硬件加速，确保最佳性能。
-         * 3. 功能与内容: 所有功能和文章内容均保持完整，无省略。
-         * --- */
-
-        /* 1. 字体系统与变量 */
-        :root {
-            --font-serif: "Noto Serif SC", serif;
-            --font-cursive: "Ma Shan Zhaeng", cursive;
-            --bg-color: #1a1a1a;
-            --text-color: rgba(255, 255, 255, 0.85);
-            --title-color: #dcc4a8;
-            --highlight-color: #b8a088;
-            --glass-bg: rgba(30, 30, 30, 0.65);
-            --border-color: rgba(255, 255, 255, 0.1);
-            --button-bg-hover: rgba(255, 255, 255, 0.1);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --separator-color: rgba(255, 255, 255, 0.15);
-            --main-max-width: 1000px;
-            --main-line-height: 1.9;
-            --light-title-gradient: linear-gradient(120deg, #5a3d2b, #3d3d3d, #8a6c5b);
-            --highlight-text: #fdd8a5;
-        }
-
-        [data-theme="light"] {
-            --bg-color: #f9f7f4;
-            --text-color: #1c1c1e;
-            --title-color: #4a2c1a;
-            --highlight-color: #795548;
-            --glass-bg: rgba(255, 255, 255, 0.85);
-            --border-color: rgba(0, 0, 0, 0.08);
-            --button-bg-hover: rgba(0, 0, 0, 0.05);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --separator-color: rgba(0, 0, 0, 0.1);
-        }
-        
-        /* 2. 基础与布局样式 */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-serif);
-            font-weight: 400;
-            line-height: var(--main-line-height);
-            transition: background-color 0.5s ease, color 0.5s ease;
-        }
-        #page-wrapper { position: relative; width: 100%; overflow-x: hidden; }
-        body::before {
-            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.4));
-            z-index: -1; pointer-events: none;
-        }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background-color: var(--highlight-color); border-radius: 10px; border: 2px solid var(--bg-color); }
-        
-        main { padding: 140px 0 100px; }
-        .article-container { max-width: var(--main-max-width); margin: 0 auto; padding: 0 20px; }
-
-        /* 3. 页眉 & 导航 */
-        @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        header {
-            position: fixed; top: 0; width: 100%; padding: 15px 3%;
-            z-index: 100; background: var(--glass-bg);
-            backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.4s ease;
-            animation: slideDown 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) both;
-        }
-        .header-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        .logo { font-family: var(--font-cursive); font-size: 2.2rem; color: var(--title-color); text-decoration: none; transition: color 0.3s; z-index: 102; }
-        .logo:hover { color: var(--highlight-color); }
-        .nav-center { flex-grow: 1; display: flex; justify-content: center; }
-        nav.main-nav a { font-family: var(--font-serif); font-size: 1rem; color: var(--text-color); text-decoration: none; margin: 0 15px; opacity: 0.8; transition: opacity 0.3s ease, color 0.3s ease; }
-        nav.main-nav a:hover { color: var(--title-color); opacity: 1; }
-        .controls { display: flex; align-items: center; gap: 10px; }
-        .controls button { min-width: 130px; background: transparent; border: 1px solid transparent; color: var(--text-color); padding: 10px; font-family: var(--font-serif); cursor: pointer; border-radius: 999px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px; line-height: 1; transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
-        .controls button:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-2px); }
-        .controls button svg { width: 1em; height: 1em; transition: transform 0.5s ease; }
-        .controls button.playing svg { animation: pulse 1.5s infinite ease-in-out; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.2); } }
-        .hamburger { display: none; cursor: pointer; background: transparent; border: none; z-index: 102; padding: 10px; }
-        .hamburger .bar { display: block; width: 25px; height: 3px; margin: 5px auto; background-color: var(--text-color); transition: all 0.3s ease-in-out; }
-        .hamburger.active .bar:nth-child(2) { opacity: 0; }
-        .hamburger.active .bar:nth-child(1) { transform: translateY(8px) rotate(45deg); }
-        .hamburger.active .bar:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
-        
-        .header-search-container { position: relative; margin-left: 15px; }
-        #header-search-box { width: 220px; padding: 8px 35px 8px 15px; font-size: 0.9rem; border-radius: 20px; border: 1px solid var(--border-color); background-color: transparent; color: var(--text-color); transition: all 0.3s ease; }
-        #header-search-box:focus { outline: none; border-color: var(--highlight-color); width: 250px; background-color: var(--button-bg-hover); }
-        .header-search-container .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); width: 1rem; height: 1rem; color: var(--text-color); opacity: 0.6; pointer-events: none; }
-        #header-search-results { position: absolute; width: 300px; top: 120%; right: 0; margin-top: 0.5rem; padding: 0.5rem; background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-color); border-radius: 12px; max-height: 50vh; overflow-y: auto; z-index: 110; box-shadow: 0 8px 30px var(--shadow-color); }
-        .result-item { display: block; padding: 0.7rem 1rem; border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease; text-decoration: none; color: var(--text-color); }
-        .result-item.active, .result-item:hover { background-color: rgba(255,255,255,0.1); }
-        .result-item .title { font-size: 1rem; font-weight: 500; color: #fff; }
-        .result-item .author { font-size: 0.8rem; opacity: 0.6; }
-        .result-item .highlight { color: var(--highlight-text); font-weight: 700; background-color: rgba(253, 216, 165, 0.1); }
-
-        /* 4. 入场动画 */
-        @keyframes fadeIn-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        .animated-item { 
-            opacity: 0; 
-            transform: translateY(30px); 
-            transition: opacity 0.7s cubic-bezier(0.25, 0.8, 0.25, 1), transform 0.7s cubic-bezier(0.25, 0.8, 0.25, 1); 
-            transition-delay: var(--delay, 0s);
-            will-change: transform, opacity;
-        }
-        .animated-item.visible { opacity: 1; transform: translateY(0); }
-
-        .article-title { text-align: center; margin-bottom: 6rem; }
-        .article-title h1, .article-title h2 {
-             animation: fadeIn-up 0.8s both cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .article-title h1 {
-            font-family: var(--font-cursive); font-size: 4.8rem; font-weight: normal; 
-            color: var(--title-color);
-            text-shadow: 1px 1px 2px var(--shadow-color), 0 0 15px var(--shadow-color);
-            transition: color 0.5s ease, background 0.5s ease;
-            animation-delay: 0.2s;
-        }
-        [data-theme="light"] .article-title h1 {
-            background: var(--light-title-gradient); -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .article-title h2 {
-            font-size: 1.2rem; color: var(--text-color); font-weight: 400; margin-top: 0.5rem; letter-spacing: 2px; 
-            animation-delay: 0.4s;
-        }
-        
-        /* 5. 原文与译文 & 其他区域 (Tooltip优化) */
-        .translation-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 2.5rem; margin-bottom: 2.8em; align-items: start; }
-        .separator { width: 1px; height: 100%; background: linear-gradient(to bottom, transparent, var(--separator-color), transparent); }
-        .original-text p, .translated-text p { font-size: 1.2rem; font-weight: 500; text-indent: 2em; text-align: justify; hyphens: auto; transition: font-size 0.4s ease; margin: 0; }
-        .translated-text p { color: var(--text-color); opacity: 0.85; font-weight: 400; }
-        .tooltip { display: inline; position: relative; text-decoration: underline; text-decoration-style: dashed; text-decoration-color: var(--highlight-color); text-decoration-thickness: 1px; text-underline-offset: 5px; cursor: help; }
-        .tooltip .tooltip-text {
-            visibility: hidden; width: 220px; 
-            background-color: rgba(30, 30, 30, 0.93); /* 增强深色模式不透明度 */
-            color: var(--text-color); 
-            text-align: left; text-indent: 0; border-radius: 8px; padding: 12px 15px; 
-            position: absolute; z-index: 1; bottom: 150%; left: 50%; margin-left: -110px; 
-            opacity: 0; transform: translateY(10px); 
-            transition: opacity 0.3s ease, transform 0.3s ease, font-size 0.4s ease; 
-            font-size: 0.9rem; line-height: 1.6; 
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); /* 增强模糊效果 */
-            border: 1px solid var(--border-color); box-shadow: 0 4px 20px var(--shadow-color);
-        }
-        [data-theme="light"] .tooltip .tooltip-text {
-            background-color: rgba(255, 255, 255, 0.9); /* 增强浅色模式不透明度 */
-        }
-        .tooltip:hover .tooltip-text { visibility: visible; opacity: 1; transform: translateY(0); }
-        .tooltip .tooltip-text::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: var(--border-color) transparent transparent transparent; }
-        
-        .analysis-section { margin: 8rem 0 0; }
-        .analysis-section h2 { font-family: var(--font-cursive); font-size: 3rem; color: var(--title-color); text-align: center; margin-bottom: 3rem; scroll-margin-top: 120px; }
-        .analysis-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-        
-        .analysis-card { background: var(--glass-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 2rem; position: relative; z-index: 1; transition: transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.4s ease; will-change: transform; }
-        .analysis-card::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px; box-shadow: 0 10px 40px var(--shadow-color); opacity: 0; z-index: -1; transition: opacity 0.4s ease; will-change: opacity; }
-        .analysis-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--highlight-color); }
-        .analysis-card:hover::after { opacity: 1; }
-        .analysis-card h3 { font-family: var(--font-serif); font-weight: 700; font-size: 1.5rem; color: var(--title-color); margin-bottom: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.8rem; }
-        .analysis-card p { font-size: 1.1rem; line-height: 1.8; text-align: left; text-indent: 0; margin-bottom: 1em; transition: font-size 0.4s ease; }
-        .analysis-card p:last-child { margin-bottom: 0; }
-        .analysis-card p strong { color: var(--highlight-color); font-weight: 500; }
-        body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.55rem; }
-        body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.4rem; }
-        body.large-font-mode .tooltip .tooltip-text { font-size: 1.15rem; width: 280px; margin-left: -140px; }
-        
-        .accordion { margin-top: 2rem; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background-color: var(--glass-bg); }
-        .accordion-item { border-bottom: 1px solid var(--border-color); }
-        .accordion-item:last-child { border-bottom: none; }
-        .accordion-header { display: flex; justify-content: space-between; align-items: center; width: 100%; background: transparent; border: none; padding: 1.5rem 2rem; text-align: left; font-family: var(--font-serif); font-size: 1.5rem; font-weight: 700; color: var(--title-color); cursor: pointer; transition: background-color 0.3s ease; }
-        .accordion-header:hover { background-color: var(--button-bg-hover); }
-        .accordion-header .icon { font-size: 1.2rem; transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); }
-        .accordion-header .icon svg { width: 1em; height: 1em; } 
-        .accordion-item.active .accordion-header .icon { transform: rotate(180deg); }
-        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-in-out; }
-        .accordion-content-inner { padding: 0 2rem 1.5rem 2rem; font-size: 1.1rem; line-height: 1.8; transition: font-size 0.4s ease; }
-        .accordion-content-inner p, .accordion-content-inner ul { margin-bottom: 1.2em; }
-        .accordion-content-inner p:last-child, .accordion-content-inner ul:last-child { margin-bottom: 0; }
-        .accordion-content-inner ul { list-style-position: inside; padding-left: 1em; }
-        .accordion-content-inner li { margin-bottom: 0.5em; }
-        .accordion-content-inner strong { color: var(--highlight-color); font-weight: 500; }
-        .accordion-content-inner em { font-style: normal; opacity: 0.8; }
-        .accordion-content-inner h4 { font-size: 1.2rem; color: var(--title-color); margin-top: 1.5rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
-        .accordion-content-inner blockquote { border-left: 3px solid var(--highlight-color); margin: 1em 0; padding: 0.5em 1.5em; background-color: var(--button-bg-hover); border-radius: 4px; font-style: italic; }
-        .idiom-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-        .idiom-item { padding: 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; }
-        .idiom-item dt { font-size: 1.3em; font-weight: 700; color: var(--title-color); margin-bottom: 0.5rem; }
-        .function-word-list div { padding: 1.2rem 0; border-bottom: 1px dashed var(--border-color); }
-        .function-word-list dt { font-weight: 700; }
-        .function-word-list div:last-child { border-bottom: none; }
-
-        /* 6. 响应式设计 */
-        @media (max-width: 992px) { 
-            .nav-center { display: none; }
-            .hamburger { display: block; }
-            .nav-center.active { display: flex; flex-direction: column; justify-content: center; align-items: center; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background-color: var(--glass-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); z-index: 101; transform: translateY(-100%); animation: slideIn 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1); }
-            .nav-center.active.closing { animation: slideOut 0.5s forwards cubic-bezier(0.25, 0.8, 0.25, 1); }
-            .nav-center.active .main-nav { flex-direction: column; gap: 2rem; }
-            .nav-center.active .main-nav a { font-size: 1.8rem; opacity: 1; }
-            @keyframes slideIn { from { transform: translateY(-100%); } to { transform: translateY(0); } }
-            @keyframes slideOut { from { transform: translateY(0); } to { transform: translateY(-100%); } }
-            .translation-grid { grid-template-columns: 1fr; gap: 1.5rem; } 
-            .separator { display: none; } 
-            .original-text p { margin-bottom: 1.5em; } 
-            .article-container { padding: 0 15px; }
-            .header-search-container { display: none; } 
-        }
-        
-        @media (max-width: 768px) { 
-            header { padding: 15px 5%; } 
-            .logo { font-size: 1.8rem; } 
-            .controls {flex-wrap: wrap; justify-content: flex-end; max-width: 150px;}
-            .controls button { min-width: auto; padding: 8px 12px; font-size: 0.8rem; } 
-            .controls button span { display: none; } 
-            main { padding: 120px 0 80px; } 
-            .article-title { margin-bottom: 4rem; }
-            .article-title h1 { font-size: 3.2rem; } 
-            .article-title h2 { font-size: 1rem; } 
-            .analysis-section { margin-top: 6rem; }
-            .analysis-grid { gap: 1.5rem; }
-            .original-text p, .translated-text p { font-size: 1.1rem; } 
-            .analysis-card p { font-size: 1rem; } 
-            body.large-font-mode .original-text p, body.large-font-mode .translated-text p { font-size: 1.25rem; } 
-            body.large-font-mode .analysis-card p, body.large-font-mode .accordion-content-inner { font-size: 1.15rem; } 
-            body.large-font-mode .tooltip .tooltip-text { font-size: 1.05rem; width: 240px; margin-left: -120px; }
-            .accordion-header { font-size: 1.3rem; padding: 1.2rem 1.5rem; } 
-            .accordion-content-inner { font-size: 1rem; }
-            .idiom-grid { grid-template-columns: 1fr; gap: 1rem; }
-        }
-        
-        /* 7. 工具类 (返回顶部按钮) */
-        #back-to-top { position: fixed; bottom: 25px; right: 25px; width: 50px; height: 50px; background-color: var(--glass-bg); border: 1px solid var(--border-color); color: var(--text-color); border-radius: 50%; cursor: pointer; visibility: hidden; opacity: 0; z-index: 99; display: flex; justify-content: center; align-items: center; transform: translateY(10px); transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s, background-color 0.3s; }
-        #back-to-top.visible { visibility: visible; opacity: 1; transform: translateY(0); }
-        #back-to-top:hover { background: var(--button-bg-hover); color: var(--title-color); transform: translateY(-5px); }
-        #back-to-top svg { width: 1.2em; height: 1.2em; }
-        @media (max-width: 768px) { #back-to-top { width: 45px; height: 45px; bottom: 20px; right: 20px; } }
-    </style>
-    
-    <script defer>
-        document.addEventListener('DOMContentLoaded', () => {
-            const body = document.getElementById('page-body');
-            const themeToggle = document.getElementById('theme-toggle');
-            const audioToggle = document.getElementById('play-audio');
-            const audioElement = document.getElementById('recitation-audio');
-            const largeFontToggle = document.getElementById('large-font-toggle');
-            const hamburger = document.getElementById('hamburger-menu');
-            const navCenter = document.querySelector('.nav-center');
-            const navLinks = navCenter.querySelectorAll('a');
-            const backToTopButton = document.getElementById('back-to-top');
-
-            // --- 移动端导航脚本 ---
-            const toggleNav = () => {
-                const isActive = hamburger.classList.contains('active');
-                if (isActive) {
-                    hamburger.classList.remove('active');
-                    navCenter.classList.add('closing');
-                    navCenter.addEventListener('animationend', () => navCenter.classList.remove('active', 'closing'), { once: true });
-                } else {
-                    hamburger.classList.add('active');
-                    navCenter.classList.add('active');
-                }
-            };
-            hamburger.addEventListener('click', toggleNav);
-            navLinks.forEach(link => link.addEventListener('click', () => { if (hamburger.classList.contains('active')) toggleNav(); }));
-
-            // --- 主题切换脚本 ---
-            function applyTheme(theme) {
-                document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
-                const themeBtnText = themeToggle.querySelector('span');
-                const sunIcon = document.getElementById('sun-icon');
-                const moonIcon = document.getElementById('moon-icon');
-                if (theme === 'dark') {
-                    if(themeBtnText) themeBtnText.textContent = '光明主题';
-                    sunIcon.style.display = 'inline-block';
-                    moonIcon.style.display = 'none';
-                } else {
-                    if(themeBtnText) themeBtnText.textContent = '静夜主题';
-                    sunIcon.style.display = 'none';
-                    moonIcon.style.display = 'inline-block';
-                }
-            }
-            const currentTheme = localStorage.getItem('theme') || 'dark';
-            applyTheme(currentTheme);
-            themeToggle.addEventListener('click', () => applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark'));
-
-            // --- 音频播放脚本 ---
-            audioToggle.addEventListener('click', () => {
-                const audioBtnText = audioToggle.querySelector('span');
-                const volumeIcon = document.getElementById('volume-icon');
-                const pauseIcon = document.getElementById('pause-icon');
-                if (audioElement.paused) {
-                    audioElement.play();
-                    if(audioBtnText) audioBtnText.textContent = '暂停朗诵';
-                    volumeIcon.style.display = 'none';
-                    pauseIcon.style.display = 'inline-block';
-                    audioToggle.classList.add('playing');
-                } else {
-                    audioElement.pause();
-                    if(audioBtnText) audioBtnText.textContent = '聆听朗诵';
-                    volumeIcon.style.display = 'inline-block';
-                    pauseIcon.style.display = 'none';
-                    audioToggle.classList.remove('playing');
-                }
-            });
-            audioElement.addEventListener('ended', () => {
-                const audioBtnText = audioToggle.querySelector('span');
-                if(audioBtnText) audioBtnText.textContent = '聆听朗诵';
-                document.getElementById('volume-icon').style.display = 'inline-block';
-                document.getElementById('pause-icon').style.display = 'none';
-                audioToggle.classList.remove('playing');
-            });
-
-            // --- 大字体模式脚本 ---
-            largeFontToggle.addEventListener('click', () => {
-                body.classList.toggle('large-font-mode');
-                const isLarge = body.classList.contains('large-font-mode');
-                document.getElementById('zoom-in-icon').style.display = isLarge ? 'none' : 'inline-block';
-                document.getElementById('zoom-out-icon').style.display = isLarge ? 'inline-block' : 'none';
-            });
-
-            // --- [性能优化] 滚动动画脚本 ---
-            const observer = new IntersectionObserver((entries, obs) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const itemsToAnimate = entry.target.querySelectorAll('.animated-item');
-                        itemsToAnimate.forEach((item, index) => {
-                            item.style.setProperty('--delay', `${index * 100}ms`);
-                            item.classList.add('visible');
-                        });
-                        obs.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
-            
-            document.querySelectorAll('.article-title, .analysis-section, .translation-grid, .accordion').forEach(section => {
-                observer.observe(section);
-            });
-
-            // --- 手风琴脚本 ---
-            document.querySelectorAll('.accordion-item').forEach(item => {
-                const header = item.querySelector('.accordion-header');
-                const content = item.querySelector('.accordion-content');
-                header.addEventListener('click', () => {
-                    const isActive = item.classList.toggle('active');
-                    content.style.maxHeight = isActive ? content.scrollHeight + "px" : null;
-                });
-            });
-
-            // --- 返回顶部脚本 ---
-            window.addEventListener('scroll', () => backToTopButton.classList.toggle('visible', window.scrollY > 300));
-            backToTopButton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-
-            // --- 页眉搜索功能脚本 ---
-            const sitePages = [
-                { id: 'chenqingbiao', title: '陈情表', author: '[晋] 李密', url: 'chenqingbiao.html', keywords: 'chenqingbiao 陈情表 李密 limi 晋 孝 奏表' },
-                { id: 'xiangjixuanzhi', title: '项脊轩志', author: '[明] 归有光', url: 'xiangjixuanzhi.html', keywords: 'xiangjixuanzhi 项脊轩志 归有光 guiyouguang 明 散文 枇杷树' },
-                { id: 'placeholder1', title: '待填之作', author: '[朝代] 作者', url: '#', keywords: '示例 placeholder' }
-            ];
-            const searchBox = document.getElementById('header-search-box');
-            const searchResultsContainer = document.getElementById('header-search-results');
-            let activeIndex = -1;
-
-            function highlightText(text, query) {
-                if (!query) return text;
-                const regex = new RegExp(`(${query})`, 'gi');
-                return text.replace(regex, '<span class="highlight">$1</span>');
-            }
-            function displayResults(query) {
-                const lowerCaseQuery = query.toLowerCase();
-                const results = sitePages.filter(page => page.id !== 'placeholder1' && (page.title.toLowerCase().includes(lowerCaseQuery) || page.author.toLowerCase().includes(lowerCaseQuery) || page.keywords.toLowerCase().includes(lowerCaseQuery)));
-                searchResultsContainer.style.display = results.length > 0 ? 'block' : 'none';
-                if (results.length > 0) {
-                    searchResultsContainer.innerHTML = results.map(page => `
-                        <a href="${page.url}" class="result-item">
-                            <div class="title">${highlightText(page.title, query)}</div>
-                            <div class="author">${highlightText(page.author, query)}</div>
-                        </a>
-                    `).join('');
-                }
-                activeIndex = -1;
-            }
-            function updateActiveItem() {
-                const items = searchResultsContainer.querySelectorAll('.result-item');
-                items.forEach((item, index) => item.classList.toggle('active', index === activeIndex));
-            }
-            function debounce(func, delay) {
-                let timeout;
-                return function(...args) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(this, args), delay);
-                };
-            }
-
-            function handleSearch() {
-                const query = searchBox.value.trim();
-                if (query) {
-                    displayResults(query);
-                } else {
-                    searchResultsContainer.style.display = 'none';
-                }
-            }
-            
-            searchBox.addEventListener('input', debounce(handleSearch, 300));
-            
-            searchBox.addEventListener('keydown', (e) => {
-                const items = searchResultsContainer.querySelectorAll('.result-item');
-                if (!items.length) return;
-                if (e.key === 'ArrowDown') { e.preventDefault(); activeIndex = (activeIndex + 1) % items.length; updateActiveItem(); } 
-                else if (e.key === 'ArrowUp') { e.preventDefault(); activeIndex = (activeIndex - 1 + items.length) % items.length; updateActiveItem(); } 
-                else if (e.key === 'Enter') { e.preventDefault(); if (activeIndex > -1) items[activeIndex].click(); }
-            });
-            searchBox.addEventListener('blur', () => setTimeout(() => { searchResultsContainer.style.display = 'none'; }, 150));
-            searchBox.addEventListener('focus', () => { if(searchBox.value.trim()){ displayResults(searchBox.value.trim()); } });
-            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { searchResultsContainer.style.display = 'none'; searchBox.blur(); } });
-        });
-    </script>
+    <link rel="stylesheet" href="article.css">
 </head>
-<body id="page-body">
-    <div id="page-wrapper">
-        <audio id="recitation-audio" src="https://ziyuan.guwendao.net/song/chenlang/a8fb4f01b418.mp3" loop preload="metadata"></audio>
 
+<body class="article-page">
+
+    <div id="page-wrapper">
+        <!-- 页眉 -->
         <header>
             <div class="header-content">
                 <a href="index.html" class="logo">初元</a>
@@ -496,40 +72,45 @@
                 </section>
                 
                 <div class="translation-grid"><div class="original-text animated-item"><p>项脊轩，<span class="tooltip">旧<span class="tooltip-text">旧日的，原来的。</span></span>南阁子也。室仅<span class="tooltip">方丈<span class="tooltip-text">一丈见方。</span></span>，可容一人居。百年老屋，<span class="tooltip">尘泥渗漉<span class="tooltip-text">（屋顶墙头上的）泥土漏下。</span></span>，<span class="tooltip">雨泽下注<span class="tooltip-text">雨水往下倾泻。</span></span>；每移<span class="tooltip">案<span class="tooltip-text">几案，桌子。</span></span>，<span class="tooltip">顾视<span class="tooltip-text">环看四周。</span></span>无可置者。又北向，不能<span class="tooltip">得日<span class="tooltip-text">照到阳光。</span></span>，日过午已<span class="tooltip">昏<span class="tooltip-text">光线不明。</span></span>。余稍为<span class="tooltip">修葺<span class="tooltip-text">修缮、修理，修补。</span></span>，使不上漏。前<span class="tooltip">辟<span class="tooltip-text">开。</span></span>四窗，<span class="tooltip">垣墙周庭<span class="tooltip-text">庭院四周砌上围墙。</span></span>，以<span class="tooltip">当<span class="tooltip-text">挡住。</span></span>南日，日影反照，室始<span class="tooltip">洞然<span class="tooltip-text">明亮的样子。</span></span>。又杂植兰桂竹木于庭，旧时<span class="tooltip">栏楯<span class="tooltip-text">栏杆。纵的叫栏，横的叫楯。</span></span>，亦遂<span class="tooltip">增胜<span class="tooltip-text">增添了光彩。</span></span>。借书满架，<span class="tooltip">偃仰<span class="tooltip-text">伏下和仰起。</span></span><span class="tooltip">啸歌<span class="tooltip-text">长啸或吟唱。</span></span>，<span class="tooltip">冥然兀坐<span class="tooltip-text">静静地独自端坐着。</span></span>，<span class="tooltip">万籁有声<span class="tooltip-text">自然界的一切声音都能听到。</span></span>；而庭阶寂寂，小鸟时来啄食，人至不去。<span class="tooltip">三五之夜<span class="tooltip-text">农历每月十五的夜晚。</span></span>，明月半墙，桂影斑驳，风移影动，<span class="tooltip">珊珊<span class="tooltip-text">树影移动的样子。</span></span>可爱。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>项脊轩，是原来的南阁子。室内面积只有一丈见方，可以容纳一个人居住。这座百年老屋，泥土从上边漏下来，雨水也一直往下流；我每次动书桌，环视四周都没有可以安置桌案的地方。又屋子方位朝北，不能被阳光照到，一过了中午屋内就已昏暗。我稍稍修理了一下，使它不从上面漏土漏雨。向前开了四扇窗子，用矮墙在庭院周围环绕，用来挡住南面射来的日光，日光反射照耀，室内才明亮起来。又在庭院里随意地种上兰花、桂树、竹子等草木，往日的栏杆，也增加了新的光彩。书摆满了书架，我仰头高声吟诵诗歌，有时又静静地独自端坐，听自然界各种各样的声音；庭院、台阶前静悄悄的，小鸟不时飞下来啄食，人走到它跟前也不离开。农历十五的夜晚，明月高悬，照亮半截墙壁，桂树的影子交杂错落，微风吹过影子摇动，可爱极了。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>然余居于此，多可喜，亦多可悲。<span class="tooltip">先是<span class="tooltip-text">在这以前。</span></span>庭中通南北为一。<span class="tooltip">迨诸父异爨<span class="tooltip-text">等到伯、叔们分了家。异爨：分灶做饭。</span></span>，内外多置小门墙，<span class="tooltip">往往<span class="tooltip-text">到处，处处。</span></span>而是，<span class="tooltip">东犬西吠<span class="tooltip-text">东家的狗对着西边叫。形容分家后亲族疏远，如同陌路。</span></span>，客<span class="tooltip">逾庖而宴<span class="tooltip-text">越过厨房去吃饭。形容家道中落，格局混乱。</span></span>，鸡栖于厅。庭中始为篱，<span class="tooltip">已<span class="tooltip-text">不久，随后。</span></span>为墙，<span class="tooltip">凡<span class="tooltip-text">总共。</span></span><span class="tooltip">再<span class="tooltip-text">两次。</span></span>变矣。家有老妪，尝居于此。妪，先大母婢也，<span class="tooltip">乳<span class="tooltip-text">名词作动词，喂奶，引申为抚育。</span></span>二世，先妣抚之甚厚。室西连于中闺，先妣尝一至。妪每谓余曰：“某所，<span class="tooltip">而<span class="tooltip-text">通“尔”，你的。</span></span>母立于兹。”妪又曰：“汝姊在吾怀，呱呱而泣；娘以指叩门扉曰：‘儿寒乎？欲食乎？’吾从板外<span class="tooltip">相为应答<span class="tooltip-text">“相”指代“我”，为（wèi），替。意为我替你母亲回答。</span></span>。”语未毕，余泣，妪亦泣。余自<span class="tooltip">束发<span class="tooltip-text">古代男孩十五岁时束发为髻，指代成童之时。</span></span>读书轩中，一日，大母过余曰：“吾儿，久不见若影，何<span class="tooltip">竟日<span class="tooltip-text">整天。</span></span>默默在此，大类女郎也？”比去，以手<span class="tooltip">阖<span class="tooltip-text">通“合”，关闭。</span></span>门，自语曰：“吾家读书久不效，儿之成，则可待乎！”顷之，持一象笏至，曰：“此吾祖太常公宣德间执此以朝，他日汝当用之！”<span class="tooltip">瞻顾遗迹<span class="tooltip-text">瞻前顾后地看着这些旧物。</span></span>，如在昨日，令人长号不自禁。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>然而我住在这里，有许多值得高兴的事，也有许多悲伤的事。在这以前，庭院南北相通成为一体。等到伯父、叔父们分了家，室内外设置了许多小门，墙壁到处都是。分家后，狗把原住同一庭院的人当作陌生人，客人得越过厨房去吃饭，鸡在厅堂里栖息。庭院中开始是篱笆隔开，然后又砌成了墙，一共变了两次。家中有个老婆婆，曾经在这里居住过。这个老婆婆，是我已经去世的祖母的婢女，给两代人喂过奶，先母对她很好。房子的西边和内室相连，去世的母亲曾经来过这里。老婆婆常常对我说：“这个地方，你母亲曾经站在这里。”老婆婆又说：“你姐姐在我怀中，呱呱地哭泣；你母亲用手指敲着房门说：‘孩子是冷呢，还是想吃东西呢？’我隔着门一一回答。”话还没有说完，我就哭起来，老婆婆也流下了眼泪。我从十五岁起就在轩内读书，有一天，祖母来看我，说：“我的孩子，好久没有见到你的身影了，为什么整天默默地呆在这里，像个女孩子一样呀？”等到离开时，用手关上门，自言自语地说：“我家祖祖辈辈都读书，长期以来却没有成就功名，这孩子取得成就，指日可待了！”不一会，拿着一个象笏过来，说：“这是我的祖父太常公宣德年间拿着去朝见皇帝用的，以后你一定会用到它！”瞻仰回顾旧日事物，就像发生在昨天一样，让人忍不住放声大哭。</p></div></div>
+                <div class="translation-grid"><div class="original-text animated-item"><p>然余居于此，多可喜，亦多可悲。<span class="tooltip">先是<span class="tooltip-text">在这以前。</span></span>庭中通南北为一。<span class="tooltip">迨诸父异爨<span class="tooltip-text">等到伯、叔们分了家。异爨：分灶做饭。</span></span>，内外多置小门墙，<span class="tooltip">往往<span class="tooltip-text">到处，处处。</span></span>而是，<span class="tooltip">东犬西吠<span class="tooltip-text">东家的狗对着西边叫。形容分家后亲族疏远，如同陌路。</span></span>，客<span class="tooltip">逾庖而宴<span class="tooltip-text">越过厨房去吃饭。形容家道中落，格局混乱。</span></span>，鸡栖于厅。庭中始为篱，<span class="tooltip">已<span class="tooltip-text">不久，随后。</span></span>为墙，<span class="tooltip">凡<span class="tooltip-text">总共。</span></span><span class="tooltip">再<span class="tooltip-text">两次。</span></span>变矣。家有老妪，尝居于此。妪，先大母婢也，<span class="tooltip">乳<span class="tooltip-text">名词作动词，喂奶，引申为抚育。</span></span>二世，先妣抚之甚厚。室西连于中闺，先妣尝一至。妪每谓余曰："某所，<span class="tooltip">而<span class="tooltip-text">通"尔"，你的。</span></span>母立于兹。"妪又曰："汝姊在吾怀，呱呱而泣；娘以指叩门扉曰：'儿寒乎？欲食乎？'吾从板外<span class="tooltip">相为应答<span class="tooltip-text">"相"指代"我"，为（wèi），替。意为我替你母亲回答。</span></span>。"语未毕，余泣，妪亦泣。余自<span class="tooltip">束发<span class="tooltip-text">古代男孩十五岁时束发为髻，指代成童之时。</span></span>读书轩中，一日，大母过余曰："吾儿，久不见若影，何<span class="tooltip">竟日<span class="tooltip-text">整天。</span></span>默默在此，大类女郎也？"比去，以手<span class="tooltip">阖<span class="tooltip-text">通"合"，关闭。</span></span>门，自语曰："吾家读书久不效，儿之成，则可待乎！"顷之，持一象笏至，曰："此吾祖太常公宣德间执此以朝，他日汝当用之！"<span class="tooltip">瞻顾遗迹<span class="tooltip-text">瞻前顾后地看着这些旧物。</span></span>，如在昨日，令人长号不自禁。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>然而我住在这里，有许多值得高兴的事，也有许多悲伤的事。在这以前，庭院南北相通成为一体。等到伯父、叔父们分了家，室内外设置了许多小门，墙壁到处都是。分家后，狗把原住同一庭院的人当作陌生人，客人得越过厨房去吃饭，鸡在厅堂里栖息。庭院中开始是篱笆隔开，然后又砌成了墙，一共变了两次。家中有个老婆婆，曾经在这里居住过。这个老婆婆，是我已经去世的祖母的婢女，给两代人喂过奶，先母对她很好。房子的西边和内室相连，去世的母亲曾经来过这里。老婆婆常常对我说："这个地方，你母亲曾经站在这里。"老婆婆又说："你姐姐在我怀中，呱呱地哭泣；你母亲用手指敲着房门说：'孩子是冷呢，还是想吃东西呢？'我隔着门一一回答。"话还没有说完，我就哭起来，老婆婆也流下了眼泪。我从十五岁起就在轩内读书，有一天，祖母来看我，说："我的孩子，好久没有见到你的身影了，为什么整天默默地呆在这里，像个女孩子一样呀？"等到离开时，用手关上门，自言自语地说："我家祖祖辈辈都读书，长期以来却没有成就功名，这孩子取得成就，指日可待了！"不一会，拿着一个象笏过来，说："这是我的祖父太常公宣德年间拿着去朝见皇帝用的，以后你一定会用到它！"瞻仰回顾旧日事物，就像发生在昨天一样，让人忍不住放声大哭。</p></div></div>
                 <div class="translation-grid"><div class="original-text animated-item"><p>轩东故尝为厨，人往，从轩前过。余<span class="tooltip">扃牖<span class="tooltip-text">关着窗户。</span></span>而居，久之，能以足音辨人。轩凡四遭火，得不焚，<span class="tooltip">殆<span class="tooltip-text">大概，恐怕。表示揣测。</span></span>有神护者。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>项脊轩的东边曾经是厨房，人们到那里去，必须从轩前经过。我关着窗子住在里面，时间长了，能够根据脚步声辨别是谁。项脊轩一共遭过四次火灾，能够不被焚毁，大概是有神灵在保护着吧。</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>项脊生曰：“蜀清守丹穴，利甲天下，其后秦皇帝筑女怀清台；刘玄德与曹操争天下，诸葛孔明起陇中。方二人之昧昧于一隅也，世何足以知之，余区区处败屋中，方扬眉、瞬目，谓有奇景。人知之者，其谓与坎井之蛙何异？”</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我认为：巴蜀寡妇名叫清的，守着丹砂矿井，得到的好处为天下第一，后来秦始皇为表彰她而筑了女怀清台。刘备和曹操争夺天下，诸葛孔明从隆中出山建功立业。当这两个人无声无息地住在偏僻的地方时，世人哪里能知道他们？我住在这小小的破屋中，当我扬眉眨眼时，认为这破屋中自有不平凡的事物。知道的人，是不是要说我跟浅薄的浅井之蛙没什么不同？</p></div></div>
-                <div class="translation-grid"><div class="original-text animated-item"><p>余既为此志，后五年，吾妻<span class="tooltip">来归<span class="tooltip-text">嫁到我家来。归，古代女子出嫁。</span></span>，时至轩中，从余问古事，或<span class="tooltip">凭几学书<span class="tooltip-text">伏在几案上学写字。</span></span>。吾妻<span class="tooltip">归宁<span class="tooltip-text">出嫁的女儿回娘家省亲。</span></span>，述诸小妹语曰：“闻姊家有阁子，且何谓阁子也？”其后六年，吾妻死，室坏不修。其后二年，余久卧病无聊，乃使人复葺南阁子，其<span class="tooltip">制<span class="tooltip-text">建造的格式和样子。</span></span>稍异于前。然自后余多在外，不常居。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我作了这篇文章之后，过了五年，我的妻子嫁到我家来，她时常来到轩中，向我问一些旧时的事情，有时伏在桌旁学写字。我妻子回娘家探亲，回来转述她的小妹妹们的话说：“听说姐姐家有个小阁楼，那么，什么叫小阁楼呢？”这以后六年，我的妻子去世，项脊轩破败没有整修。又过了两年，我很长时间生病卧床没有什么（精神上的）寄托，就派人再次修缮南阁子，格局跟过去稍有不同。然而这之后我多在外边，不常住在这里。</p></div></div>
+                <div class="translation-grid"><div class="original-text animated-item"><p>项脊生曰："蜀清守丹穴，利甲天下，其后秦皇帝筑女怀清台；刘玄德与曹操争天下，诸葛孔明起陇中。方二人之昧昧于一隅也，世何足以知之，余区区处败屋中，方扬眉、瞬目，谓有奇景。人知之者，其谓与坎井之蛙何异？"</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我认为：巴蜀寡妇名叫清的，守着丹砂矿井，得到的好处为天下第一，后来秦始皇为表彰她而筑了女怀清台。刘备和曹操争夺天下，诸葛孔明从隆中出山建功立业。当这两个人无声无息地住在偏僻的地方时，世人哪里能知道他们？我住在这小小的破屋中，当我扬眉眨眼时，认为这破屋中自有不平凡的事物。知道的人，是不是要说我跟浅薄的浅井之蛙没什么不同？</p></div></div>
+                <div class="translation-grid"><div class="original-text animated-item"><p>余既为此志，后五年，吾妻<span class="tooltip">来归<span class="tooltip-text">嫁到我家来。归，古代女子出嫁。</span></span>，时至轩中，从余问古事，或<span class="tooltip">凭几学书<span class="tooltip-text">伏在几案上学写字。</span></span>。吾妻<span class="tooltip">归宁<span class="tooltip-text">出嫁的女儿回娘家省亲。</span></span>，述诸小妹语曰："闻姊家有阁子，且何谓阁子也？"其后六年，吾妻死，室坏不修。其后二年，余久卧病无聊，乃使人复葺南阁子，其<span class="tooltip">制<span class="tooltip-text">建造的格式和样子。</span></span>稍异于前。然自后余多在外，不常居。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>我作了这篇文章之后，过了五年，我的妻子嫁到我家来，她时常来到轩中，向我问一些旧时的事情，有时伏在桌旁学写字。我妻子回娘家探亲，回来转述她的小妹妹们的话说："听说姐姐家有个小阁楼，那么，什么叫小阁楼呢？"这以后六年，我的妻子去世，项脊轩破败没有整修。又过了两年，我很长时间生病卧床没有什么（精神上的）寄托，就派人再次修缮南阁子，格局跟过去稍有不同。然而这之后我多在外边，不常住在这里。</p></div></div>
                 <div class="translation-grid"><div class="original-text animated-item"><p>庭有枇杷树，吾妻死之年所<span class="tooltip">手植<span class="tooltip-text">亲手种植。</span></span>也，今已<span class="tooltip">亭亭如盖<span class="tooltip-text">高高挺立，树冠像伞盖一样。</span></span>矣。</p></div><div class="separator"></div><div class="translated-text animated-item"><p>庭院中有一株枇杷树，是我妻子去世那年她亲手种的，如今已经高高挺立着，枝叶繁茂像伞一样了。</p></div></div>
             
                 <section id="features" class="analysis-section">
                     <h2 class="animated-item">艺术特色探微</h2>
-                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>以小见大</h3><p>文章以一座小小书斋“项脊轩”的兴废为线索，串联起<strong>家族的衰落、人事的变迁</strong>和作者的人生轨迹。通过对庭院格局变化、家庭成员言行等日常琐事的描写，折射出明代大家庭分崩离析的社会现实，实现了“于小中见大”的艺术效果。</p></div><div class="analysis-card animated-item"><h3>借物抒情</h3><p>文中的物象都寄托了作者深厚的情感。项脊轩不仅是读书之所，更是<strong>三代人情感的交汇点</strong>和家族记忆的载体。结尾的“枇杷树”更是点睛之笔，它由亡妻亲手所植，如今“亭亭如盖”，物是人非，作者对亡妻的无尽思念蕴含其中，含蓄而又感人至深。</p></div><div class="analysis-card animated-item"><h3>白描手法</h3><p>语言朴素自然，不假雕饰，多用白描手法。如描写母亲、祖母和老妪的片段，仅通过三两句对话和动作，就将人物的音容笑貌、慈爱之情刻画得栩栩如生。这种<strong>传神的细节描写</strong>，使文章情感真挚，具有强大的感染力，体现了“唐宋派”古文的精髓。</p></div></div>
+                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>以小见大</h3><p>文章以一座小小书斋"项脊轩"的兴废为线索，串联起<strong>家族的衰落、人事的变迁</strong>和作者的人生轨迹。通过对庭院格局变化、家庭成员言行等日常琐事的描写，折射出明代大家庭分崩离析的社会现实，实现了"于小中见大"的艺术效果。</p></div><div class="analysis-card animated-item"><h3>借物抒情</h3><p>文中的物象都寄托了作者深厚的情感。项脊轩不仅是读书之所，更是<strong>三代人情感的交汇点</strong>和家族记忆的载体。结尾的"枇杷树"更是点睛之笔，它由亡妻亲手所植，如今"亭亭如盖"，物是人非，作者对亡妻的无尽思念蕴含其中，含蓄而又感人至深。</p></div><div class="analysis-card animated-item"><h3>白描手法</h3><p>语言朴素自然，不假雕饰，多用白描手法。如描写母亲、祖母和老妪的片段，仅通过三两句对话和动作，就将人物的音容笑貌、慈爱之情刻画得栩栩如生。这种<strong>传神的细节描写</strong>，使文章情感真挚，具有强大的感染力，体现了"唐宋派"古文的精髓。</p></div></div>
                 </section>
         
                 <section id="influence" class="analysis-section">
                     <h2 class="animated-item">后世影响</h2>
-                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>明代散文典范</h3><p>《项脊轩志》被誉为“明文第一”，是<strong>明代“唐宋派”散文</strong>的代表作。它打破了前后七子“文必秦汉”的拟古风气，以清新自然的笔触描写家庭生活，抒发真情实感，对晚明小品文的兴起产生了深远影响，成为后世散文家学习的典范。</p></div><div class="analysis-card animated-item"><h3>家庭文学的丰碑</h3><p>本文以其对家庭亲情细腻入微的描写，开创了中国古代家庭纪实文学的新高度。文中对母爱、祖孙情、夫妻情的刻画，<strong>情真意切，感人肺腑</strong>。尤其是“枇杷树”的意象，已成为中国文学中悼亡思亲的经典符号，被后世广泛引用和化用。</p></div></div>
+                    <div class="analysis-grid"><div class="analysis-card animated-item"><h3>明代散文典范</h3><p>《项脊轩志》被誉为"明文第一"，是<strong>明代"唐宋派"散文</strong>的代表作。它打破了前后七子"文必秦汉"的拟古风气，以清新自然的笔触描写家庭生活，抒发真情实感，对晚明小品文的兴起产生了深远影响，成为后世散文家学习的典范。</p></div><div class="analysis-card animated-item"><h3>家庭文学的丰碑</h3><p>本文以其对家庭亲情细腻入微的描写，开创了中国古代家庭纪实文学的新高度。文中对母爱、祖孙情、夫妻情的刻画，<strong>情真意切，感人肺腑</strong>。尤其是"枇杷树"的意象，已成为中国文学中悼亡思亲的经典符号，被后世广泛引用和化用。</p></div></div>
                 </section>
 
                 <section id="grammar-analysis" class="analysis-section">
                     <h2 class="animated-item">文言知识详解</h2>
                     <div class="accordion animated-item">
-                        <div class="accordion-item"><button class="accordion-header">重点解释 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>项脊轩:</strong> 归有光家的书斋名。轩：小的房室。</p><p><strong>方丈:</strong> 一丈见方。</p><p><strong>尘泥渗漉:</strong> （屋顶墙头上的）泥土漏下。渗：透过。漉：漏下。</p><p><strong>雨泽下注:</strong> 雨水往下倾泻。</p><p><strong>案:</strong> 几案，桌子。</p><p><strong>顾视:</strong> 环看四周。</p><p><strong>修葺:</strong> 修缮、修理，修补。</p><p><strong>垣墙周庭:</strong> 庭院四周砌上围墙。垣：名词作动词，砌矮墙。</p><p><strong>洞然:</strong> 明亮的样子。</p><p><strong>栏楯:</strong> 栏杆。纵的叫栏，横的叫楯。</p><p><strong>偃仰啸歌:</strong> 俯仰身子，吟咏诗文。</p><p><strong>冥然兀坐:</strong> 静静地独自端坐着。</p><p><strong>万籁有声:</strong> 自然界的一切声音都能听到。籁：声响。</p><p><strong>三五之夜:</strong> 农历每月十五的夜晚。</p><p><strong>珊珊:</strong> 树影移动摇曳的样子。</p><p><strong>迨诸父异爨:</strong> 等到伯、叔们分了家。异爨：分灶做饭。</p><p><strong>东犬西吠:</strong> 东家的狗对着西边叫，形容亲族疏远。</p><p><strong>逾庖而宴:</strong> 越过厨房去吃饭。</p><p><strong>束发:</strong> 古代男孩成童时（15岁）束发为髻。</p><p><strong>竟日:</strong> 整天，一天到晚。</p><p><strong>阖:</strong> 通“合”，合上，关闭。</p><p><strong>扃牖:</strong> 关着窗户。扃：关闭。牖：窗户。</p><p><strong>殆:</strong> 大概，恐怕。</p><p><strong>来归:</strong> 古代指女子出嫁。</p><p><strong>归宁:</strong> 出嫁的女儿回娘家省亲。</p><p><strong>亭亭如盖:</strong> 高高挺立，树冠像伞盖一样。</p></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">通假字 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>某所，而母立于兹</strong>：“而”通“<strong>尔</strong>”，你，你的。</li><li><strong>以手阖门</strong>：“阖”通“<strong>合</strong>”，关闭。</li></ul></div></div></div>
+                        <div class="accordion-item"><button class="accordion-header">重点解释 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><p><strong>项脊轩:</strong> 归有光家的书斋名。轩：小的房室。</p><p><strong>方丈:</strong> 一丈见方。</p><p><strong>尘泥渗漉:</strong> （屋顶墙头上的）泥土漏下。渗：透过。漉：漏下。</p><p><strong>雨泽下注:</strong> 雨水往下倾泻。</p><p><strong>案:</strong> 几案，桌子。</p><p><strong>顾视:</strong> 环看四周。</p><p><strong>修葺:</strong> 修缮、修理，修补。</p><p><strong>垣墙周庭:</strong> 庭院四周砌上围墙。垣：名词作动词，砌矮墙。</p><p><strong>洞然:</strong> 明亮的样子。</p><p><strong>栏楯:</strong> 栏杆。纵的叫栏，横的叫楯。</p><p><strong>偃仰啸歌:</strong> 俯仰身子，吟咏诗文。</p><p><strong>冥然兀坐:</strong> 静静地独自端坐着。</p><p><strong>万籁有声:</strong> 自然界的一切声音都能听到。籁：声响。</p><p><strong>三五之夜:</strong> 农历每月十五的夜晚。</p><p><strong>珊珊:</strong> 树影移动摇曳的样子。</p><p><strong>迨诸父异爨:</strong> 等到伯、叔们分了家。异爨：分灶做饭。</p><p><strong>东犬西吠:</strong> 东家的狗对着西边叫，形容亲族疏远。</p><p><strong>逾庖而宴:</strong> 越过厨房去吃饭。</p><p><strong>束发:</strong> 古代男孩成童时（15岁）束发为髻。</p><p><strong>竟日:</strong> 整天，一天到晚。</p><p><strong>阖:</strong> 通"合"，关闭。</p><p><strong>扃牖:</strong> 关着窗户。扃：关闭。牖：窗户。</p><p><strong>殆:</strong> 大概，恐怕。</p><p><strong>来归:</strong> 古代指女子出嫁。</p><p><strong>归宁:</strong> 出嫁的女儿回娘家省亲。</p><p><strong>亭亭如盖:</strong> 高高挺立，树冠像伞盖一样。</p></div></div></div>
+                        <div class="accordion-item"><button class="accordion-header">通假字 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>某所，而母立于兹</strong>："而"通"<strong>尔</strong>"，你，你的。</li><li><strong>以手阖门</strong>："阖"通"<strong>合</strong>"，关闭。</li></ul></div></div></div>
                         <div class="accordion-item"><button class="accordion-header">词类活用 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>名词作动词</h4><ul><li><strong>乳</strong>二世：喂奶，抚育。</li><li>客逾庖而<strong>宴</strong>：吃饭。</li><li>执此以<strong>朝</strong>：上朝。</li><li>吾家读书久不<strong>效</strong>：见效，取得成效。</li><li><strong>垣</strong>墙周庭：砌墙。</li></ul><h4>名词作状语</h4><ul><li>雨泽<strong>下</strong>注：向下。</li><li><strong>前</strong>辟四窗：在前面。</li><li>又<strong>北</strong>向：向北。</li><li><strong>东</strong>犬<strong>西</strong>吠：向东，向西。</li><li><strong>手</strong>植：亲手。</li></ul><h4>形容词作名词</h4><ul><li>多可喜，亦多可悲：可喜的<strong>事</strong>，可悲的<strong>事</strong>。</li></ul><h4>数词作名词</h4><ul><li>庭中通南北为<strong>一</strong>：一个整体。</li></ul></div></div></div>
                         <div class="accordion-item"><button class="accordion-header">古今异义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><ul><li><strong>方丈</strong>: <em>古义：</em>一丈见方。 <em>今义：</em>寺院的主持。</li><li><strong>往往</strong>: <em>古义：</em>到处，处处。 <em>今义：</em>常常，经常。</li><li><strong>再</strong>: <em>古义：</em>两次。 <em>今义：</em>又一次，第二次。</li><li><strong>案</strong>: <em>古义：</em>书桌，几案。 <em>今义：</em>案件，方案。</li><li><strong>若</strong>: <em>古义：</em>你。 <em>今义：</em>好像，如果。</li><li><strong>几</strong>: <em>古义：</em>矮小的桌子。 <em>今义：</em>表示不定的少数。</li><li><strong>书</strong>: <em>古义：</em>写字（动词）。 <em>今义：</em>书籍（名词）。</li><li><strong>交通</strong>: <em>（文中无，但为常见考点）</em> <em>古义：</em>交错相通。 <em>今义：</em>各种运输和邮电事业的总称。</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">一词多义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>始:</h4><ul><li>室<strong>始</strong>洞然（才，副词）</li><li>庭中<strong>始</strong>为篱（起初，副词）</li></ul><h4>过:</h4><ul><li>日<strong>过</strong>午已昏（超过，动词）</li><li>大母<strong>过</strong>余曰（探望，动词）</li></ul><h4>置:</h4><ul><li>顾视无可<strong>置</strong>者（放置，动词）</li><li>内外多<strong>置</strong>小门（设置，动词）</li></ul><h4>为:</h4><ul><li>庭中通南北<strong>为</strong>一（成为，动词）</li><li>轩东故尝<strong>为</strong>厨（是，作为，动词）</li><li>吾从板外相<strong>为</strong>应答（替，介词）</li></ul><h4>以:</h4><ul><li><strong>以</strong>当南日（用来，连词）</li><li><strong>以</strong>手阖门（用，介词）</li><li>能<strong>以</strong>足音辨人（凭借，介词）</li><li>执此<strong>以</strong>朝（连词，相当于“而”）</li></ul><h4>归:</h4><ul><li>吾妻来<strong>归</strong>（女子出嫁，动词）</li><li>吾妻<strong>归</strong>宁（返回，动词）</li></ul><h4>然:</h4><ul><li>室始洞<strong>然</strong>（...的样子，形容词词尾）</li><li><strong>然</strong>余居于此（然而，但是，连词）</li></ul></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">成语典故 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="idiom-grid"><div class="idiom-item"><dl><dt>东犬西吠</dt><dd>东家的狗对着西边来的人叫。形容分家后，昔日亲人变得生疏，如同陌路。</dd></dl></div><div class="idiom-item"><dl><dt>万籁俱寂</dt><dd>文中作“万籁有声”。形容各种声音都沉寂了，一片寂静。本文反用其意，指能听到万物的声音，衬托书斋的幽静。</dd></dl></div><div class="idiom-item"><dl><dt>坎井之蛙</dt><dd>浅井里的青蛙。比喻见识短浅的人。</dd></dl></div><div class="idiom-item"><dl><dt>亭亭如盖</dt><dd>形容树木长得高大茂盛，树冠像一把大伞。后多用以抒发物是人非、怀念故人的感慨。</dd></dl></div><div class="idiom-item"><dl><dt>三五之夜</dt><dd>指农历十五的夜晚，特指月圆之夜。</dd></dl></div></div></div></div></div>
-                        <div class="accordion-item"><button class="accordion-header">特殊句式 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>判断句</h4><ul><li>项脊轩，旧南阁子<strong>也</strong>。</li><li>妪，先大母婢<strong>也</strong>。</li><li>庭有枇杷树，吾妻死之年所手植<strong>也</strong>。</li></ul><h4>省略句</h4><ul><li>（余）又杂植兰桂竹木于庭。（省略主语“余”）</li><li>明月（照）半墙。（省略谓语“照”）</li><li>余自束发读书（于）轩中。（省略介词“于”）</li></ul><h4>倒装句 (介词结构后置)</h4><ul><li>杂植兰桂竹木<strong>于庭</strong>。（应为：于庭杂植兰桂竹木）</li><li>鸡栖<strong>于厅</strong>。（应为：于厅栖）</li><li>其制稍异<strong>于前</strong>。（应为：于前稍异）</li></ul><h4>被动句</h4><ul><li>轩凡四遭火，<strong>得不焚</strong>。（能够不“被”焚毁）</li></ul></div></div></div>
+                        <div class="accordion-item"><button class="accordion-header">一词多义 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>始:</h4><ul><li>室<strong>始</strong>洞然（才，副词）</li><li>庭中<strong>始</strong>为篱（起初，副词）</li></ul><h4>过:</h4><ul><li>日<strong>过</strong>午已昏（超过，动词）</li><li>大母<strong>过</strong>余曰（探望，动词）</li></ul><h4>置:</h4><ul><li>顾视无可<strong>置</strong>者（放置，动词）</li><li>内外多<strong>置</strong>小门（设置，动词）</li></ul><h4>为:</h4><ul><li>庭中通南北<strong>为</strong>一（成为，动词）</li><li>轩东故尝<strong>为</strong>厨（是，作为，动词）</li><li>吾从板外相<strong>为</strong>应答（替，介词）</li></ul><h4>以:</h4><ul><li><strong>以</strong>当南日（用来，连词）</li><li><strong>以</strong>手阖门（用，介词）</li><li>能<strong>以</strong>足音辨人（凭借，介词）</li><li>执此<strong>以</strong>朝（连词，相当于"而"）</li></ul><h4>归:</h4><ul><li>吾妻来<strong>归</strong>（女子出嫁，动词）</li><li>吾妻<strong>归</strong>宁（返回，动词）</li></ul><h4>然:</h4><ul><li>室始洞<strong>然</strong>（...的样子，形容词词尾）</li><li><strong>然</strong>余居于此（然而，但是，连词）</li></ul></div></div></div>
+                        <div class="accordion-item"><button class="accordion-header">成语典故 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><div class="idiom-grid"><div class="idiom-item"><dl><dt>东犬西吠</dt><dd>东家的狗对着西边来的人叫。形容分家后，昔日亲人变得生疏，如同陌路。</dd></dl></div><div class="idiom-item"><dl><dt>万籁俱寂</dt><dd>文中作"万籁有声"。形容各种声音都沉寂了，一片寂静。本文反用其意，指能听到万物的声音，衬托书斋的幽静。</dd></dl></div><div class="idiom-item"><dl><dt>坎井之蛙</dt><dd>浅井里的青蛙。比喻见识短浅的人。</dd></dl></div><div class="idiom-item"><dl><dt>亭亭如盖</dt><dd>形容树木长得高大茂盛，树冠像一把大伞。后多用以抒发物是人非、怀念故人的感慨。</dd></dl></div><div class="idiom-item"><dl><dt>三五之夜</dt><dd>指农历十五的夜晚，特指月圆之夜。</dd></dl></div></div></div></div></div>
+                        <div class="accordion-item"><button class="accordion-header">特殊句式 <span class="icon"><svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></span></button><div class="accordion-content"><div class="accordion-content-inner"><h4>判断句</h4><ul><li>项脊轩，旧南阁子<strong>也</strong>。</li><li>妪，先大母婢<strong>也</strong>。</li><li>庭有枇杷树，吾妻死之年所手植<strong>也</strong>。</li></ul><h4>省略句</h4><ul><li>（余）又杂植兰桂竹木于庭。（省略主语"余"）</li><li>明月（照）半墙。（省略谓语"照"）</li><li>余自束发读书（于）轩中。（省略介词"于"）</li></ul><h4>倒装句 (介词结构后置)</h4><ul><li>杂植兰桂竹木<strong>于庭</strong>。（应为：于庭杂植兰桂竹木）</li><li>鸡栖<strong>于厅</strong>。（应为：于厅栖）</li><li>其制稍异<strong>于前</strong>。（应为：于前稍异）</li></ul><h4>被动句</h4><ul><li>轩凡四遭火，<strong>得不焚</strong>。（能够不"被"焚毁）</li></ul></div></div></div>
                     </div>
                 </section>
             </div>
         </main>
-        
-        <button id="back-to-top" title="回到顶部">
-            <svg aria-hidden="true" focusable="false" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M246.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L224 109.3V480c0 17.7 14.3 32 32 32s32-14.3 32-32V109.3l137.4 137.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z"></path></svg>
-        </button>
-    </div>
+
+    </div> <!-- #page-wrapper -->
+
+    <audio id="background-music" loop>
+        <source src="./static/匆匆那年.mp3" type="audio/mpeg">
+        您的浏览器不支持 audio 标签。
+    </audio>
+    
+    <script src="article.js" defer></script>
+
 </body>
 </html>
